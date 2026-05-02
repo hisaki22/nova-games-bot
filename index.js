@@ -51090,7 +51090,7 @@ var require_GuildMember = __commonJS({
     var GuildMemberRoleManager = require_GuildMemberRoleManager();
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
     var PermissionsBitField2 = require_PermissionsBitField();
-    var GuildMember = class extends Base {
+    var GuildMember2 = class extends Base {
       constructor(client, data, guild) {
         super(client);
         this.guild = guild;
@@ -51515,8 +51515,8 @@ var require_GuildMember = __commonJS({
         return json;
       }
     };
-    TextBasedChannel.applyToClass(GuildMember);
-    exports2.GuildMember = GuildMember;
+    TextBasedChannel.applyToClass(GuildMember2);
+    exports2.GuildMember = GuildMember2;
   }
 });
 
@@ -51921,8 +51921,8 @@ var require_MessagePayload = __commonJS({
        */
       get isUser() {
         const User = require_User();
-        const { GuildMember } = require_GuildMember();
-        return this.target instanceof User || this.target instanceof GuildMember;
+        const { GuildMember: GuildMember2 } = require_GuildMember();
+        return this.target instanceof User || this.target instanceof GuildMember2;
       }
       /**
        * Whether or not the target is a {@link Message}
@@ -52310,8 +52310,8 @@ var require_TextBasedChannel = __commonJS({
        */
       async send(options) {
         const User = require_User();
-        const { GuildMember } = require_GuildMember();
-        if (this instanceof User || this instanceof GuildMember) {
+        const { GuildMember: GuildMember2 } = require_GuildMember();
+        if (this instanceof User || this instanceof GuildMember2) {
           const dm = await this.createDM();
           return dm.send(options);
         }
@@ -67708,7 +67708,7 @@ var require_GuildBanManager = __commonJS({
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildBan = require_GuildBan();
-    var { GuildMember } = require_GuildMember();
+    var { GuildMember: GuildMember2 } = require_GuildMember();
     var deprecationEmittedForDeleteMessageDays = false;
     var GuildBanManager = class extends CachedManager {
       constructor(guild, iterable) {
@@ -67844,7 +67844,7 @@ var require_GuildBanManager = __commonJS({
           },
           reason: options.reason
         });
-        if (user instanceof GuildMember) return user;
+        if (user instanceof GuildMember2) return user;
         const _user = this.client.users.cache.get(id);
         if (_user) {
           return this.guild.members.resolve(_user) ?? _user;
@@ -68741,7 +68741,7 @@ var require_GuildMemberManager = __commonJS({
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
-    var { GuildMember } = require_GuildMember();
+    var { GuildMember: GuildMember2 } = require_GuildMember();
     var { Role } = require_Role();
     var { resolveImage } = require_DataResolver();
     var Events3 = require_Events();
@@ -68750,7 +68750,7 @@ var require_GuildMemberManager = __commonJS({
     var deprecatedEmittedForEditSoleNickname = false;
     var GuildMemberManager = class extends CachedManager {
       constructor(guild, iterable) {
-        super(guild.client, GuildMember, iterable);
+        super(guild.client, GuildMember2, iterable);
         this.guild = guild;
       }
       /**
@@ -72032,7 +72032,7 @@ var require_GuildManager = __commonJS({
     var { Guild } = require_Guild();
     var GuildChannel = require_GuildChannel();
     var GuildEmoji = require_GuildEmoji();
-    var { GuildMember } = require_GuildMember();
+    var { GuildMember: GuildMember2 } = require_GuildMember();
     var Invite2 = require_Invite();
     var OAuth2Guild = require_OAuth2Guild();
     var { Role } = require_Role();
@@ -72116,7 +72116,7 @@ var require_GuildManager = __commonJS({
        * @returns {?Guild}
        */
       resolve(guild) {
-        if (guild instanceof GuildChannel || guild instanceof GuildMember || guild instanceof GuildEmoji || guild instanceof Role || guild instanceof Invite2 && guild.guild) {
+        if (guild instanceof GuildChannel || guild instanceof GuildMember2 || guild instanceof GuildEmoji || guild instanceof Role || guild instanceof Invite2 && guild.guild) {
           return super.resolve(guild.guild);
         }
         return super.resolve(guild);
@@ -72130,7 +72130,7 @@ var require_GuildManager = __commonJS({
        * @returns {?Snowflake}
        */
       resolveId(guild) {
-        if (guild instanceof GuildChannel || guild instanceof GuildMember || guild instanceof GuildEmoji || guild instanceof Role || guild instanceof Invite2 && guild.guild) {
+        if (guild instanceof GuildChannel || guild instanceof GuildMember2 || guild instanceof GuildEmoji || guild instanceof Role || guild instanceof Invite2 && guild.guild) {
           return super.resolveId(guild.guild.id);
         }
         return super.resolveId(guild);
@@ -72372,7 +72372,7 @@ var require_UserManager = __commonJS({
     var { ChannelType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
-    var { GuildMember } = require_GuildMember();
+    var { GuildMember: GuildMember2 } = require_GuildMember();
     var { Message } = require_Message();
     var ThreadMember = require_ThreadMember();
     var User = require_User();
@@ -72477,7 +72477,7 @@ var require_UserManager = __commonJS({
        * @returns {?User}
        */
       resolve(user) {
-        if (user instanceof GuildMember || user instanceof ThreadMember) return user.user;
+        if (user instanceof GuildMember2 || user instanceof ThreadMember) return user.user;
         if (user instanceof Message) return user.author;
         return super.resolve(user);
       }
@@ -72488,7 +72488,7 @@ var require_UserManager = __commonJS({
        */
       resolveId(user) {
         if (user instanceof ThreadMember) return user.id;
-        if (user instanceof GuildMember) return user.user.id;
+        if (user instanceof GuildMember2) return user.user.id;
         if (user instanceof Message) return user.author.id;
         return super.resolveId(user);
       }
@@ -76090,11 +76090,12 @@ async function handleStartCommand(interaction) {
     return;
   }
   await interaction.deferReply({ flags: import_discord3.MessageFlags.Ephemeral });
+  const displayName = interaction.member instanceof import_discord3.GuildMember ? interaction.member.displayName : interaction.user.username;
   const result = await initImposterGame(
     interaction.channel,
     interaction.guildId,
     interaction.user.id,
-    interaction.user.username
+    displayName
   );
   if (!result.ok) {
     await interaction.editReply({ embeds: [errorEmbed(result.reason)] });
@@ -76134,10 +76135,11 @@ async function refreshLobby(interaction) {
   });
 }
 async function handleJoin(interaction) {
+  const displayName = interaction.member instanceof import_discord3.GuildMember ? interaction.member.displayName : interaction.user.username;
   const result = joinGame(
     interaction.channelId,
     interaction.user.id,
-    interaction.user.username
+    displayName
   );
   if (!result.ok) {
     await interaction.reply({
@@ -76399,6 +76401,59 @@ async function transitionToReveal(_client2, channel, game) {
 }
 async function transitionToSuggestions(channel, game) {
   if (game.phase !== "reveal") return;
+  const unseenIds = Array.from(game.players.entries()).filter(([, p]) => !p.seenWord).map(([id]) => id);
+  if (unseenIds.length > 0) {
+    for (const id of unseenIds) game.players.delete(id);
+    const eliminatedText = unseenIds.map((id) => `<@${id}>`).join("\u060C ");
+    const pmPre = getPhaseMessages(channel.id);
+    if (pmPre.reveal) {
+      try {
+        await pmPre.reveal.edit({
+          embeds: [infoEmbed("\u23F0 \u0627\u0646\u062A\u0647\u062A \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641", "\u062A\u0645 \u0637\u0631\u062F \u0627\u0644\u063A\u0627\u0626\u0628\u064A\u0646 \u2014 \u062A\u0627\u0628\u0639\u0648\u0627 \u2B07\uFE0F")],
+          components: []
+        });
+      } catch {
+      }
+      pmPre.reveal = void 0;
+    }
+    if (game.players.size < 3) {
+      await channel.send({
+        embeds: [{
+          color: 15548997,
+          title: "\u{1F6D1} \u0627\u0646\u062A\u0647\u062A \u0627\u0644\u0644\u0639\u0628\u0629",
+          description: `\u0637\u064F\u0631\u062F ${eliminatedText} \u0644\u0639\u062F\u0645 \u0627\u0644\u0636\u063A\u0637 \u0639\u0644\u0649 \u0632\u0631 \u0627\u0644\u0643\u0634\u0641.
+\u0645\u0627 \u064A\u0643\u0641\u064A \u0644\u0627\u0639\u0628\u064A\u0646 \u0644\u0625\u0643\u0645\u0627\u0644 \u0627\u0644\u0644\u0639\u0628\u0629.`
+        }]
+      });
+      deleteGame(channel.id);
+      clearPhaseMessages(channel.id);
+      return;
+    }
+    await channel.send({
+      embeds: [{
+        color: 15548997,
+        title: "\u23F0 \u0637\u064F\u0631\u062F \u0645\u0646 \u0627\u0644\u0644\u0639\u0628\u0629",
+        description: `${eliminatedText} \u0644\u0645 \u064A\u0636\u063A\u0637\u0648\u0627 \u0639\u0644\u0649 \u0632\u0631 \u0627\u0644\u0643\u0634\u0641 \u0641\u064A \u0627\u0644\u0648\u0642\u062A \u0648\u062A\u0645 \u0637\u0631\u062F\u0647\u0645! \u{1F6AB}`
+      }]
+    });
+    const imposterEliminated = unseenIds.some(
+      (id) => game.imposterIds.includes(id)
+    );
+    if (imposterEliminated) {
+      const remainingIds = Array.from(game.players.keys());
+      const newImposterId = remainingIds[Math.floor(Math.random() * remainingIds.length)];
+      game.imposterIds = [newImposterId];
+      for (const p of game.players.values()) {
+        p.isImposter = p.id === newImposterId;
+        p.seenWord = false;
+      }
+      await channel.send({
+        embeds: [infoEmbed("\u{1F504} \u0625\u0639\u0627\u062F\u0629 \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641", "\u062A\u0645 \u0627\u062E\u062A\u064A\u0627\u0631 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F \u2014 \u0627\u0636\u063A\u0637\u0648\u0627 \u0627\u0644\u0632\u0631 \u0645\u062C\u062F\u062F\u0627\u064B \u{1F3B4}")]
+      });
+      await transitionToReveal(channel.client, channel, game);
+      return;
+    }
+  }
   game.phase = "suggestions";
   const suggestEnd = Date.now() + SUGGESTION_SECONDS * 1e3;
   game.timers.suggestEnd = suggestEnd;
@@ -76406,12 +76461,7 @@ async function transitionToSuggestions(channel, game) {
   if (pm.reveal) {
     try {
       await pm.reveal.edit({
-        embeds: [
-          infoEmbed(
-            "\u{1F3B4} \u0627\u0646\u062A\u0647\u062A \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641",
-            "\u0646\u0646\u062A\u0642\u0644 \u0644\u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0627\u0642\u062A\u0631\u0627\u062D\u0627\u062A \u2B07\uFE0F"
-          )
-        ],
+        embeds: [infoEmbed("\u{1F3B4} \u0627\u0646\u062A\u0647\u062A \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641", "\u0646\u0646\u062A\u0642\u0644 \u0644\u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0627\u0642\u062A\u0631\u0627\u062D\u0627\u062A \u2B07\uFE0F")],
         components: []
       });
     } catch {
@@ -76509,18 +76559,6 @@ async function endRound(channel, game) {
   }
   const result = finalizeScores(game);
   await channel.send({ embeds: [endRoundEmbed(game, result)] });
-  let topPts = 0;
-  let topId = "";
-  for (const [id, delta] of result.scoreDelta) {
-    if (delta > topPts) {
-      topPts = delta;
-      topId = id;
-    }
-  }
-  if (topId && topPts > 0) {
-    const botPts = topPts * 10;
-    await channel.send(`\u{1F389} <@${topId}> \u062D\u0635\u0644 \u0639\u0644\u0649 \u0623\u0639\u0644\u0649 \u0646\u0642\u0627\u0637 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u062C\u0648\u0644\u0629: **${botPts} \u0646\u0642\u0637\u0629**!`);
-  }
   for (const [userId, delta] of result.scoreDelta) {
     const player = game.players.get(userId);
     if (player && game.guildId) {
@@ -87468,7 +87506,8 @@ async function handlePrefixMessage(message) {
     switch (cmd) {
       // ─── Games ───────────────────────────────────────────────────────────
       case "\u0627\u0645\u0628\u0648\u0633\u062A\u0631": {
-        const result = await initImposterGame(channel, guildId, userId, username);
+        const displayName = message.member?.displayName ?? username;
+        const result = await initImposterGame(channel, guildId, userId, displayName);
         if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
         break;
       }

@@ -76388,7 +76388,9 @@ async function transitionToReveal(_client2, channel, game) {
   game.phase = "reveal";
   const revealEnd = Date.now() + REVEAL_SECONDS * 1e3;
   game.timers.revealEnd = revealEnd;
+  const mentionsLine = Array.from(game.players.keys()).map((id) => `<@${id}>`).join(" ");
   const msg = await channel.send({
+    content: mentionsLine,
     embeds: [revealPhaseEmbed(game, REVEAL_SECONDS)],
     components: [revealButton()]
   });
@@ -76447,8 +76449,13 @@ async function transitionToSuggestions(channel, game) {
         p.isImposter = p.id === newImposterId;
         p.seenWord = false;
       }
+      const { category, word } = pickRound();
+      game.category = category;
+      game.secretWord = word;
+      game.eightOptions = pickEightOptions(category, word);
       await channel.send({
-        embeds: [infoEmbed("\u{1F504} \u0625\u0639\u0627\u062F\u0629 \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641", "\u062A\u0645 \u0627\u062E\u062A\u064A\u0627\u0631 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F \u2014 \u0627\u0636\u063A\u0637\u0648\u0627 \u0627\u0644\u0632\u0631 \u0645\u062C\u062F\u062F\u0627\u064B \u{1F3B4}")]
+        embeds: [infoEmbed("\u{1F504} \u0625\u0639\u0627\u062F\u0629 \u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0643\u0634\u0641", `\u062A\u0645 \u0627\u062E\u062A\u064A\u0627\u0631 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F \u0648\u0643\u0644\u0645\u0629 \u062C\u062F\u064A\u062F\u0629 \u2014 \u0627\u0636\u063A\u0637\u0648\u0627 \u0627\u0644\u0632\u0631 \u0645\u062C\u062F\u062F\u0627\u064B \u{1F3B4}
+**\u0627\u0644\u0641\u0626\u0629 \u0627\u0644\u062C\u062F\u064A\u062F\u0629:** \`${category.name}\``)]
       });
       await transitionToReveal(channel.client, channel, game);
       return;

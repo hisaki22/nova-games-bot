@@ -74989,13 +74989,320 @@ var require_src = __commonJS({
   }
 });
 
+// console-logger:console-logger
+var logger;
+var init_console_logger = __esm({
+  "console-logger:console-logger"() {
+    logger = { info: (o, m) => console.log("[INFO]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), warn: (o, m) => console.warn("[WARN]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), error: (o, m) => console.error("[ERROR]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), child: function() {
+      return this;
+    } };
+  }
+});
+
+// src/bot/scores.ts
+var scores_exports = {};
+__export(scores_exports, {
+  addClosestWin: () => addClosestWin,
+  addGuessWin: () => addGuessWin,
+  addImposterPoints: () => addImposterPoints,
+  addRouletteWin: () => addRouletteWin,
+  addScrambleCorrect: () => addScrambleCorrect,
+  addScrambleWin: () => addScrambleWin,
+  addSearchWin: () => addSearchWin,
+  adjustPoints: () => adjustPoints,
+  getGlobalLeaderboard: () => getGlobalLeaderboard,
+  getGuildStats: () => getGuildStats,
+  getLeaderboard: () => getLeaderboard,
+  getStoreSnapshot: () => getStoreSnapshot,
+  getUserRank: () => getUserRank,
+  getUserRecord: () => getUserRecord,
+  loadScores: () => loadScores
+});
+async function connectPg() {
+  const url = process.env.DATABASE_URL;
+  if (!url) return null;
+  try {
+    const { Client: Client3 } = await import("pg");
+    const client = new Client3({ connectionString: url, ssl: { rejectUnauthorized: false } });
+    await client.connect();
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS scores (
+        guild_id         TEXT NOT NULL,
+        user_id          TEXT NOT NULL,
+        username         TEXT NOT NULL DEFAULT '',
+        points           INTEGER NOT NULL DEFAULT 0,
+        scramble_wins    INTEGER NOT NULL DEFAULT 0,
+        scramble_correct INTEGER NOT NULL DEFAULT 0,
+        imposter_points  INTEGER NOT NULL DEFAULT 0,
+        search_wins      INTEGER NOT NULL DEFAULT 0,
+        roulette_wins    INTEGER NOT NULL DEFAULT 0,
+        closest_wins     INTEGER NOT NULL DEFAULT 0,
+        guess_wins       INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (guild_id, user_id)
+      )
+    `);
+    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS closest_wins INTEGER NOT NULL DEFAULT 0`).catch(() => {
+    });
+    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS guess_wins   INTEGER NOT NULL DEFAULT 0`).catch(() => {
+    });
+    logger.info("PostgreSQL connected \u2014 scores will be persisted");
+    return client;
+  } catch (err) {
+    logger.error({ err }, "PostgreSQL connection failed \u2014 falling back to file storage");
+    return null;
+  }
+}
+async function pgUpsert(guildId, rec) {
+  if (!pgClient) return;
+  try {
+    await pgClient.query(
+      `INSERT INTO scores
+         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins, closest_wins, guess_wins)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+       ON CONFLICT (guild_id, user_id) DO UPDATE SET
+         username         = EXCLUDED.username,
+         points           = EXCLUDED.points,
+         scramble_wins    = EXCLUDED.scramble_wins,
+         scramble_correct = EXCLUDED.scramble_correct,
+         imposter_points  = EXCLUDED.imposter_points,
+         search_wins      = EXCLUDED.search_wins,
+         roulette_wins    = EXCLUDED.roulette_wins,
+         closest_wins     = EXCLUDED.closest_wins,
+         guess_wins       = EXCLUDED.guess_wins`,
+      [
+        guildId,
+        rec.userId,
+        rec.username,
+        rec.points,
+        rec.scrambleWins,
+        rec.scrambleCorrect,
+        rec.imposterPoints,
+        rec.searchWins,
+        rec.rouletteWins,
+        rec.closestWins,
+        rec.guessWins
+      ]
+    );
+  } catch (err) {
+    logger.error({ err }, "pgUpsert failed");
+  }
+}
+async function loadScores() {
+  pgClient = await connectPg();
+  if (pgClient) {
+    try {
+      const result = await pgClient.query("SELECT * FROM scores");
+      for (const row of result.rows) {
+        if (!store[row.guild_id]) store[row.guild_id] = {};
+        store[row.guild_id][row.user_id] = {
+          userId: row.user_id,
+          username: row.username,
+          points: Number(row.points),
+          scrambleWins: Number(row.scramble_wins),
+          scrambleCorrect: Number(row.scramble_correct),
+          imposterPoints: Number(row.imposter_points),
+          searchWins: Number(row.search_wins),
+          rouletteWins: Number(row.roulette_wins),
+          closestWins: Number(row.closest_wins),
+          guessWins: Number(row.guess_wins)
+        };
+      }
+      logger.info({ rows: result.rowCount }, "scores loaded from PostgreSQL");
+      return;
+    } catch (err) {
+      logger.error({ err }, "failed to load scores from PostgreSQL");
+    }
+  }
+  try {
+    await (0, import_promises.mkdir)(DATA_DIR, { recursive: true });
+    const raw = await (0, import_promises.readFile)(SCORES_FILE, "utf-8");
+    store = JSON.parse(raw);
+  } catch {
+    store = {};
+  }
+}
+function scheduleSave(guildId, rec) {
+  if (pgClient) {
+    pgUpsert(guildId, rec).catch(() => {
+    });
+    return;
+  }
+  dirty = true;
+  if (saveTimer) return;
+  saveTimer = setTimeout(async () => {
+    saveTimer = null;
+    if (!dirty) return;
+    dirty = false;
+    try {
+      await (0, import_promises.writeFile)(SCORES_FILE, JSON.stringify(store, null, 2), "utf-8");
+    } catch (err) {
+      logger.error({ err }, "failed to save scores to file");
+    }
+  }, 2e3);
+}
+function getOrCreate(guildId, userId, username) {
+  if (!store[guildId]) store[guildId] = {};
+  if (!store[guildId][userId]) {
+    store[guildId][userId] = {
+      userId,
+      username,
+      points: 0,
+      scrambleWins: 0,
+      scrambleCorrect: 0,
+      imposterPoints: 0,
+      searchWins: 0,
+      rouletteWins: 0,
+      closestWins: 0,
+      guessWins: 0
+    };
+  } else {
+    store[guildId][userId].username = username;
+  }
+  return store[guildId][userId];
+}
+function addScrambleCorrect(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.scrambleCorrect += 1;
+  scheduleSave(guildId, rec);
+}
+function addScrambleWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.scrambleWins += 1;
+  scheduleSave(guildId, rec);
+}
+function addImposterPoints(guildId, userId, username, pts) {
+  if (pts <= 0) return;
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts * 10;
+  rec.imposterPoints += pts * 10;
+  scheduleSave(guildId, rec);
+}
+function addSearchWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.searchWins = (rec.searchWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
+function addRouletteWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.rouletteWins = (rec.rouletteWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
+function addClosestWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.closestWins = (rec.closestWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
+function addGuessWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.guessWins = (rec.guessWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
+function getLeaderboard(guildId) {
+  const guild = store[guildId];
+  if (!guild) return [];
+  return Object.values(guild).filter((r) => r.points > 0).sort((a, b) => b.points - a.points).slice(0, 10);
+}
+function getUserRecord(guildId, userId) {
+  return store[guildId]?.[userId] ?? null;
+}
+function getUserRank(guildId, userId) {
+  const guild = store[guildId];
+  if (!guild) return 0;
+  const sorted = Object.values(guild).filter((r) => r.points > 0).sort((a, b) => b.points - a.points);
+  const idx = sorted.findIndex((r) => r.userId === userId);
+  return idx === -1 ? 0 : idx + 1;
+}
+function getStoreSnapshot() {
+  return JSON.parse(JSON.stringify(store));
+}
+function adjustPoints(guildId, userId, username, delta) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points = Math.max(0, rec.points + delta);
+  scheduleSave(guildId, rec);
+  return rec.points;
+}
+function getGlobalLeaderboard() {
+  const totals = /* @__PURE__ */ new Map();
+  for (const guildData of Object.values(store)) {
+    for (const rec of Object.values(guildData)) {
+      if (rec.points <= 0) continue;
+      const existing = totals.get(rec.userId);
+      if (existing) {
+        existing.totalPoints += rec.points;
+        existing.username = rec.username;
+      } else {
+        totals.set(rec.userId, {
+          userId: rec.userId,
+          username: rec.username,
+          totalPoints: rec.points
+        });
+      }
+    }
+  }
+  return Array.from(totals.values()).sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
+}
+function getGuildStats(guildId) {
+  const guild = store[guildId];
+  if (!guild) {
+    return {
+      totalPlayers: 0,
+      totalPoints: 0,
+      topGame: "\u2014",
+      topPlayer: null,
+      gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0, closest: 0, guess: 0 }
+    };
+  }
+  const records = Object.values(guild).filter((r) => r.points > 0);
+  const totalPoints = records.reduce((s, r) => s + r.points, 0);
+  const gameCounts = {
+    imposter: records.filter((r) => r.imposterPoints > 0).length,
+    scramble: records.reduce((s, r) => s + r.scrambleWins, 0),
+    search: records.reduce((s, r) => s + (r.searchWins ?? 0), 0),
+    roulette: records.reduce((s, r) => s + (r.rouletteWins ?? 0), 0),
+    closest: records.reduce((s, r) => s + (r.closestWins ?? 0), 0),
+    guess: records.reduce((s, r) => s + (r.guessWins ?? 0), 0)
+  };
+  const topGameEntry = Object.entries(gameCounts).sort((a, b) => b[1] - a[1])[0];
+  const gameNames = {
+    imposter: "\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631",
+    scramble: "\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641",
+    search: "\u{1F50D} \u0627\u0644\u0628\u062D\u062B",
+    roulette: "\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A",
+    closest: "\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628",
+    guess: "\u{1F50E} \u062E\u0645\u0651\u0646"
+  };
+  const topGame = topGameEntry && topGameEntry[1] > 0 ? gameNames[topGameEntry[0]] ?? "\u2014" : "\u2014";
+  const topPlayer = records.sort((a, b) => b.points - a.points)[0] ?? null;
+  return { totalPlayers: records.length, totalPoints, topGame, topPlayer, gameCounts };
+}
+var import_promises, import_path, DATA_DIR, SCORES_FILE, store, pgClient, dirty, saveTimer;
+var init_scores = __esm({
+  "src/bot/scores.ts"() {
+    "use strict";
+    import_promises = require("fs/promises");
+    import_path = __toESM(require("path"), 1);
+    init_console_logger();
+    DATA_DIR = import_path.default.join(process.cwd(), "data");
+    SCORES_FILE = import_path.default.join(DATA_DIR, "scores.json");
+    store = {};
+    pgClient = null;
+    dirty = false;
+    saveTimer = null;
+  }
+});
+
 // src/bot/client.ts
 var import_discord11 = __toESM(require_src(), 1);
+init_console_logger();
 
-// console-logger:console-logger
-var logger = { info: (o, m) => console.log("[INFO]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), warn: (o, m) => console.warn("[WARN]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), error: (o, m) => console.error("[ERROR]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), child: function() {
-  return this;
-} };
+// src/bot/prefix.ts
+init_console_logger();
 
 // src/bot/handlers.ts
 var import_discord3 = __toESM(require_src(), 1);
@@ -75691,248 +75998,9 @@ function guessButtons(options) {
   return rows.map((r) => r.toJSON());
 }
 
-// src/bot/scores.ts
-var import_promises = require("fs/promises");
-var import_path = __toESM(require("path"), 1);
-var DATA_DIR = import_path.default.join(process.cwd(), "data");
-var SCORES_FILE = import_path.default.join(DATA_DIR, "scores.json");
-var store = {};
-var pgClient = null;
-async function connectPg() {
-  const url = process.env.DATABASE_URL;
-  if (!url) return null;
-  try {
-    const { Client: Client3 } = await import("pg");
-    const client = new Client3({ connectionString: url, ssl: { rejectUnauthorized: false } });
-    await client.connect();
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS scores (
-        guild_id         TEXT NOT NULL,
-        user_id          TEXT NOT NULL,
-        username         TEXT NOT NULL DEFAULT '',
-        points           INTEGER NOT NULL DEFAULT 0,
-        scramble_wins    INTEGER NOT NULL DEFAULT 0,
-        scramble_correct INTEGER NOT NULL DEFAULT 0,
-        imposter_points  INTEGER NOT NULL DEFAULT 0,
-        search_wins      INTEGER NOT NULL DEFAULT 0,
-        roulette_wins    INTEGER NOT NULL DEFAULT 0,
-        closest_wins     INTEGER NOT NULL DEFAULT 0,
-        guess_wins       INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY (guild_id, user_id)
-      )
-    `);
-    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS closest_wins INTEGER NOT NULL DEFAULT 0`).catch(() => {
-    });
-    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS guess_wins   INTEGER NOT NULL DEFAULT 0`).catch(() => {
-    });
-    logger.info("PostgreSQL connected \u2014 scores will be persisted");
-    return client;
-  } catch (err) {
-    logger.error({ err }, "PostgreSQL connection failed \u2014 falling back to file storage");
-    return null;
-  }
-}
-async function pgUpsert(guildId, rec) {
-  if (!pgClient) return;
-  try {
-    await pgClient.query(
-      `INSERT INTO scores
-         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins, closest_wins, guess_wins)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
-       ON CONFLICT (guild_id, user_id) DO UPDATE SET
-         username         = EXCLUDED.username,
-         points           = EXCLUDED.points,
-         scramble_wins    = EXCLUDED.scramble_wins,
-         scramble_correct = EXCLUDED.scramble_correct,
-         imposter_points  = EXCLUDED.imposter_points,
-         search_wins      = EXCLUDED.search_wins,
-         roulette_wins    = EXCLUDED.roulette_wins,
-         closest_wins     = EXCLUDED.closest_wins,
-         guess_wins       = EXCLUDED.guess_wins`,
-      [
-        guildId,
-        rec.userId,
-        rec.username,
-        rec.points,
-        rec.scrambleWins,
-        rec.scrambleCorrect,
-        rec.imposterPoints,
-        rec.searchWins,
-        rec.rouletteWins,
-        rec.closestWins,
-        rec.guessWins
-      ]
-    );
-  } catch (err) {
-    logger.error({ err }, "pgUpsert failed");
-  }
-}
-async function loadScores() {
-  pgClient = await connectPg();
-  if (pgClient) {
-    try {
-      const result = await pgClient.query("SELECT * FROM scores");
-      for (const row of result.rows) {
-        if (!store[row.guild_id]) store[row.guild_id] = {};
-        store[row.guild_id][row.user_id] = {
-          userId: row.user_id,
-          username: row.username,
-          points: Number(row.points),
-          scrambleWins: Number(row.scramble_wins),
-          scrambleCorrect: Number(row.scramble_correct),
-          imposterPoints: Number(row.imposter_points),
-          searchWins: Number(row.search_wins),
-          rouletteWins: Number(row.roulette_wins),
-          closestWins: Number(row.closest_wins),
-          guessWins: Number(row.guess_wins)
-        };
-      }
-      logger.info({ rows: result.rowCount }, "scores loaded from PostgreSQL");
-      return;
-    } catch (err) {
-      logger.error({ err }, "failed to load scores from PostgreSQL");
-    }
-  }
-  try {
-    await (0, import_promises.mkdir)(DATA_DIR, { recursive: true });
-    const raw = await (0, import_promises.readFile)(SCORES_FILE, "utf-8");
-    store = JSON.parse(raw);
-  } catch {
-    store = {};
-  }
-}
-var dirty = false;
-var saveTimer = null;
-function scheduleSave(guildId, rec) {
-  if (pgClient) {
-    pgUpsert(guildId, rec).catch(() => {
-    });
-    return;
-  }
-  dirty = true;
-  if (saveTimer) return;
-  saveTimer = setTimeout(async () => {
-    saveTimer = null;
-    if (!dirty) return;
-    dirty = false;
-    try {
-      await (0, import_promises.writeFile)(SCORES_FILE, JSON.stringify(store, null, 2), "utf-8");
-    } catch (err) {
-      logger.error({ err }, "failed to save scores to file");
-    }
-  }, 2e3);
-}
-function getOrCreate(guildId, userId, username) {
-  if (!store[guildId]) store[guildId] = {};
-  if (!store[guildId][userId]) {
-    store[guildId][userId] = {
-      userId,
-      username,
-      points: 0,
-      scrambleWins: 0,
-      scrambleCorrect: 0,
-      imposterPoints: 0,
-      searchWins: 0,
-      rouletteWins: 0,
-      closestWins: 0,
-      guessWins: 0
-    };
-  } else {
-    store[guildId][userId].username = username;
-  }
-  return store[guildId][userId];
-}
-function addScrambleWin(guildId, userId, username, pts) {
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts;
-  rec.scrambleWins += 1;
-  scheduleSave(guildId, rec);
-}
-function addImposterPoints(guildId, userId, username, pts) {
-  if (pts <= 0) return;
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts * 10;
-  rec.imposterPoints += pts * 10;
-  scheduleSave(guildId, rec);
-}
-function addSearchWin(guildId, userId, username, pts) {
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts;
-  rec.searchWins = (rec.searchWins ?? 0) + 1;
-  scheduleSave(guildId, rec);
-}
-function addRouletteWin(guildId, userId, username, pts) {
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts;
-  rec.rouletteWins = (rec.rouletteWins ?? 0) + 1;
-  scheduleSave(guildId, rec);
-}
-function addClosestWin(guildId, userId, username, pts) {
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts;
-  rec.closestWins = (rec.closestWins ?? 0) + 1;
-  scheduleSave(guildId, rec);
-}
-function addGuessWin(guildId, userId, username, pts) {
-  const rec = getOrCreate(guildId, userId, username);
-  rec.points += pts;
-  rec.guessWins = (rec.guessWins ?? 0) + 1;
-  scheduleSave(guildId, rec);
-}
-function getLeaderboard(guildId) {
-  const guild = store[guildId];
-  if (!guild) return [];
-  return Object.values(guild).filter((r) => r.points > 0).sort((a, b) => b.points - a.points).slice(0, 10);
-}
-function getUserRecord(guildId, userId) {
-  return store[guildId]?.[userId] ?? null;
-}
-function getUserRank(guildId, userId) {
-  const guild = store[guildId];
-  if (!guild) return 0;
-  const sorted = Object.values(guild).filter((r) => r.points > 0).sort((a, b) => b.points - a.points);
-  const idx = sorted.findIndex((r) => r.userId === userId);
-  return idx === -1 ? 0 : idx + 1;
-}
-function getStoreSnapshot() {
-  return JSON.parse(JSON.stringify(store));
-}
-function getGuildStats(guildId) {
-  const guild = store[guildId];
-  if (!guild) {
-    return {
-      totalPlayers: 0,
-      totalPoints: 0,
-      topGame: "\u2014",
-      topPlayer: null,
-      gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0, closest: 0, guess: 0 }
-    };
-  }
-  const records = Object.values(guild).filter((r) => r.points > 0);
-  const totalPoints = records.reduce((s, r) => s + r.points, 0);
-  const gameCounts = {
-    imposter: records.filter((r) => r.imposterPoints > 0).length,
-    scramble: records.reduce((s, r) => s + r.scrambleWins, 0),
-    search: records.reduce((s, r) => s + (r.searchWins ?? 0), 0),
-    roulette: records.reduce((s, r) => s + (r.rouletteWins ?? 0), 0),
-    closest: records.reduce((s, r) => s + (r.closestWins ?? 0), 0),
-    guess: records.reduce((s, r) => s + (r.guessWins ?? 0), 0)
-  };
-  const topGameEntry = Object.entries(gameCounts).sort((a, b) => b[1] - a[1])[0];
-  const gameNames = {
-    imposter: "\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631",
-    scramble: "\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641",
-    search: "\u{1F50D} \u0627\u0644\u0628\u062D\u062B",
-    roulette: "\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A",
-    closest: "\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628",
-    guess: "\u{1F50E} \u062E\u0645\u0651\u0646"
-  };
-  const topGame = topGameEntry && topGameEntry[1] > 0 ? gameNames[topGameEntry[0]] ?? "\u2014" : "\u2014";
-  const topPlayer = records.sort((a, b) => b.points - a.points)[0] ?? null;
-  return { totalPlayers: records.length, totalPoints, topGame, topPlayer, gameCounts };
-}
-
 // src/bot/handlers.ts
+init_console_logger();
+init_scores();
 var REVEAL_SECONDS = 20;
 var SUGGESTION_SECONDS = 40;
 var VOTING_BASE_SECONDS = 30;
@@ -76527,12 +76595,16 @@ async function handleLeaderboardCommand(interaction) {
     }]
   });
 }
+var BACKUP_OWNER_IDS = /* @__PURE__ */ new Set([
+  "855054759379599360",
+  "716279646160814200",
+  "1406547827865288786",
+  "1258814535528218677"
+]);
 async function handleBackupCommand(interaction) {
-  const member = interaction.member;
-  const isAdmin = member && typeof member.permissions !== "string" && member.permissions.has("Administrator");
-  if (!isAdmin) {
+  if (!BACKUP_OWNER_IDS.has(interaction.user.id)) {
     await interaction.reply({
-      embeds: [errorEmbed("\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637.")],
+      embeds: [errorEmbed("\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0623\u0635\u062D\u0627\u0628 \u0627\u0644\u0628\u0648\u062A \u0641\u0642\u0637.")],
       flags: import_discord3.MessageFlags.Ephemeral
     });
     return;
@@ -77039,6 +77111,7 @@ function scrambleCancelledEmbed() {
 }
 
 // src/bot/scramble/handlers.ts
+init_scores();
 var LOBBY_SECONDS2 = 60;
 var LOBBY_TICK = 15;
 var BETWEEN_TURNS_MS = 1500;
@@ -78098,6 +78171,7 @@ function getRandomPairs(count, used) {
 }
 
 // src/bot/search/handlers.ts
+init_scores();
 function lobbyButtons3() {
   return new import_discord6.ActionRowBuilder().addComponents(
     new import_discord6.ButtonBuilder().setCustomId("search:join").setLabel("\u0627\u0646\u0636\u0645 \u270B").setStyle(import_discord6.ButtonStyle.Primary),
@@ -78466,6 +78540,9 @@ async function generateWheelPng(players, selectedIdx) {
   return (0, import_sharp.default)(Buffer.from(svg)).png().toBuffer();
 }
 
+// src/bot/roulette/handlers.ts
+init_console_logger();
+
 // src/bot/roulette/game.ts
 var LOBBY_SECONDS5 = 60;
 var CHOOSE_SECONDS = 30;
@@ -78647,6 +78724,7 @@ function rouletteFinalRoundEmbed(playerA, playerB) {
 }
 
 // src/bot/roulette/handlers.ts
+init_scores();
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -79320,6 +79398,7 @@ async function handleRouletteButton(interaction) {
 
 // src/bot/closest/handlers.ts
 var import_discord9 = __toESM(require_src(), 1);
+init_scores();
 
 // src/bot/closest/game.ts
 var games5 = /* @__PURE__ */ new Map();
@@ -79652,6 +79731,7 @@ async function handleClosestCommand(interaction) {
 
 // src/bot/guess/handlers.ts
 var import_discord10 = __toESM(require_src(), 1);
+init_scores();
 
 // src/bot/guess/words.ts
 var WORDS = [
@@ -87358,8 +87438,15 @@ async function handleGuessCommand(interaction) {
 }
 
 // src/bot/prefix.ts
+init_scores();
 var PREFIX = "$";
 var RANK_MEDALS2 = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
+var OWNER_IDS = /* @__PURE__ */ new Set([
+  "855054759379599360",
+  "716279646160814200",
+  "1406547827865288786",
+  "1258814535528218677"
+]);
 async function replyTemp(msg, content) {
   try {
     const sent = await msg.reply(content);
@@ -87515,6 +87602,7 @@ async function handlePrefixMessage(message) {
         });
         break;
       }
+      // ─── Server leaderboard (mentions) ────────────────────────────────────
       case "\u062A\u0648\u0628": {
         const top = getLeaderboard(guildId);
         if (top.length === 0) {
@@ -87528,9 +87616,30 @@ async function handlePrefixMessage(message) {
         await message.reply({
           embeds: [{
             color: 16426522,
-            title: "\u{1F3C6} \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646",
+            title: "\u{1F3C6} \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646 \u2014 \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
             description: rows,
-            footer: { text: "\u0645\u062C\u0645\u0648\u0639 \u0646\u0642\u0627\u0637 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628" }
+            footer: { text: "\u0645\u062C\u0645\u0648\u0639 \u0646\u0642\u0627\u0637 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u2022 \u0627\u0644\u0633\u064A\u0631\u0641\u0631 \u0627\u0644\u062D\u0627\u0644\u064A \u0641\u0642\u0637" }
+          }]
+        });
+        break;
+      }
+      // ─── Global leaderboard (usernames, all servers) ──────────────────────
+      case "\u0639\u0627\u0644\u0645\u064A": {
+        const top = getGlobalLeaderboard();
+        if (top.length === 0) {
+          await message.reply("\u0645\u0627 \u0641\u064A \u0646\u0642\u0627\u0637 \u0645\u0633\u062C\u0651\u0644\u0629 \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u0628\u062F\u0623! \u{1F3AE}");
+          break;
+        }
+        const rows = top.map((r, i) => {
+          const medal = RANK_MEDALS2[i] ?? `\`${i + 1}.\``;
+          return `${medal} **${r.username}** \u2014 **${r.totalPoints}** \u0646\u0642\u0637\u0629`;
+        }).join("\n");
+        await message.reply({
+          embeds: [{
+            color: 15844367,
+            title: "\u{1F30D} \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646 \u0639\u0627\u0644\u0645\u064A\u0627\u064B",
+            description: rows,
+            footer: { text: "\u0645\u062C\u0645\u0648\u0639 \u0627\u0644\u0646\u0642\u0627\u0637 \u0645\u0646 \u062C\u0645\u064A\u0639 \u0627\u0644\u0633\u064A\u0631\u0641\u0631\u0627\u062A" }
           }]
         });
         break;
@@ -87571,6 +87680,54 @@ async function handlePrefixMessage(message) {
         });
         break;
       }
+      // ─── Admin: add points ────────────────────────────────────────────────
+      case "\u0627\u0636\u0627\u0641\u0647": {
+        if (!OWNER_IDS.has(userId)) {
+          await replyTemp(message, "\u274C \u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0623\u0635\u062D\u0627\u0628 \u0627\u0644\u0628\u0648\u062A \u0641\u0642\u0637.");
+          break;
+        }
+        const mentionRaw = args[1];
+        const mentionMatch = mentionRaw?.match(/^<@!?(\d+)>$/);
+        if (!mentionMatch) {
+          await replyTemp(message, "\u274C \u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0627\u0644\u0635\u062D\u064A\u062D: `$\u0627\u0636\u0627\u0641\u0647 @\u0634\u062E\u0635 \u0639\u062F\u062F_\u0627\u0644\u0646\u0642\u0627\u0637`");
+          break;
+        }
+        const targetId = mentionMatch[1];
+        const amount = parseInt(args[2] ?? "", 10);
+        if (isNaN(amount) || amount <= 0) {
+          await replyTemp(message, "\u274C \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0648\u062C\u0628\u0627\u064B.");
+          break;
+        }
+        const targetMember = await message.guild?.members.fetch(targetId).catch(() => null);
+        const targetUsername = targetMember?.user.username ?? targetId;
+        const newTotal = adjustPoints(guildId, targetId, targetUsername, amount);
+        await message.reply(`\u2705 \u062A\u0645 \u0625\u0636\u0627\u0641\u0629 **${amount}** \u0646\u0642\u0637\u0629 \u0644\u0640 <@${targetId}> \u2014 \u0627\u0644\u0645\u062C\u0645\u0648\u0639: **${newTotal}** \u0646\u0642\u0637\u0629`);
+        break;
+      }
+      // ─── Admin: remove points ─────────────────────────────────────────────
+      case "\u062E\u0635\u0645": {
+        if (!OWNER_IDS.has(userId)) {
+          await replyTemp(message, "\u274C \u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0623\u0635\u062D\u0627\u0628 \u0627\u0644\u0628\u0648\u062A \u0641\u0642\u0637.");
+          break;
+        }
+        const mentionRaw = args[1];
+        const mentionMatch = mentionRaw?.match(/^<@!?(\d+)>$/);
+        if (!mentionMatch) {
+          await replyTemp(message, "\u274C \u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0627\u0644\u0635\u062D\u064A\u062D: `$\u062E\u0635\u0645 @\u0634\u062E\u0635 \u0639\u062F\u062F_\u0627\u0644\u0646\u0642\u0627\u0637`");
+          break;
+        }
+        const targetId = mentionMatch[1];
+        const amount = parseInt(args[2] ?? "", 10);
+        if (isNaN(amount) || amount <= 0) {
+          await replyTemp(message, "\u274C \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0648\u062C\u0628\u0627\u064B.");
+          break;
+        }
+        const targetMember = await message.guild?.members.fetch(targetId).catch(() => null);
+        const targetUsername = targetMember?.user.username ?? targetId;
+        const newTotal = adjustPoints(guildId, targetId, targetUsername, -amount);
+        await message.reply(`\u2705 \u062A\u0645 \u062E\u0635\u0645 **${amount}** \u0646\u0642\u0637\u0629 \u0645\u0646 <@${targetId}> \u2014 \u0627\u0644\u0645\u062C\u0645\u0648\u0639: **${newTotal}** \u0646\u0642\u0637\u0629`);
+        break;
+      }
       // ─── Help & Games List ────────────────────────────────────────────────
       case "\u0627\u0644\u0639\u0627\u0628": {
         await message.reply({
@@ -87603,6 +87760,14 @@ async function handlePrefixMessage(message) {
         break;
       }
       case "\u0645\u0633\u0627\u0639\u062F\u0629": {
+        const isOwner = OWNER_IDS.has(userId);
+        const adminSection = isOwner ? [
+          "",
+          "**\u{1F6E1}\uFE0F \u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0625\u062F\u0627\u0631\u0629** _(\u0623\u0635\u062D\u0627\u0628 \u0627\u0644\u0628\u0648\u062A \u0641\u0642\u0637)_",
+          "`$\u0627\u0636\u0627\u0641\u0647 @\u0634\u062E\u0635 \u0639\u062F\u062F` \u2014 \u0623\u0636\u0641 \u0646\u0642\u0627\u0637 \u0644\u0644\u0627\u0639\u0628",
+          "`$\u062E\u0635\u0645 @\u0634\u062E\u0635 \u0639\u062F\u062F` \u2014 \u0627\u062E\u0635\u0645 \u0646\u0642\u0627\u0637 \u0645\u0646 \u0644\u0627\u0639\u0628",
+          "`$\u0628\u064A\u0643\u0627\u0628` \u2014 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0627\u0644\u0622\u0646"
+        ] : [];
         await message.reply({
           embeds: [{
             color: 5793266,
@@ -87615,12 +87780,45 @@ async function handlePrefixMessage(message) {
               "**\u{1F3C6} \u0627\u0644\u0646\u0642\u0627\u0637**",
               "`$\u0646\u0642\u0627\u0637` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643",
               "`$\u0646\u0642\u0627\u0637 @\u0634\u062E\u0635` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637 \u0634\u062E\u0635 \u0622\u062E\u0631",
-              "`$\u062A\u0648\u0628` \u2014 \u0644\u0648\u062D\u0629 \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u064A\u0646",
+              "`$\u062A\u0648\u0628` \u2014 \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631 (@\u0645\u0646\u0634\u0646\u0627\u062A)",
+              "`$\u0639\u0627\u0644\u0645\u064A` \u2014 \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646 \u0641\u064A \u062C\u0645\u064A\u0639 \u0627\u0644\u0633\u064A\u0631\u0641\u0631\u0627\u062A",
               "`$\u0627\u062D\u0635\u0627\u0621` \u2014 \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
-              "`$\u0645\u0633\u0627\u0639\u062F\u0629` \u2014 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0626\u0645\u0629"
+              "`$\u0645\u0633\u0627\u0639\u062F\u0629` \u2014 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0626\u0645\u0629",
+              ...adminSection
             ].join("\n")
           }]
         });
+        break;
+      }
+      // ─── Manual backup (owners only) ──────────────────────────────────────
+      case "\u0628\u064A\u0643\u0627\u0628": {
+        if (!OWNER_IDS.has(userId)) {
+          await replyTemp(message, "\u274C \u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0623\u0635\u062D\u0627\u0628 \u0627\u0644\u0628\u0648\u062A \u0641\u0642\u0637.");
+          break;
+        }
+        const webhookUrl = process.env.GOOGLE_DRIVE_WEBHOOK;
+        if (!webhookUrl) {
+          await message.reply("\u274C \u0645\u062A\u063A\u064A\u0631 `GOOGLE_DRIVE_WEBHOOK` \u063A\u064A\u0631 \u0645\u0636\u0628\u0648\u0637 \u0641\u064A Railway.");
+          break;
+        }
+        const snapshot = JSON.parse(JSON.stringify(
+          await Promise.resolve().then(() => (init_scores(), scores_exports)).then((m) => m.getStoreSnapshot())
+        ));
+        const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+        try {
+          const res = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ date, scores: snapshot })
+          });
+          if (res.ok) {
+            await message.reply(`\u2705 \u062A\u0645 \u062D\u0641\u0638 \u0627\u0644\u0646\u0633\u062E\u0629 \u0627\u0644\u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0628\u0646\u062C\u0627\u062D \u2014 **${date}**`);
+          } else {
+            await message.reply("\u274C \u0641\u0634\u0644 \u0627\u0644\u0625\u0631\u0633\u0627\u0644. \u062A\u0623\u0643\u062F \u0623\u0646 \u0631\u0627\u0628\u0637 Google Drive \u0635\u062D\u064A\u062D.");
+          }
+        } catch {
+          await message.reply("\u274C \u062E\u0637\u0623 \u0623\u062B\u0646\u0627\u0621 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0646\u0633\u062E\u0629 \u0627\u0644\u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629.");
+        }
         break;
       }
       default:
@@ -87740,7 +87938,11 @@ async function startBot(token2) {
   return client;
 }
 
+// bot-entry:bot-entry
+init_scores();
+
 // src/bot/backup.ts
+init_console_logger();
 var BACKUP_INTERVAL_MS = 24 * 60 * 60 * 1e3;
 function startDailyBackup(getStoreSnapshot2) {
   const webhookUrl = process.env.GOOGLE_DRIVE_WEBHOOK;

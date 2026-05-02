@@ -20323,23 +20323,23 @@ var require_message = __commonJS({
       MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
       MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
     })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
-    var MessageFlags6;
-    (function(MessageFlags7) {
-      MessageFlags7[MessageFlags7["Crossposted"] = 1] = "Crossposted";
-      MessageFlags7[MessageFlags7["IsCrosspost"] = 2] = "IsCrosspost";
-      MessageFlags7[MessageFlags7["SuppressEmbeds"] = 4] = "SuppressEmbeds";
-      MessageFlags7[MessageFlags7["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
-      MessageFlags7[MessageFlags7["Urgent"] = 16] = "Urgent";
-      MessageFlags7[MessageFlags7["HasThread"] = 32] = "HasThread";
-      MessageFlags7[MessageFlags7["Ephemeral"] = 64] = "Ephemeral";
-      MessageFlags7[MessageFlags7["Loading"] = 128] = "Loading";
-      MessageFlags7[MessageFlags7["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
-      MessageFlags7[MessageFlags7["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
-      MessageFlags7[MessageFlags7["SuppressNotifications"] = 4096] = "SuppressNotifications";
-      MessageFlags7[MessageFlags7["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
-      MessageFlags7[MessageFlags7["HasSnapshot"] = 16384] = "HasSnapshot";
-      MessageFlags7[MessageFlags7["IsComponentsV2"] = 32768] = "IsComponentsV2";
-    })(MessageFlags6 || (exports2.MessageFlags = MessageFlags6 = {}));
+    var MessageFlags7;
+    (function(MessageFlags8) {
+      MessageFlags8[MessageFlags8["Crossposted"] = 1] = "Crossposted";
+      MessageFlags8[MessageFlags8["IsCrosspost"] = 2] = "IsCrosspost";
+      MessageFlags8[MessageFlags8["SuppressEmbeds"] = 4] = "SuppressEmbeds";
+      MessageFlags8[MessageFlags8["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
+      MessageFlags8[MessageFlags8["Urgent"] = 16] = "Urgent";
+      MessageFlags8[MessageFlags8["HasThread"] = 32] = "HasThread";
+      MessageFlags8[MessageFlags8["Ephemeral"] = 64] = "Ephemeral";
+      MessageFlags8[MessageFlags8["Loading"] = 128] = "Loading";
+      MessageFlags8[MessageFlags8["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
+      MessageFlags8[MessageFlags8["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
+      MessageFlags8[MessageFlags8["SuppressNotifications"] = 4096] = "SuppressNotifications";
+      MessageFlags8[MessageFlags8["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
+      MessageFlags8[MessageFlags8["HasSnapshot"] = 16384] = "HasSnapshot";
+      MessageFlags8[MessageFlags8["IsComponentsV2"] = 32768] = "IsComponentsV2";
+    })(MessageFlags7 || (exports2.MessageFlags = MessageFlags7 = {}));
     var BaseThemeType;
     (function(BaseThemeType2) {
       BaseThemeType2[BaseThemeType2["Unset"] = 0] = "Unset";
@@ -20406,15 +20406,15 @@ var require_message = __commonJS({
       ComponentType2[ComponentType2["Checkbox"] = 23] = "Checkbox";
       ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
     })(ComponentType || (exports2.ComponentType = ComponentType = {}));
-    var ButtonStyle6;
-    (function(ButtonStyle7) {
-      ButtonStyle7[ButtonStyle7["Primary"] = 1] = "Primary";
-      ButtonStyle7[ButtonStyle7["Secondary"] = 2] = "Secondary";
-      ButtonStyle7[ButtonStyle7["Success"] = 3] = "Success";
-      ButtonStyle7[ButtonStyle7["Danger"] = 4] = "Danger";
-      ButtonStyle7[ButtonStyle7["Link"] = 5] = "Link";
-      ButtonStyle7[ButtonStyle7["Premium"] = 6] = "Premium";
-    })(ButtonStyle6 || (exports2.ButtonStyle = ButtonStyle6 = {}));
+    var ButtonStyle7;
+    (function(ButtonStyle8) {
+      ButtonStyle8[ButtonStyle8["Primary"] = 1] = "Primary";
+      ButtonStyle8[ButtonStyle8["Secondary"] = 2] = "Secondary";
+      ButtonStyle8[ButtonStyle8["Success"] = 3] = "Success";
+      ButtonStyle8[ButtonStyle8["Danger"] = 4] = "Danger";
+      ButtonStyle8[ButtonStyle8["Link"] = 5] = "Link";
+      ButtonStyle8[ButtonStyle8["Premium"] = 6] = "Premium";
+    })(ButtonStyle7 || (exports2.ButtonStyle = ButtonStyle7 = {}));
     var TextInputStyle2;
     (function(TextInputStyle3) {
       TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
@@ -35613,7 +35613,7 @@ var require_DataResolver = __commonJS({
 var require_MessageFlagsBitField = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/util/MessageFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { MessageFlags: MessageFlags6 } = require_v106();
+    var { MessageFlags: MessageFlags7 } = require_v106();
     var BitField = require_BitField();
     var MessageFlagsBitField = class extends BitField {
       /**
@@ -35621,7 +35621,7 @@ var require_MessageFlagsBitField = __commonJS({
        * @type {MessageFlags}
        * @memberof MessageFlagsBitField
        */
-      static Flags = MessageFlags6;
+      static Flags = MessageFlags7;
     };
     module2.exports = MessageFlagsBitField;
   }
@@ -42601,14 +42601,14 @@ var require_dist8 = __commonJS({
     };
     var index_exports = {};
     __export2(index_exports, {
-      ActionRowBuilder: () => ActionRowBuilder6,
+      ActionRowBuilder: () => ActionRowBuilder7,
       ApplicationCommandNumericOptionMinMaxValueMixin: () => ApplicationCommandNumericOptionMinMaxValueMixin,
       ApplicationCommandOptionBase: () => ApplicationCommandOptionBase,
       ApplicationCommandOptionChannelTypesMixin: () => ApplicationCommandOptionChannelTypesMixin,
       ApplicationCommandOptionWithAutocompleteMixin: () => ApplicationCommandOptionWithAutocompleteMixin,
       ApplicationCommandOptionWithChoicesMixin: () => ApplicationCommandOptionWithChoicesMixin,
       BaseSelectMenuBuilder: () => BaseSelectMenuBuilder,
-      ButtonBuilder: () => ButtonBuilder6,
+      ButtonBuilder: () => ButtonBuilder7,
       ChannelSelectMenuBuilder: () => ChannelSelectMenuBuilder,
       CheckboxAssertions: () => Assertions_exports3,
       CheckboxBuilder: () => CheckboxBuilder,
@@ -43174,7 +43174,7 @@ var require_dist8 = __commonJS({
     };
     var import_v1027 = require_v106();
     var import_v102 = require_v106();
-    var ButtonBuilder6 = class extends ComponentBuilder {
+    var ButtonBuilder7 = class extends ComponentBuilder {
       static {
         __name(this, "ButtonBuilder");
       }
@@ -44956,7 +44956,7 @@ var require_dist8 = __commonJS({
     var dividerPredicate = import_shapeshift8.s.boolean();
     var spacingPredicate = import_shapeshift8.s.nativeEnum(import_v1020.SeparatorSpacingSize);
     var textDisplayContentPredicate = import_shapeshift8.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var accessoryPredicate = import_shapeshift8.s.instance(ButtonBuilder6).or(import_shapeshift8.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
+    var accessoryPredicate = import_shapeshift8.s.instance(ButtonBuilder7).or(import_shapeshift8.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
     var containerColorPredicate = colorPredicate.nullish();
     function assertReturnOfBuilder(input, ExpectedInstanceOf) {
       import_shapeshift8.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
@@ -45209,7 +45209,7 @@ var require_dist8 = __commonJS({
        */
       addActionRowComponents(...components) {
         this.components.push(
-          ...normalizeArray(components).map((component) => resolveBuilder(component, ActionRowBuilder6))
+          ...normalizeArray(components).map((component) => resolveBuilder(component, ActionRowBuilder7))
         );
         return this;
       }
@@ -45531,7 +45531,7 @@ var require_dist8 = __commonJS({
        * @param accessory - The accessory to use
        */
       setButtonAccessory(accessory) {
-        Reflect.set(this, "accessory", accessoryPredicate.parse(resolveBuilder(accessory, ButtonBuilder6)));
+        Reflect.set(this, "accessory", accessoryPredicate.parse(resolveBuilder(accessory, ButtonBuilder7)));
         return this;
       }
       /**
@@ -45595,9 +45595,9 @@ var require_dist8 = __commonJS({
       }
       switch (data.type) {
         case import_v1027.ComponentType.ActionRow:
-          return new ActionRowBuilder6(data);
+          return new ActionRowBuilder7(data);
         case import_v1027.ComponentType.Button:
-          return new ButtonBuilder6(data);
+          return new ButtonBuilder7(data);
         case import_v1027.ComponentType.StringSelect:
           return new StringSelectMenuBuilder(data);
         case import_v1027.ComponentType.TextInput:
@@ -45653,7 +45653,7 @@ var require_dist8 = __commonJS({
       return new Constructor(builder);
     }
     __name(resolveBuilder, "resolveBuilder");
-    var ActionRowBuilder6 = class extends ComponentBuilder {
+    var ActionRowBuilder7 = class extends ComponentBuilder {
       static {
         __name(this, "ActionRowBuilder");
       }
@@ -45736,7 +45736,7 @@ var require_dist8 = __commonJS({
     });
     var import_shapeshift9 = require_cjs4();
     var titleValidator = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
-    var componentsValidator = import_shapeshift9.s.union([import_shapeshift9.s.instance(ActionRowBuilder6), import_shapeshift9.s.instance(LabelBuilder), import_shapeshift9.s.instance(TextDisplayBuilder)]).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
+    var componentsValidator = import_shapeshift9.s.union([import_shapeshift9.s.instance(ActionRowBuilder7), import_shapeshift9.s.instance(LabelBuilder), import_shapeshift9.s.instance(TextDisplayBuilder)]).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
     function validateRequiredParameters2(customId, title, components) {
       customIdValidator.parse(customId);
       titleValidator.parse(title);
@@ -45791,15 +45791,15 @@ var require_dist8 = __commonJS({
       addComponents(...components) {
         this.components.push(
           ...normalizeArray(components).map((component, idx) => {
-            if (component instanceof ActionRowBuilder6 || component instanceof LabelBuilder || component instanceof TextDisplayBuilder) {
+            if (component instanceof ActionRowBuilder7 || component instanceof LabelBuilder || component instanceof TextDisplayBuilder) {
               return component;
             }
             if (component instanceof TextInputBuilder2) {
-              return new ActionRowBuilder6().addComponents(component);
+              return new ActionRowBuilder7().addComponents(component);
             }
             if ("type" in component) {
               if (component.type === import_v1029.ComponentType.ActionRow) {
-                return new ActionRowBuilder6(component);
+                return new ActionRowBuilder7(component);
               }
               if (component.type === import_v1029.ComponentType.Label) {
                 return new LabelBuilder(component);
@@ -45808,7 +45808,7 @@ var require_dist8 = __commonJS({
                 return new TextDisplayBuilder(component);
               }
               if (component.type === import_v1029.ComponentType.TextInput) {
-                return new ActionRowBuilder6().addComponents(
+                return new ActionRowBuilder7().addComponents(
                   new TextInputBuilder2(component)
                 );
               }
@@ -45848,7 +45848,7 @@ var require_dist8 = __commonJS({
        */
       addActionRowComponents(...components) {
         const normalized = normalizeArray(components);
-        const resolved = normalized.map((row) => resolveBuilder(row, ActionRowBuilder6));
+        const resolved = normalized.map((row) => resolveBuilder(row, ActionRowBuilder7));
         this.components.push(...resolved);
         return this;
       }
@@ -48506,7 +48506,7 @@ var require_ActionRowBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { createComponentBuilder } = require_Components();
     var { toSnakeCase } = require_Transformers();
-    var ActionRowBuilder6 = class extends BuildersActionRow {
+    var ActionRowBuilder7 = class extends BuildersActionRow {
       constructor({ components, ...data } = {}) {
         super({
           ...toSnakeCase(data),
@@ -48522,7 +48522,7 @@ var require_ActionRowBuilder = __commonJS({
         return new this(isJSONEncodable(other) ? other.toJSON() : other);
       }
     };
-    module2.exports = ActionRowBuilder6;
+    module2.exports = ActionRowBuilder7;
   }
 });
 
@@ -48534,7 +48534,7 @@ var require_ButtonBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
-    var ButtonBuilder6 = class extends BuildersButton {
+    var ButtonBuilder7 = class extends BuildersButton {
       constructor({ emoji, ...data } = {}) {
         super(toSnakeCase({ ...data, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
       }
@@ -48558,7 +48558,7 @@ var require_ButtonBuilder = __commonJS({
         return new this(isJSONEncodable(other) ? other.toJSON() : other);
       }
     };
-    module2.exports = ButtonBuilder6;
+    module2.exports = ButtonBuilder7;
   }
 });
 
@@ -49311,8 +49311,8 @@ var require_Components = __commonJS({
     }
     module2.exports = { createComponent, createComponentBuilder, findComponentByCustomId };
     var ActionRow = require_ActionRow();
-    var ActionRowBuilder6 = require_ActionRowBuilder();
-    var ButtonBuilder6 = require_ButtonBuilder();
+    var ActionRowBuilder7 = require_ActionRowBuilder();
+    var ButtonBuilder7 = require_ButtonBuilder();
     var ButtonComponent = require_ButtonComponent();
     var ChannelSelectMenuBuilder = require_ChannelSelectMenuBuilder();
     var ChannelSelectMenuComponent = require_ChannelSelectMenuComponent();
@@ -49354,8 +49354,8 @@ var require_Components = __commonJS({
       [ComponentType.Label]: LabelComponent
     };
     var ComponentTypeToBuilder = {
-      [ComponentType.ActionRow]: ActionRowBuilder6,
-      [ComponentType.Button]: ButtonBuilder6,
+      [ComponentType.ActionRow]: ActionRowBuilder7,
+      [ComponentType.Button]: ButtonBuilder7,
       [ComponentType.StringSelect]: StringSelectMenuBuilder,
       [ComponentType.TextInput]: TextInputBuilder2,
       [ComponentType.UserSelect]: UserSelectMenuBuilder,
@@ -49377,7 +49377,7 @@ var require_Message = __commonJS({
       InteractionType,
       ChannelType,
       MessageType,
-      MessageFlags: MessageFlags6,
+      MessageFlags: MessageFlags7,
       PermissionFlagsBits,
       MessageReferenceType
     } = require_v106();
@@ -49682,7 +49682,7 @@ var require_Message = __commonJS({
        * @readonly
        */
       get hasThread() {
-        return this.flags.has(MessageFlags6.HasThread);
+        return this.flags.has(MessageFlags7.HasThread);
       }
       /**
        * The thread started by this message
@@ -49892,7 +49892,7 @@ var require_Message = __commonJS({
         const bitfield = PermissionFlagsBits.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits.ManageMessages);
         const { channel } = this;
         return Boolean(
-          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags6.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
+          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags7.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
         );
       }
       /**
@@ -50093,9 +50093,9 @@ var require_Message = __commonJS({
       suppressEmbeds(suppress = true) {
         const flags = new MessageFlagsBitField(this.flags.bitfield);
         if (suppress) {
-          flags.add(MessageFlags6.SuppressEmbeds);
+          flags.add(MessageFlags7.SuppressEmbeds);
         } else {
-          flags.remove(MessageFlags6.SuppressEmbeds);
+          flags.remove(MessageFlags7.SuppressEmbeds);
         }
         return this.edit({ flags });
       }
@@ -51887,7 +51887,7 @@ var require_MessagePayload = __commonJS({
     var { Buffer: Buffer2 } = require("node:buffer");
     var { lazy, isJSONEncodable } = require_dist();
     var { DiscordSnowflake } = require_cjs3();
-    var { MessageFlags: MessageFlags6, MessageReferenceType } = require_v106();
+    var { MessageFlags: MessageFlags7, MessageReferenceType } = require_v106();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveFile } = require_DataResolver();
     var MessageFlagsBitField = require_MessageFlagsBitField();
@@ -52013,7 +52013,7 @@ var require_MessagePayload = __commonJS({
           flags = new MessageFlagsBitField(this.options.flags).bitfield;
         }
         if (isInteraction && this.options.ephemeral) {
-          flags |= MessageFlags6.Ephemeral;
+          flags |= MessageFlags7.Ephemeral;
         }
         let allowedMentions = this.options.allowedMentions === void 0 ? this.target.client.options.allowedMentions : this.options.allowedMentions;
         if (allowedMentions?.repliedUser !== void 0) {
@@ -57768,7 +57768,7 @@ var require_InteractionResponses = __commonJS({
     var { deprecate } = require("node:util");
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { isJSONEncodable } = require_dist();
-    var { InteractionResponseType, MessageFlags: MessageFlags6, Routes: Routes3, InteractionType } = require_v106();
+    var { InteractionResponseType, MessageFlags: MessageFlags7, Routes: Routes3, InteractionType } = require_v106();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessageFlagsBitField = require_MessageFlagsBitField();
     var InteractionCallbackResponse = require_InteractionCallbackResponse();
@@ -57862,7 +57862,7 @@ var require_InteractionResponses = __commonJS({
         }
         const flags = new MessageFlagsBitField(options.flags);
         if (options.ephemeral) {
-          flags.add(MessageFlags6.Ephemeral);
+          flags.add(MessageFlags7.Ephemeral);
         }
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
@@ -57875,7 +57875,7 @@ var require_InteractionResponses = __commonJS({
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
         this.deferred = true;
-        this.ephemeral = flags.has(MessageFlags6.Ephemeral);
+        this.ephemeral = flags.has(MessageFlags7.Ephemeral);
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
       /**
@@ -57930,7 +57930,7 @@ var require_InteractionResponses = __commonJS({
           auth: false,
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
-        this.ephemeral = Boolean(data.flags & MessageFlags6.Ephemeral);
+        this.ephemeral = Boolean(data.flags & MessageFlags7.Ephemeral);
         this.replied = true;
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
@@ -74990,7 +74990,7 @@ var require_src = __commonJS({
 });
 
 // src/bot/client.ts
-var import_discord10 = __toESM(require_src(), 1);
+var import_discord11 = __toESM(require_src(), 1);
 
 // console-logger:console-logger
 var logger = {
@@ -75722,12 +75722,13 @@ async function connectPg() {
         search_wins      INTEGER NOT NULL DEFAULT 0,
         roulette_wins    INTEGER NOT NULL DEFAULT 0,
         closest_wins     INTEGER NOT NULL DEFAULT 0,
+        guess_wins       INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (guild_id, user_id)
       )
     `);
-    await client.query(`
-      ALTER TABLE scores ADD COLUMN IF NOT EXISTS closest_wins INTEGER NOT NULL DEFAULT 0
-    `).catch(() => {
+    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS closest_wins INTEGER NOT NULL DEFAULT 0`).catch(() => {
+    });
+    await client.query(`ALTER TABLE scores ADD COLUMN IF NOT EXISTS guess_wins   INTEGER NOT NULL DEFAULT 0`).catch(() => {
     });
     logger.info("PostgreSQL connected \u2014 scores will be persisted");
     return client;
@@ -75741,8 +75742,8 @@ async function pgUpsert(guildId, rec) {
   try {
     await pgClient.query(
       `INSERT INTO scores
-         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins, closest_wins)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins, closest_wins, guess_wins)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
        ON CONFLICT (guild_id, user_id) DO UPDATE SET
          username         = EXCLUDED.username,
          points           = EXCLUDED.points,
@@ -75751,7 +75752,8 @@ async function pgUpsert(guildId, rec) {
          imposter_points  = EXCLUDED.imposter_points,
          search_wins      = EXCLUDED.search_wins,
          roulette_wins    = EXCLUDED.roulette_wins,
-         closest_wins     = EXCLUDED.closest_wins`,
+         closest_wins     = EXCLUDED.closest_wins,
+         guess_wins       = EXCLUDED.guess_wins`,
       [
         guildId,
         rec.userId,
@@ -75762,7 +75764,8 @@ async function pgUpsert(guildId, rec) {
         rec.imposterPoints,
         rec.searchWins,
         rec.rouletteWins,
-        rec.closestWins
+        rec.closestWins,
+        rec.guessWins
       ]
     );
   } catch (err) {
@@ -75785,7 +75788,8 @@ async function loadScores() {
           imposterPoints: Number(row.imposter_points),
           searchWins: Number(row.search_wins),
           rouletteWins: Number(row.roulette_wins),
-          closestWins: Number(row.closest_wins)
+          closestWins: Number(row.closest_wins),
+          guessWins: Number(row.guess_wins)
         };
       }
       logger.info({ rows: result.rowCount }, "scores loaded from PostgreSQL");
@@ -75835,7 +75839,8 @@ function getOrCreate(guildId, userId, username) {
       imposterPoints: 0,
       searchWins: 0,
       rouletteWins: 0,
-      closestWins: 0
+      closestWins: 0,
+      guessWins: 0
     };
   } else {
     store[guildId][userId].username = username;
@@ -75873,6 +75878,12 @@ function addClosestWin(guildId, userId, username, pts) {
   rec.closestWins = (rec.closestWins ?? 0) + 1;
   scheduleSave(guildId, rec);
 }
+function addGuessWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.guessWins = (rec.guessWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
 function getLeaderboard(guildId) {
   const guild = store[guildId];
   if (!guild) return [];
@@ -75899,7 +75910,7 @@ function getGuildStats(guildId) {
       totalPoints: 0,
       topGame: "\u2014",
       topPlayer: null,
-      gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0, closest: 0 }
+      gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0, closest: 0, guess: 0 }
     };
   }
   const records = Object.values(guild).filter((r) => r.points > 0);
@@ -75909,7 +75920,8 @@ function getGuildStats(guildId) {
     scramble: records.reduce((s, r) => s + r.scrambleWins, 0),
     search: records.reduce((s, r) => s + (r.searchWins ?? 0), 0),
     roulette: records.reduce((s, r) => s + (r.rouletteWins ?? 0), 0),
-    closest: records.reduce((s, r) => s + (r.closestWins ?? 0), 0)
+    closest: records.reduce((s, r) => s + (r.closestWins ?? 0), 0),
+    guess: records.reduce((s, r) => s + (r.guessWins ?? 0), 0)
   };
   const topGameEntry = Object.entries(gameCounts).sort((a, b) => b[1] - a[1])[0];
   const gameNames = {
@@ -75917,7 +75929,8 @@ function getGuildStats(guildId) {
     scramble: "\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641",
     search: "\u{1F50D} \u0627\u0644\u0628\u062D\u062B",
     roulette: "\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A",
-    closest: "\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628"
+    closest: "\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628",
+    guess: "\u{1F50E} \u062E\u0645\u0651\u0646"
   };
   const topGame = topGameEntry && topGameEntry[1] > 0 ? gameNames[topGameEntry[0]] ?? "\u2014" : "\u2014";
   const topPlayer = records.sort((a, b) => b.points - a.points)[0] ?? null;
@@ -79591,6 +79604,434 @@ async function handleClosestCommand(interaction) {
   await interaction.reply({ content: "\u062A\u0645 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F3AE}", flags: import_discord9.MessageFlags.Ephemeral });
 }
 
+// src/bot/guess/handlers.ts
+var import_discord10 = __toESM(require_src(), 1);
+
+// src/bot/guess/words.ts
+var WORDS = [
+  // Animals
+  { word: "\u0623\u0633\u062F", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0642\u0637", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0643\u0644\u0628", category: "animal", isLiving: true, isEdible: false, size: "medium", environment: "both", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062D\u0635\u0627\u0646", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0641\u064A\u0644", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0642\u0631\u062F", category: "animal", isLiving: true, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062B\u0639\u0644\u0628", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0630\u0626\u0628", category: "animal", isLiving: true, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062F\u0628", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0646\u0645\u0631", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0632\u0631\u0627\u0641\u0629", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062A\u0645\u0633\u0627\u062D", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "water", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0633\u0644\u062D\u0641\u0627\u0629", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "both", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0623\u0631\u0646\u0628", category: "animal", isLiving: true, isEdible: true, size: "small", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062F\u062C\u0627\u062C\u0629", category: "animal", isLiving: true, isEdible: true, size: "small", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true, isFemale: true },
+  { word: "\u0628\u0642\u0631\u0629", category: "animal", isLiving: true, isEdible: true, size: "large", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true, isFemale: true },
+  { word: "\u062E\u0631\u0648\u0641", category: "animal", isLiving: true, isEdible: true, size: "medium", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0646\u0633\u0631", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "air", canFly: true, hasLegs: true, isNatural: true },
+  { word: "\u0628\u0648\u0645\u0629", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "air", canFly: true, hasLegs: true, isNatural: true, isFemale: true },
+  { word: "\u0637\u0627\u0648\u0648\u0633", category: "animal", isLiving: true, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062F\u0644\u0641\u064A\u0646", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "water", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u062D\u0648\u062A", category: "animal", isLiving: true, isEdible: false, size: "large", environment: "water", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0633\u0645\u0643\u0629", category: "animal", isLiving: true, isEdible: true, size: "small", environment: "water", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0639\u0642\u0631\u0628", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "outdoor", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u0646\u062D\u0644\u0629", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "air", canFly: true, hasLegs: true, isNatural: true, isFemale: true },
+  { word: "\u0641\u0631\u0627\u0634\u0629", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "air", canFly: true, hasLegs: true, isNatural: true, isFemale: true },
+  { word: "\u0636\u0641\u062F\u0639", category: "animal", isLiving: true, isEdible: false, size: "small", environment: "water", canFly: false, hasLegs: true, isNatural: true },
+  { word: "\u062B\u0639\u0628\u0627\u0646", category: "animal", isLiving: true, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  // Plants
+  { word: "\u0634\u062C\u0631\u0629", category: "plant", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0648\u0631\u062F\u0629", category: "plant", isLiving: true, isEdible: false, size: "small", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0646\u062E\u0644\u0629", category: "plant", isLiving: true, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0639\u0634\u0628", category: "plant", isLiving: true, isEdible: false, size: "small", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0641\u0637\u0631", category: "plant", isLiving: true, isEdible: true, size: "small", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  // Food
+  { word: "\u062A\u0641\u0627\u062D\u0629", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0645\u0648\u0632\u0629", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0631\u0632", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u062E\u0628\u0632", category: "food", isLiving: false, isEdible: true, size: "medium", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u062A\u0645\u0631", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u062C\u0632\u0631\u0629", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0628\u0635\u0644\u0629", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0628\u0637\u0627\u0637\u0633", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0639\u0633\u0644", category: "food", isLiving: false, isEdible: true, size: "small", environment: "both", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u062C\u0628\u0646", category: "food", isLiving: false, isEdible: true, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0644\u062D\u0645", category: "food", isLiving: false, isEdible: true, size: "medium", environment: "indoor", canFly: false, hasLegs: false, isNatural: true },
+  // Objects
+  { word: "\u0643\u062A\u0627\u0628", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0643\u0631\u0633\u064A", category: "object", isLiving: false, isEdible: false, size: "medium", environment: "indoor", canFly: false, hasLegs: true, isNatural: false },
+  { word: "\u0637\u0627\u0648\u0644\u0629", category: "object", isLiving: false, isEdible: false, size: "medium", environment: "indoor", canFly: false, hasLegs: true, isNatural: false, isFemale: true },
+  { word: "\u0628\u0627\u0628", category: "object", isLiving: false, isEdible: false, size: "large", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0633\u064A\u0627\u0631\u0629", category: "object", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0637\u0627\u0626\u0631\u0629", category: "object", isLiving: false, isEdible: false, size: "large", environment: "air", canFly: true, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0633\u0641\u064A\u0646\u0629", category: "object", isLiving: false, isEdible: false, size: "large", environment: "water", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0647\u0627\u062A\u0641", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0633\u0627\u0639\u0629", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0645\u0631\u0622\u0629", category: "object", isLiving: false, isEdible: false, size: "medium", environment: "indoor", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0645\u0641\u062A\u0627\u062D", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0645\u0638\u0644\u0629", category: "object", isLiving: false, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0642\u0644\u0645", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u062D\u0642\u064A\u0628\u0629", category: "object", isLiving: false, isEdible: false, size: "medium", environment: "both", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0645\u0635\u0628\u0627\u062D", category: "object", isLiving: false, isEdible: false, size: "small", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  // Nature
+  { word: "\u062C\u0628\u0644", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0628\u062D\u0631", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0646\u0647\u0631", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0635\u062D\u0631\u0627\u0621", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0634\u0645\u0633", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "air", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0642\u0645\u0631", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "air", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0646\u062C\u0645\u0629", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "air", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0633\u062D\u0627\u0628\u0629", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "air", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0645\u0637\u0631", category: "nature", isLiving: false, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u062B\u0644\u062C", category: "nature", isLiving: false, isEdible: false, size: "medium", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true },
+  { word: "\u0631\u064A\u062D", category: "nature", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0646\u0627\u0631", category: "nature", isLiving: false, isEdible: false, size: "medium", environment: "both", canFly: false, hasLegs: false, isNatural: true, isFemale: true },
+  { word: "\u0645\u0627\u0621", category: "nature", isLiving: false, isEdible: true, size: "medium", environment: "both", canFly: false, hasLegs: false, isNatural: true },
+  // Places
+  { word: "\u0645\u062F\u0631\u0633\u0629", category: "place", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: false, isFemale: true },
+  { word: "\u0645\u0633\u062A\u0634\u0641\u0649", category: "place", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0633\u0648\u0642", category: "place", isLiving: false, isEdible: false, size: "large", environment: "both", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u0645\u0637\u0628\u062E", category: "place", isLiving: false, isEdible: false, size: "medium", environment: "indoor", canFly: false, hasLegs: false, isNatural: false },
+  { word: "\u062D\u062F\u064A\u0642\u0629", category: "place", isLiving: false, isEdible: false, size: "large", environment: "outdoor", canFly: false, hasLegs: false, isNatural: true, isFemale: true }
+];
+function pickRandomWord() {
+  return WORDS[Math.floor(Math.random() * WORDS.length)];
+}
+function answerQuestion(question, entry) {
+  const q = question.replace(/^هل\s*/u, "").replace(/[؟?]/g, "").trim();
+  if (/حي|كائن حي|يعيش|ينمو/.test(q)) return entry.isLiving;
+  if (/جماد|غير حي|ميت/.test(q)) return !entry.isLiving;
+  if (/حيوان/.test(q)) return entry.category === "animal";
+  if (/نبات|شجر/.test(q)) return entry.category === "plant";
+  if (/طعام|أكل|غذاء/.test(q)) return entry.category === "food" || entry.isEdible;
+  if (/يُؤكل|يتم أكله|نأكله|مأكول/.test(q)) return entry.isEdible;
+  if (/مكان/.test(q)) return entry.category === "place";
+  if (/طبيعة|طبيعي/.test(q)) return entry.category === "nature" || entry.isNatural;
+  if (/كبير/.test(q)) return entry.size === "large";
+  if (/صغير/.test(q)) return entry.size === "small";
+  if (/متوسط/.test(q)) return entry.size === "medium";
+  if (/يعيش في الماء|مائي|بحري/.test(q)) return entry.environment === "water";
+  if (/يعيش في البيت|داخل المنزل|منزلي/.test(q)) return entry.environment === "indoor";
+  if (/يعيش في البر|خارجي|برّي/.test(q)) return entry.environment === "outdoor" || entry.environment === "both";
+  if (/يطير|في الهواء|جوي/.test(q)) return entry.canFly || entry.environment === "air";
+  if (/أرجل|قوائم/.test(q)) return entry.hasLegs;
+  if (/يطير/.test(q)) return entry.canFly;
+  if (/صناعي|يصنعه الإنسان|مصنوع/.test(q)) return !entry.isNatural;
+  if (/موجود في البيت|نستخدمه في البيت/.test(q)) return entry.environment === "indoor" || entry.environment === "both";
+  if (/أنثى|مؤنث/.test(q)) return entry.isFemale === true;
+  if (/ذكر|مذكر/.test(q)) return entry.isFemale !== true;
+  if (/أكثر من.*حرف|حروف كثيرة/.test(q)) {
+    const m = q.match(/(\d+)\s*حرف/);
+    if (m) return entry.word.length > parseInt(m[1]);
+  }
+  if (/أقل من.*حرف/.test(q)) {
+    const m = q.match(/(\d+)\s*حرف/);
+    if (m) return entry.word.length < parseInt(m[1]);
+  }
+  if (/كم حرف|عدد الحروف/.test(q)) return null;
+  return null;
+}
+
+// src/bot/guess/game.ts
+var games6 = /* @__PURE__ */ new Map();
+function createGuessGame(channelId, guildId, hostId, hostUsername) {
+  const game = {
+    channelId,
+    guildId,
+    hostId,
+    phase: "lobby",
+    players: [{ userId: hostId, username: hostUsername }],
+    word: pickRandomWord(),
+    currentPlayerIndex: 0,
+    questionCount: 0,
+    lobbyMessageId: null,
+    timers: []
+  };
+  games6.set(channelId, game);
+  lockChannel(channelId, "\u062E\u0645\u0651\u0646");
+  return game;
+}
+function getGuessGame(channelId) {
+  return games6.get(channelId);
+}
+function deleteGuessGame(channelId) {
+  const game = games6.get(channelId);
+  if (game) {
+    for (const t of game.timers) clearTimeout(t);
+    game.timers = [];
+  }
+  games6.delete(channelId);
+  unlockChannel(channelId);
+}
+function joinGuessGame(game, userId, username) {
+  if (game.phase !== "lobby") return false;
+  if (game.players.find((p) => p.userId === userId)) return false;
+  if (game.players.length >= 20) return false;
+  game.players.push({ userId, username });
+  return true;
+}
+function leaveGuessGame(game, userId) {
+  if (game.phase !== "lobby") return false;
+  const idx = game.players.findIndex((p) => p.userId === userId);
+  if (idx === -1) return false;
+  game.players.splice(idx, 1);
+  return true;
+}
+function startGuessGame(game) {
+  game.phase = "playing";
+  for (let i = game.players.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [game.players[i], game.players[j]] = [game.players[j], game.players[i]];
+  }
+  game.currentPlayerIndex = 0;
+  game.questionCount = 0;
+}
+function getCurrentGuesser(game) {
+  return game.players[game.currentPlayerIndex];
+}
+function nextGuesser(game) {
+  game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
+  return game.players[game.currentPlayerIndex];
+}
+
+// src/bot/guess/embeds.ts
+var COLOR2 = 1752220;
+function guessLobbyEmbed(game, secondsLeft) {
+  const playerList = game.players.map((p, i) => `${i + 1}. **${p.username}**`).join("\n") || "\u2014";
+  return {
+    color: COLOR2,
+    title: "\u{1F50E} \u0644\u0639\u0628\u0629 \u062E\u0645\u0651\u0646",
+    description: "\u0627\u0644\u0628\u0648\u062A \u0627\u062E\u062A\u0627\u0631 \u0643\u0644\u0645\u0629 \u0633\u0631\u064A\u0629!\n\u0627\u0633\u0623\u0644\u0648\u0647 \u0623\u0633\u0626\u0644\u0629 \u0628\u0640 **\u0646\u0639\u0645/\u0644\u0627** \u0644\u062A\u0643\u062A\u0634\u0641\u0648\u0627 \u0627\u0644\u0643\u0644\u0645\u0629\u060C \u0648\u0645\u0646 \u064A\u062E\u0645\u0651\u0646\u0647\u0627 \u0623\u0648\u0644\u0627\u064B \u064A\u0641\u0648\u0632!",
+    fields: [
+      { name: "\u{1F465} \u0627\u0644\u0644\u0627\u0639\u0628\u0648\u0646", value: playerList, inline: true },
+      { name: "\u23F1\uFE0F \u062A\u0628\u062F\u0623 \u062E\u0644\u0627\u0644", value: `**${secondsLeft}** \u062B\u0627\u0646\u064A\u0629`, inline: true }
+    ],
+    footer: { text: "\u0646\u0642\u0627\u0637 \u0627\u0644\u0641\u0627\u0626\u0632: 40 \u0646\u0642\u0637\u0629" }
+  };
+}
+function guessStartEmbed(playerCount) {
+  return {
+    color: COLOR2,
+    title: "\u{1F50E} \u0644\u0639\u0628\u0629 \u062E\u0645\u0651\u0646 \u0628\u062F\u0623\u062A!",
+    description: [
+      `${playerCount} \u0644\u0627\u0639\u0628 \u0627\u0646\u0636\u0645\u0648\u0627 \u2014 \u0628\u0627\u0644\u062A\u0648\u0641\u064A\u0642 \u0644\u0644\u062C\u0645\u064A\u0639!`,
+      "",
+      "**\u0643\u064A\u0641 \u062A\u0644\u0639\u0628:**",
+      "\u2022 \u0641\u064A \u062F\u0648\u0631\u0643: \u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u064A\u0628\u062F\u0623 \u0628\u0640 **\u0647\u0644** (\u0627\u0644\u0628\u0648\u062A \u064A\u062C\u0627\u0648\u0628 \u0646\u0639\u0645/\u0644\u0627)",
+      "\u2022 \u0623\u0648 \u0627\u0643\u062A\u0628 \u062A\u062E\u0645\u064A\u0646\u0643 \u0645\u0628\u0627\u0634\u0631\u0629 \u0644\u062A\u0641\u0648\u0632!"
+    ].join("\n")
+  };
+}
+function guessWinEmbed(winner, word, questionCount) {
+  return {
+    color: 15844367,
+    title: "\u{1F3C6} \u0635\u062D\u064A\u062D! \u0644\u062F\u064A\u0646\u0627 \u0641\u0627\u0626\u0632!",
+    description: [
+      `\u{1F389} <@${winner.userId}> \u062E\u0645\u0651\u0646 \u0627\u0644\u0643\u0644\u0645\u0629 \u0627\u0644\u0635\u062D\u064A\u062D\u0629!`,
+      `\u{1F50E} \u0627\u0644\u0643\u0644\u0645\u0629 \u0643\u0627\u0646\u062A: **${word}**`,
+      `\u2753 \u0639\u062F\u062F \u0627\u0644\u0623\u0633\u0626\u0644\u0629: **${questionCount}**`,
+      `\u2B50 \u0627\u0644\u0646\u0642\u0627\u0637 \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629: **40** \u0646\u0642\u0637\u0629`
+    ].join("\n")
+  };
+}
+function guessTimeoutEmbed(word) {
+  return {
+    color: 15548997,
+    title: "\u23F0 \u0627\u0646\u062A\u0647\u062A \u0627\u0644\u0644\u0639\u0628\u0629!",
+    description: `\u0645\u0627 \u0623\u062D\u062F \u062E\u0645\u0651\u0646 \u0627\u0644\u0643\u0644\u0645\u0629.
+\u{1F50E} \u0627\u0644\u0643\u0644\u0645\u0629 \u0643\u0627\u0646\u062A: **${word}**`
+  };
+}
+
+// src/bot/guess/handlers.ts
+var LOBBY_SECONDS7 = 60;
+var GAME_TIMEOUT_MS = 15 * 60 * 1e3;
+function lobbyButtons5() {
+  return new import_discord10.ActionRowBuilder().addComponents(
+    new import_discord10.ButtonBuilder().setCustomId("gss:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord10.ButtonStyle.Success),
+    new import_discord10.ButtonBuilder().setCustomId("gss:leave").setLabel("\u062E\u0631\u0648\u062C \u{1F6AA}").setStyle(import_discord10.ButtonStyle.Secondary),
+    new import_discord10.ButtonBuilder().setCustomId("gss:cancel").setLabel("\u0625\u0644\u063A\u0627\u0621 \u274C").setStyle(import_discord10.ButtonStyle.Danger)
+  );
+}
+function disabledButtons2() {
+  return new import_discord10.ActionRowBuilder().addComponents(
+    new import_discord10.ButtonBuilder().setCustomId("gss:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord10.ButtonStyle.Success).setDisabled(true),
+    new import_discord10.ButtonBuilder().setCustomId("gss:leave").setLabel("\u062E\u0631\u0648\u062C \u{1F6AA}").setStyle(import_discord10.ButtonStyle.Secondary).setDisabled(true),
+    new import_discord10.ButtonBuilder().setCustomId("gss:cancel").setLabel("\u0625\u0644\u063A\u0627\u0621 \u274C").setStyle(import_discord10.ButtonStyle.Danger).setDisabled(true)
+  );
+}
+async function initGuessGame(channel, guildId, userId, username) {
+  const lock = getChannelLock(channel.id);
+  if (lock) {
+    return {
+      ok: false,
+      reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u0627\u0643\u062A\u0628 \`$\u062A\u0648\u0642\u0641\` \u0644\u0625\u064A\u0642\u0627\u0641\u0647\u0627.`
+    };
+  }
+  const game = createGuessGame(channel.id, guildId, userId, username);
+  let secondsLeft = LOBBY_SECONDS7;
+  const msg = await channel.send({
+    embeds: [guessLobbyEmbed(game, secondsLeft)],
+    components: [lobbyButtons5()]
+  });
+  game.lobbyMessageId = msg.id;
+  const updateTimer = setInterval(async () => {
+    secondsLeft -= 15;
+    const g = getGuessGame(channel.id);
+    if (!g || g.phase !== "lobby") {
+      clearInterval(updateTimer);
+      return;
+    }
+    try {
+      await msg.edit({
+        embeds: [guessLobbyEmbed(g, Math.max(0, secondsLeft))],
+        components: [lobbyButtons5()]
+      });
+    } catch {
+      clearInterval(updateTimer);
+    }
+  }, 15e3);
+  game.timers.push(updateTimer);
+  const startTimer = setTimeout(async () => {
+    clearInterval(updateTimer);
+    const g = getGuessGame(channel.id);
+    if (!g || g.phase !== "lobby") return;
+    if (g.players.length < 2) {
+      deleteGuessGame(channel.id);
+      try {
+        await msg.edit({
+          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0627\u0643\u062A\u0645\u0644 \u0627\u0644\u0639\u062F\u062F (\u064A\u062D\u062A\u0627\u062C \u0644\u0627\u0639\u0628\u064E\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644)." }],
+          components: [disabledButtons2()]
+        });
+      } catch {
+      }
+      return;
+    }
+    startGuessGame(g);
+    try {
+      await msg.edit({
+        embeds: [guessStartEmbed(g.players.length)],
+        components: [disabledButtons2()]
+      });
+    } catch {
+    }
+    const gameTimeout = setTimeout(async () => {
+      const g2 = getGuessGame(channel.id);
+      if (!g2) return;
+      const word = g2.word.word;
+      deleteGuessGame(channel.id);
+      await channel.send({ embeds: [guessTimeoutEmbed(word)] });
+    }, GAME_TIMEOUT_MS);
+    g.timers.push(gameTimeout);
+    await sendTurnPrompt(channel, g);
+  }, LOBBY_SECONDS7 * 1e3);
+  game.timers.push(startTimer);
+  return { ok: true };
+}
+async function sendTurnPrompt(channel, game) {
+  const player = getCurrentGuesser(game);
+  await channel.send(
+    `<@${player.userId}> \u062F\u0648\u0631\u0643! \u{1F50E}
+\u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u064A\u0628\u062F\u0623 \u0628\u0640 **\u0647\u0644** (\u0645\u062B\u0627\u0644: \u0647\u0644 \u0627\u0644\u0643\u0644\u0645\u0629 \u062D\u064A\u0648\u0627\u0646\u061F)
+\u0623\u0648 \u0627\u0643\u062A\u0628 \u062A\u062E\u0645\u064A\u0646\u0643 \u0645\u0628\u0627\u0634\u0631\u0629\u064B \u0644\u0644\u0641\u0648\u0632! \u2014 **${game.questionCount}** \u0633\u0624\u0627\u0644 \u062D\u062A\u0649 \u0627\u0644\u0622\u0646`
+  );
+}
+async function handleGuessMessage(message) {
+  if (message.author.bot) return;
+  if (!message.channelId) return;
+  const game = getGuessGame(message.channelId);
+  if (!game || game.phase !== "playing") return;
+  const current = getCurrentGuesser(game);
+  if (message.author.id !== current.userId) return;
+  const text = message.content.trim();
+  if (!text) return;
+  const channel = message.channel;
+  const isQuestion = /^هل\s+/.test(text);
+  if (isQuestion) {
+    game.questionCount++;
+    const answer = answerQuestion(text, game.word);
+    if (answer === null) {
+      await channel.send(`<@${current.userId}> \u2753 \u0645\u0627 \u0623\u0642\u062F\u0631 \u0623\u062C\u0627\u0648\u0628 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u0633\u0624\u0627\u0644 \u2014 \u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u0622\u062E\u0631 \u0623\u0648 \u062E\u0645\u0651\u0646 \u0645\u0628\u0627\u0634\u0631\u0629\u064B.`);
+      return;
+    }
+    await channel.send(
+      answer ? `\u2705 **\u0646\u0639\u0645!** _(\u0633\u0624\u0627\u0644 #${game.questionCount})_` : `\u274C **\u0644\u0627.** _(\u0633\u0624\u0627\u0644 #${game.questionCount})_`
+    );
+    const next = nextGuesser(game);
+    await sendTurnPrompt(channel, game);
+    return;
+  }
+  const guess = text.replace(/[.!؟?،,]/g, "").trim();
+  const secret = game.word.word;
+  if (guess === secret) {
+    const winner = { ...current };
+    const questionCount = game.questionCount;
+    deleteGuessGame(game.channelId);
+    addGuessWin(game.guildId, winner.userId, winner.username, 40);
+    await channel.send({ embeds: [guessWinEmbed(winner, secret, questionCount)] });
+    return;
+  }
+  await channel.send(`<@${current.userId}> \u274C \u062E\u0637\u0623! \u0627\u0633\u062A\u0645\u0631 \u0641\u064A \u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u062E\u0645\u0651\u0646 \u0645\u0631\u0629 \u0623\u062E\u0631\u0649 \u0641\u064A \u062F\u0648\u0631\u0643 \u0627\u0644\u0642\u0627\u062F\u0645.`);
+  nextGuesser(game);
+  await sendTurnPrompt(channel, game);
+}
+async function handleGuessButton(interaction) {
+  const game = getGuessGame(interaction.channelId);
+  if (!game || game.phase !== "lobby") {
+    await interaction.reply({ content: "\u0627\u0644\u0644\u0648\u0628\u064A \u0627\u0646\u062A\u0647\u0649 \u0623\u0648 \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629.", flags: import_discord10.MessageFlags.Ephemeral });
+    return;
+  }
+  const userId = interaction.user.id;
+  const username = interaction.user.username;
+  const action = interaction.customId.split(":")[1];
+  if (action === "join") {
+    const joined = joinGuessGame(game, userId, username);
+    if (!joined) {
+      await interaction.reply({ content: "\u0623\u0646\u062A \u0645\u0646\u0636\u0645 \u0628\u0627\u0644\u0641\u0639\u0644 \u0623\u0648 \u0627\u0644\u0644\u0648\u0628\u064A \u0627\u0645\u062A\u0644\u0623.", flags: import_discord10.MessageFlags.Ephemeral });
+      return;
+    }
+    await interaction.update({ embeds: [guessLobbyEmbed(game, LOBBY_SECONDS7)], components: [lobbyButtons5()] });
+    return;
+  }
+  if (action === "leave") {
+    if (userId === game.hostId) {
+      await interaction.reply({ content: "\u0627\u0644\u0645\u0636\u064A\u0641 \u0645\u0627 \u064A\u0642\u062F\u0631 \u064A\u062E\u0631\u062C. \u0627\u0633\u062A\u062E\u062F\u0645 \u0632\u0631 \u0627\u0644\u0625\u0644\u063A\u0627\u0621.", flags: import_discord10.MessageFlags.Ephemeral });
+      return;
+    }
+    const left = leaveGuessGame(game, userId);
+    if (!left) {
+      await interaction.reply({ content: "\u0623\u0646\u062A \u0644\u0633\u062A \u0641\u064A \u0627\u0644\u0644\u0639\u0628\u0629.", flags: import_discord10.MessageFlags.Ephemeral });
+      return;
+    }
+    await interaction.update({ embeds: [guessLobbyEmbed(game, LOBBY_SECONDS7)], components: [lobbyButtons5()] });
+    return;
+  }
+  if (action === "cancel") {
+    if (userId !== game.hostId) {
+      await interaction.reply({ content: "\u0627\u0644\u0625\u0644\u063A\u0627\u0621 \u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637.", flags: import_discord10.MessageFlags.Ephemeral });
+      return;
+    }
+    deleteGuessGame(interaction.channelId);
+    await interaction.update({
+      embeds: [{ color: 15548997, title: "\u274C \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u062E\u0645\u0651\u0646", description: "\u0623\u0644\u063A\u0627\u0647\u0627 \u0627\u0644\u0645\u0636\u064A\u0641." }],
+      components: [disabledButtons2()]
+    });
+    return;
+  }
+}
+async function handleGuessCommand(interaction) {
+  if (!interaction.guild || !interaction.channel) {
+    await interaction.reply({ content: "\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0644\u0633\u064A\u0631\u0641\u0631\u0627\u062A \u0641\u0642\u0637.", flags: import_discord10.MessageFlags.Ephemeral });
+    return;
+  }
+  const channel = interaction.channel;
+  const result = await initGuessGame(channel, interaction.guildId, interaction.user.id, interaction.user.username);
+  if (!result.ok) {
+    await interaction.reply({ content: result.reason, flags: import_discord10.MessageFlags.Ephemeral });
+    return;
+  }
+  await interaction.reply({ content: "\u062A\u0645 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F3AE}", flags: import_discord10.MessageFlags.Ephemeral });
+}
+
 // src/bot/prefix.ts
 var PREFIX = "$";
 var RANK_MEDALS2 = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
@@ -79637,6 +80078,11 @@ async function handlePrefixMessage(message) {
       }
       case "\u0623\u0642\u0631\u0628": {
         const result = await initClosestGame(channel, guildId, userId, username);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      case "\u062E\u0645\u0646": {
+        const result = await initGuessGame(channel, guildId, userId, username);
         if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
         break;
       }
@@ -79697,6 +80143,16 @@ async function handlePrefixMessage(message) {
           await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u0623\u0642\u0631\u0628**.");
           stopped = true;
         }
+        const guess = getGuessGame(channelId);
+        if (!stopped && guess) {
+          if (guess.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          deleteGuessGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u062E\u0645\u0651\u0646**.");
+          stopped = true;
+        }
         if (!stopped) {
           await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.");
         }
@@ -79727,7 +80183,8 @@ async function handlePrefixMessage(message) {
               `\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631: **${rec.imposterPoints}** \u0646\u0642\u0637\u0629`,
               `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${rec.searchWins ?? 0}** \u0641\u0648\u0632`,
               `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${rec.rouletteWins ?? 0}** \u0641\u0648\u0632`,
-              `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${rec.closestWins ?? 0}** \u0641\u0648\u0632`
+              `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${rec.closestWins ?? 0}** \u0641\u0648\u0632`,
+              `\u{1F50E} \u062E\u0645\u0651\u0646: **${rec.guessWins ?? 0}** \u0641\u0648\u0632`
             ].join("\n")
           }]
         });
@@ -79774,7 +80231,8 @@ async function handlePrefixMessage(message) {
                   `\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641: **${stats.gameCounts.scramble}** \u0641\u0648\u0632`,
                   `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${stats.gameCounts.search}** \u0641\u0648\u0632`,
                   `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${stats.gameCounts.roulette}** \u0641\u0648\u0632`,
-                  `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${stats.gameCounts.closest}** \u0641\u0648\u0632`
+                  `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${stats.gameCounts.closest}** \u0641\u0648\u0632`,
+                  `\u{1F50E} \u062E\u0645\u0651\u0646: **${stats.gameCounts.guess}** \u0641\u0648\u0632`
                 ].join("\n"),
                 inline: false
               },
@@ -79809,6 +80267,9 @@ async function handlePrefixMessage(message) {
               "",
               "**\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628**",
               "`$\u0623\u0642\u0631\u0628` \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300",
+              "",
+              "**\u{1F50E} \u062E\u0645\u0651\u0646**",
+              "`$\u062E\u0645\u0646` \u2014 \u0627\u0644\u0628\u0648\u062A \u064A\u062E\u062A\u0627\u0631 \u0643\u0644\u0645\u0629\u060C \u0627\u0633\u0623\u0644\u0647 \u0646\u0639\u0645/\u0644\u0627 \u0644\u062A\u062E\u0645\u064A\u0646\u0647\u0627",
               "",
               "\u{1F4CC} \u0627\u0643\u062A\u0628 `$\u062A\u0648\u0642\u0641` \u0644\u0625\u064A\u0642\u0627\u0641 \u0623\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629 \u0641\u064A \u0627\u0644\u0642\u0646\u0627\u0629"
             ].join("\n")
@@ -79847,31 +80308,32 @@ async function handlePrefixMessage(message) {
 
 // src/bot/client.ts
 var commands = [
-  new import_discord10.SlashCommandBuilder().setName("\u0627\u0645\u0628\u0648\u0633\u062A\u0631").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0645\u0633\u0627\u0639\u062F\u0629").setDescription("\u0627\u0639\u0631\u0636 \u0634\u0631\u062D \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0648\u0627\u0644\u0623\u0648\u0627\u0645\u0631").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u062D\u0631\u0648\u0641").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0646\u0642\u0627\u0637").setDescription("\u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643 \u0648\u0645\u0631\u062A\u0628\u062A\u0643 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0623\u0642\u0631\u0628").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300!").toJSON()
+  new import_discord11.SlashCommandBuilder().setName("\u0627\u0645\u0628\u0648\u0633\u062A\u0631").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0645\u0633\u0627\u0639\u062F\u0629").setDescription("\u0627\u0639\u0631\u0636 \u0634\u0631\u062D \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0648\u0627\u0644\u0623\u0648\u0627\u0645\u0631").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u062D\u0631\u0648\u0641").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0646\u0642\u0627\u0637").setDescription("\u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643 \u0648\u0645\u0631\u062A\u0628\u062A\u0643 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u0623\u0642\u0631\u0628").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300!").toJSON(),
+  new import_discord11.SlashCommandBuilder().setName("\u062E\u0645\u0646").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u062E\u0645\u0651\u0646 \u2014 \u0627\u0644\u0628\u0648\u062A \u064A\u062E\u062A\u0627\u0631 \u0643\u0644\u0645\u0629 \u0633\u0631\u064A\u0629 \u0648\u0627\u0633\u0623\u0644\u0647 \u0646\u0639\u0645/\u0644\u0627!").toJSON()
 ];
 async function startBot(token2) {
-  const client = new import_discord10.Client({
+  const client = new import_discord11.Client({
     intents: [
-      import_discord10.GatewayIntentBits.Guilds,
-      import_discord10.GatewayIntentBits.GuildMessages,
-      import_discord10.GatewayIntentBits.DirectMessages,
-      import_discord10.GatewayIntentBits.MessageContent
+      import_discord11.GatewayIntentBits.Guilds,
+      import_discord11.GatewayIntentBits.GuildMessages,
+      import_discord11.GatewayIntentBits.DirectMessages,
+      import_discord11.GatewayIntentBits.MessageContent
     ],
-    partials: [import_discord10.Partials.Channel]
+    partials: [import_discord11.Partials.Channel]
   });
-  client.once(import_discord10.Events.ClientReady, async (c) => {
+  client.once(import_discord11.Events.ClientReady, async (c) => {
     logger.info({ tag: c.user.tag, id: c.user.id }, "discord bot ready");
     try {
-      const rest = new import_discord10.REST({ version: "10" }).setToken(token2);
-      await rest.put(import_discord10.Routes.applicationCommands(c.user.id), {
+      const rest = new import_discord11.REST({ version: "10" }).setToken(token2);
+      await rest.put(import_discord11.Routes.applicationCommands(c.user.id), {
         body: commands
       });
       logger.info(
@@ -79882,7 +80344,7 @@ async function startBot(token2) {
       logger.error({ err }, "failed to register slash commands");
     }
   });
-  client.on(import_discord10.Events.InteractionCreate, async (interaction) => {
+  client.on(import_discord11.Events.InteractionCreate, async (interaction) => {
     try {
       if (interaction.isChatInputCommand()) {
         const name = interaction.commandName;
@@ -79904,9 +80366,13 @@ async function startBot(token2) {
           await handleBackupCommand(interaction);
         } else if (name === "\u0623\u0642\u0631\u0628") {
           await handleClosestCommand(interaction);
+        } else if (name === "\u062E\u0645\u0646") {
+          await handleGuessCommand(interaction);
         }
       } else if (interaction.isButton()) {
-        if (interaction.customId.startsWith("clst:")) {
+        if (interaction.customId.startsWith("gss:")) {
+          await handleGuessButton(interaction);
+        } else if (interaction.customId.startsWith("clst:")) {
           await handleClosestButton(interaction);
         } else if (interaction.customId.startsWith("scr:")) {
           await handleScrambleButton(interaction);
@@ -79933,15 +80399,16 @@ async function startBot(token2) {
       }
     }
   });
-  client.on(import_discord10.Events.MessageCreate, async (message) => {
+  client.on(import_discord11.Events.MessageCreate, async (message) => {
     try {
+      await handleGuessMessage(message);
       await handleClosestMessage(message);
       await handlePrefixMessage(message);
     } catch (err) {
       logger.error({ err }, "prefix handler failed");
     }
   });
-  client.on(import_discord10.Events.Error, (err) => {
+  client.on(import_discord11.Events.Error, (err) => {
     logger.error({ err }, "discord client error");
   });
   await client.login(token2);

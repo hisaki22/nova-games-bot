@@ -76495,6 +76495,53 @@ async function handleLeaderboardCommand(interaction) {
     }]
   });
 }
+async function handleBackupCommand(interaction) {
+  const member = interaction.member;
+  const isAdmin = member && typeof member.permissions !== "string" && member.permissions.has("Administrator");
+  if (!isAdmin) {
+    await interaction.reply({
+      embeds: [errorEmbed("\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637.")],
+      flags: import_discord3.MessageFlags.Ephemeral
+    });
+    return;
+  }
+  const webhookUrl = process.env.GOOGLE_DRIVE_WEBHOOK;
+  if (!webhookUrl) {
+    await interaction.reply({
+      embeds: [errorEmbed("\u0644\u0645 \u064A\u062A\u0645 \u0625\u0639\u062F\u0627\u062F Google Drive \u0628\u0639\u062F. \u0623\u0636\u0641 \u0645\u062A\u063A\u064A\u0631 GOOGLE_DRIVE_WEBHOOK \u0641\u064A \u0627\u0644\u0627\u0633\u062A\u0636\u0627\u0641\u0629.")],
+      flags: import_discord3.MessageFlags.Ephemeral
+    });
+    return;
+  }
+  await interaction.deferReply({ flags: import_discord3.MessageFlags.Ephemeral });
+  try {
+    const snapshot = getStoreSnapshot();
+    const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date, scores: snapshot })
+    });
+    if (res.ok) {
+      await interaction.editReply({
+        embeds: [{
+          color: 5763719,
+          title: "\u2705 \u062A\u0645 \u062D\u0641\u0638 \u0627\u0644\u0646\u0633\u062E\u0629 \u0627\u0644\u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629",
+          description: `\u062A\u0645 \u0631\u0641\u0639 \u0645\u0644\u0641 **nova-scores-${date}.json** \u0625\u0644\u0649 Google Drive \u0628\u0646\u062C\u0627\u062D.`,
+          footer: { text: "\u064A\u062A\u0645 \u0627\u0644\u062D\u0641\u0638 \u062A\u0644\u0642\u0627\u0626\u064A\u0627\u064B \u0643\u0644 24 \u0633\u0627\u0639\u0629 \u0623\u064A\u0636\u0627\u064B" }
+        }]
+      });
+    } else {
+      await interaction.editReply({
+        embeds: [errorEmbed("\u0641\u0634\u0644 \u0627\u0644\u0627\u062A\u0635\u0627\u0644 \u0628\u0640 Google Drive. \u062A\u0623\u0643\u062F \u0623\u0646 \u0627\u0644\u0631\u0627\u0628\u0637 \u0635\u062D\u064A\u062D.")]
+      });
+    }
+  } catch {
+    await interaction.editReply({
+      embeds: [errorEmbed("\u062D\u062F\u062B \u062E\u0637\u0623 \u0623\u062B\u0646\u0627\u0621 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0646\u0633\u062E\u0629 \u0627\u0644\u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629.")]
+    });
+  }
+}
 
 // src/bot/scramble/handlers.ts
 var import_discord5 = __toESM(require_src(), 1);
@@ -79506,7 +79553,8 @@ var commands = [
   new import_discord9.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
   new import_discord9.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
   new import_discord9.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON()
+  new import_discord9.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
+  new import_discord9.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON()
 ];
 async function startBot(token2) {
   const client = new import_discord9.Client({
@@ -79557,6 +79605,8 @@ async function startBot(token2) {
           await handleRouletteCommand(interaction);
         } else if (name === "\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A") {
           await handleRouletteCancelCommand(interaction);
+        } else if (name === "\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A") {
+          await handleBackupCommand(interaction);
         }
       } else if (interaction.isButton()) {
         if (interaction.customId.startsWith("scr:")) {

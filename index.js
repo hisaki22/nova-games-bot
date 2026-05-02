@@ -20323,23 +20323,23 @@ var require_message = __commonJS({
       MessageReferenceType2[MessageReferenceType2["Default"] = 0] = "Default";
       MessageReferenceType2[MessageReferenceType2["Forward"] = 1] = "Forward";
     })(MessageReferenceType || (exports2.MessageReferenceType = MessageReferenceType = {}));
-    var MessageFlags5;
-    (function(MessageFlags6) {
-      MessageFlags6[MessageFlags6["Crossposted"] = 1] = "Crossposted";
-      MessageFlags6[MessageFlags6["IsCrosspost"] = 2] = "IsCrosspost";
-      MessageFlags6[MessageFlags6["SuppressEmbeds"] = 4] = "SuppressEmbeds";
-      MessageFlags6[MessageFlags6["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
-      MessageFlags6[MessageFlags6["Urgent"] = 16] = "Urgent";
-      MessageFlags6[MessageFlags6["HasThread"] = 32] = "HasThread";
-      MessageFlags6[MessageFlags6["Ephemeral"] = 64] = "Ephemeral";
-      MessageFlags6[MessageFlags6["Loading"] = 128] = "Loading";
-      MessageFlags6[MessageFlags6["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
-      MessageFlags6[MessageFlags6["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
-      MessageFlags6[MessageFlags6["SuppressNotifications"] = 4096] = "SuppressNotifications";
-      MessageFlags6[MessageFlags6["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
-      MessageFlags6[MessageFlags6["HasSnapshot"] = 16384] = "HasSnapshot";
-      MessageFlags6[MessageFlags6["IsComponentsV2"] = 32768] = "IsComponentsV2";
-    })(MessageFlags5 || (exports2.MessageFlags = MessageFlags5 = {}));
+    var MessageFlags6;
+    (function(MessageFlags7) {
+      MessageFlags7[MessageFlags7["Crossposted"] = 1] = "Crossposted";
+      MessageFlags7[MessageFlags7["IsCrosspost"] = 2] = "IsCrosspost";
+      MessageFlags7[MessageFlags7["SuppressEmbeds"] = 4] = "SuppressEmbeds";
+      MessageFlags7[MessageFlags7["SourceMessageDeleted"] = 8] = "SourceMessageDeleted";
+      MessageFlags7[MessageFlags7["Urgent"] = 16] = "Urgent";
+      MessageFlags7[MessageFlags7["HasThread"] = 32] = "HasThread";
+      MessageFlags7[MessageFlags7["Ephemeral"] = 64] = "Ephemeral";
+      MessageFlags7[MessageFlags7["Loading"] = 128] = "Loading";
+      MessageFlags7[MessageFlags7["FailedToMentionSomeRolesInThread"] = 256] = "FailedToMentionSomeRolesInThread";
+      MessageFlags7[MessageFlags7["ShouldShowLinkNotDiscordWarning"] = 1024] = "ShouldShowLinkNotDiscordWarning";
+      MessageFlags7[MessageFlags7["SuppressNotifications"] = 4096] = "SuppressNotifications";
+      MessageFlags7[MessageFlags7["IsVoiceMessage"] = 8192] = "IsVoiceMessage";
+      MessageFlags7[MessageFlags7["HasSnapshot"] = 16384] = "HasSnapshot";
+      MessageFlags7[MessageFlags7["IsComponentsV2"] = 32768] = "IsComponentsV2";
+    })(MessageFlags6 || (exports2.MessageFlags = MessageFlags6 = {}));
     var BaseThemeType;
     (function(BaseThemeType2) {
       BaseThemeType2[BaseThemeType2["Unset"] = 0] = "Unset";
@@ -20406,15 +20406,15 @@ var require_message = __commonJS({
       ComponentType2[ComponentType2["Checkbox"] = 23] = "Checkbox";
       ComponentType2[ComponentType2["SelectMenu"] = 3] = "SelectMenu";
     })(ComponentType || (exports2.ComponentType = ComponentType = {}));
-    var ButtonStyle5;
-    (function(ButtonStyle6) {
-      ButtonStyle6[ButtonStyle6["Primary"] = 1] = "Primary";
-      ButtonStyle6[ButtonStyle6["Secondary"] = 2] = "Secondary";
-      ButtonStyle6[ButtonStyle6["Success"] = 3] = "Success";
-      ButtonStyle6[ButtonStyle6["Danger"] = 4] = "Danger";
-      ButtonStyle6[ButtonStyle6["Link"] = 5] = "Link";
-      ButtonStyle6[ButtonStyle6["Premium"] = 6] = "Premium";
-    })(ButtonStyle5 || (exports2.ButtonStyle = ButtonStyle5 = {}));
+    var ButtonStyle6;
+    (function(ButtonStyle7) {
+      ButtonStyle7[ButtonStyle7["Primary"] = 1] = "Primary";
+      ButtonStyle7[ButtonStyle7["Secondary"] = 2] = "Secondary";
+      ButtonStyle7[ButtonStyle7["Success"] = 3] = "Success";
+      ButtonStyle7[ButtonStyle7["Danger"] = 4] = "Danger";
+      ButtonStyle7[ButtonStyle7["Link"] = 5] = "Link";
+      ButtonStyle7[ButtonStyle7["Premium"] = 6] = "Premium";
+    })(ButtonStyle6 || (exports2.ButtonStyle = ButtonStyle6 = {}));
     var TextInputStyle2;
     (function(TextInputStyle3) {
       TextInputStyle3[TextInputStyle3["Short"] = 1] = "Short";
@@ -35613,7 +35613,7 @@ var require_DataResolver = __commonJS({
 var require_MessageFlagsBitField = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/util/MessageFlagsBitField.js"(exports2, module2) {
     "use strict";
-    var { MessageFlags: MessageFlags5 } = require_v106();
+    var { MessageFlags: MessageFlags6 } = require_v106();
     var BitField = require_BitField();
     var MessageFlagsBitField = class extends BitField {
       /**
@@ -35621,7 +35621,7 @@ var require_MessageFlagsBitField = __commonJS({
        * @type {MessageFlags}
        * @memberof MessageFlagsBitField
        */
-      static Flags = MessageFlags5;
+      static Flags = MessageFlags6;
     };
     module2.exports = MessageFlagsBitField;
   }
@@ -42601,14 +42601,14 @@ var require_dist8 = __commonJS({
     };
     var index_exports = {};
     __export2(index_exports, {
-      ActionRowBuilder: () => ActionRowBuilder5,
+      ActionRowBuilder: () => ActionRowBuilder6,
       ApplicationCommandNumericOptionMinMaxValueMixin: () => ApplicationCommandNumericOptionMinMaxValueMixin,
       ApplicationCommandOptionBase: () => ApplicationCommandOptionBase,
       ApplicationCommandOptionChannelTypesMixin: () => ApplicationCommandOptionChannelTypesMixin,
       ApplicationCommandOptionWithAutocompleteMixin: () => ApplicationCommandOptionWithAutocompleteMixin,
       ApplicationCommandOptionWithChoicesMixin: () => ApplicationCommandOptionWithChoicesMixin,
       BaseSelectMenuBuilder: () => BaseSelectMenuBuilder,
-      ButtonBuilder: () => ButtonBuilder5,
+      ButtonBuilder: () => ButtonBuilder6,
       ChannelSelectMenuBuilder: () => ChannelSelectMenuBuilder,
       CheckboxAssertions: () => Assertions_exports3,
       CheckboxBuilder: () => CheckboxBuilder,
@@ -43174,7 +43174,7 @@ var require_dist8 = __commonJS({
     };
     var import_v1027 = require_v106();
     var import_v102 = require_v106();
-    var ButtonBuilder5 = class extends ComponentBuilder {
+    var ButtonBuilder6 = class extends ComponentBuilder {
       static {
         __name(this, "ButtonBuilder");
       }
@@ -44956,7 +44956,7 @@ var require_dist8 = __commonJS({
     var dividerPredicate = import_shapeshift8.s.boolean();
     var spacingPredicate = import_shapeshift8.s.nativeEnum(import_v1020.SeparatorSpacingSize);
     var textDisplayContentPredicate = import_shapeshift8.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(4e3).setValidationEnabled(isValidationEnabled);
-    var accessoryPredicate = import_shapeshift8.s.instance(ButtonBuilder5).or(import_shapeshift8.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
+    var accessoryPredicate = import_shapeshift8.s.instance(ButtonBuilder6).or(import_shapeshift8.s.instance(ThumbnailBuilder)).setValidationEnabled(isValidationEnabled);
     var containerColorPredicate = colorPredicate.nullish();
     function assertReturnOfBuilder(input, ExpectedInstanceOf) {
       import_shapeshift8.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
@@ -45209,7 +45209,7 @@ var require_dist8 = __commonJS({
        */
       addActionRowComponents(...components) {
         this.components.push(
-          ...normalizeArray(components).map((component) => resolveBuilder(component, ActionRowBuilder5))
+          ...normalizeArray(components).map((component) => resolveBuilder(component, ActionRowBuilder6))
         );
         return this;
       }
@@ -45531,7 +45531,7 @@ var require_dist8 = __commonJS({
        * @param accessory - The accessory to use
        */
       setButtonAccessory(accessory) {
-        Reflect.set(this, "accessory", accessoryPredicate.parse(resolveBuilder(accessory, ButtonBuilder5)));
+        Reflect.set(this, "accessory", accessoryPredicate.parse(resolveBuilder(accessory, ButtonBuilder6)));
         return this;
       }
       /**
@@ -45595,9 +45595,9 @@ var require_dist8 = __commonJS({
       }
       switch (data.type) {
         case import_v1027.ComponentType.ActionRow:
-          return new ActionRowBuilder5(data);
+          return new ActionRowBuilder6(data);
         case import_v1027.ComponentType.Button:
-          return new ButtonBuilder5(data);
+          return new ButtonBuilder6(data);
         case import_v1027.ComponentType.StringSelect:
           return new StringSelectMenuBuilder(data);
         case import_v1027.ComponentType.TextInput:
@@ -45653,7 +45653,7 @@ var require_dist8 = __commonJS({
       return new Constructor(builder);
     }
     __name(resolveBuilder, "resolveBuilder");
-    var ActionRowBuilder5 = class extends ComponentBuilder {
+    var ActionRowBuilder6 = class extends ComponentBuilder {
       static {
         __name(this, "ActionRowBuilder");
       }
@@ -45736,7 +45736,7 @@ var require_dist8 = __commonJS({
     });
     var import_shapeshift9 = require_cjs4();
     var titleValidator = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
-    var componentsValidator = import_shapeshift9.s.union([import_shapeshift9.s.instance(ActionRowBuilder5), import_shapeshift9.s.instance(LabelBuilder), import_shapeshift9.s.instance(TextDisplayBuilder)]).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
+    var componentsValidator = import_shapeshift9.s.union([import_shapeshift9.s.instance(ActionRowBuilder6), import_shapeshift9.s.instance(LabelBuilder), import_shapeshift9.s.instance(TextDisplayBuilder)]).array().lengthGreaterThanOrEqual(1).setValidationEnabled(isValidationEnabled);
     function validateRequiredParameters2(customId, title, components) {
       customIdValidator.parse(customId);
       titleValidator.parse(title);
@@ -45791,15 +45791,15 @@ var require_dist8 = __commonJS({
       addComponents(...components) {
         this.components.push(
           ...normalizeArray(components).map((component, idx) => {
-            if (component instanceof ActionRowBuilder5 || component instanceof LabelBuilder || component instanceof TextDisplayBuilder) {
+            if (component instanceof ActionRowBuilder6 || component instanceof LabelBuilder || component instanceof TextDisplayBuilder) {
               return component;
             }
             if (component instanceof TextInputBuilder2) {
-              return new ActionRowBuilder5().addComponents(component);
+              return new ActionRowBuilder6().addComponents(component);
             }
             if ("type" in component) {
               if (component.type === import_v1029.ComponentType.ActionRow) {
-                return new ActionRowBuilder5(component);
+                return new ActionRowBuilder6(component);
               }
               if (component.type === import_v1029.ComponentType.Label) {
                 return new LabelBuilder(component);
@@ -45808,7 +45808,7 @@ var require_dist8 = __commonJS({
                 return new TextDisplayBuilder(component);
               }
               if (component.type === import_v1029.ComponentType.TextInput) {
-                return new ActionRowBuilder5().addComponents(
+                return new ActionRowBuilder6().addComponents(
                   new TextInputBuilder2(component)
                 );
               }
@@ -45848,7 +45848,7 @@ var require_dist8 = __commonJS({
        */
       addActionRowComponents(...components) {
         const normalized = normalizeArray(components);
-        const resolved = normalized.map((row) => resolveBuilder(row, ActionRowBuilder5));
+        const resolved = normalized.map((row) => resolveBuilder(row, ActionRowBuilder6));
         this.components.push(...resolved);
         return this;
       }
@@ -48506,7 +48506,7 @@ var require_ActionRowBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { createComponentBuilder } = require_Components();
     var { toSnakeCase } = require_Transformers();
-    var ActionRowBuilder5 = class extends BuildersActionRow {
+    var ActionRowBuilder6 = class extends BuildersActionRow {
       constructor({ components, ...data } = {}) {
         super({
           ...toSnakeCase(data),
@@ -48522,7 +48522,7 @@ var require_ActionRowBuilder = __commonJS({
         return new this(isJSONEncodable(other) ? other.toJSON() : other);
       }
     };
-    module2.exports = ActionRowBuilder5;
+    module2.exports = ActionRowBuilder6;
   }
 });
 
@@ -48534,7 +48534,7 @@ var require_ButtonBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
-    var ButtonBuilder5 = class extends BuildersButton {
+    var ButtonBuilder6 = class extends BuildersButton {
       constructor({ emoji, ...data } = {}) {
         super(toSnakeCase({ ...data, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
       }
@@ -48558,7 +48558,7 @@ var require_ButtonBuilder = __commonJS({
         return new this(isJSONEncodable(other) ? other.toJSON() : other);
       }
     };
-    module2.exports = ButtonBuilder5;
+    module2.exports = ButtonBuilder6;
   }
 });
 
@@ -49311,8 +49311,8 @@ var require_Components = __commonJS({
     }
     module2.exports = { createComponent, createComponentBuilder, findComponentByCustomId };
     var ActionRow = require_ActionRow();
-    var ActionRowBuilder5 = require_ActionRowBuilder();
-    var ButtonBuilder5 = require_ButtonBuilder();
+    var ActionRowBuilder6 = require_ActionRowBuilder();
+    var ButtonBuilder6 = require_ButtonBuilder();
     var ButtonComponent = require_ButtonComponent();
     var ChannelSelectMenuBuilder = require_ChannelSelectMenuBuilder();
     var ChannelSelectMenuComponent = require_ChannelSelectMenuComponent();
@@ -49354,8 +49354,8 @@ var require_Components = __commonJS({
       [ComponentType.Label]: LabelComponent
     };
     var ComponentTypeToBuilder = {
-      [ComponentType.ActionRow]: ActionRowBuilder5,
-      [ComponentType.Button]: ButtonBuilder5,
+      [ComponentType.ActionRow]: ActionRowBuilder6,
+      [ComponentType.Button]: ButtonBuilder6,
       [ComponentType.StringSelect]: StringSelectMenuBuilder,
       [ComponentType.TextInput]: TextInputBuilder2,
       [ComponentType.UserSelect]: UserSelectMenuBuilder,
@@ -49377,7 +49377,7 @@ var require_Message = __commonJS({
       InteractionType,
       ChannelType,
       MessageType,
-      MessageFlags: MessageFlags5,
+      MessageFlags: MessageFlags6,
       PermissionFlagsBits,
       MessageReferenceType
     } = require_v106();
@@ -49682,7 +49682,7 @@ var require_Message = __commonJS({
        * @readonly
        */
       get hasThread() {
-        return this.flags.has(MessageFlags5.HasThread);
+        return this.flags.has(MessageFlags6.HasThread);
       }
       /**
        * The thread started by this message
@@ -49892,7 +49892,7 @@ var require_Message = __commonJS({
         const bitfield = PermissionFlagsBits.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits.ManageMessages);
         const { channel } = this;
         return Boolean(
-          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags5.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
+          channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags6.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
         );
       }
       /**
@@ -50093,9 +50093,9 @@ var require_Message = __commonJS({
       suppressEmbeds(suppress = true) {
         const flags = new MessageFlagsBitField(this.flags.bitfield);
         if (suppress) {
-          flags.add(MessageFlags5.SuppressEmbeds);
+          flags.add(MessageFlags6.SuppressEmbeds);
         } else {
-          flags.remove(MessageFlags5.SuppressEmbeds);
+          flags.remove(MessageFlags6.SuppressEmbeds);
         }
         return this.edit({ flags });
       }
@@ -51887,7 +51887,7 @@ var require_MessagePayload = __commonJS({
     var { Buffer: Buffer2 } = require("node:buffer");
     var { lazy, isJSONEncodable } = require_dist();
     var { DiscordSnowflake } = require_cjs3();
-    var { MessageFlags: MessageFlags5, MessageReferenceType } = require_v106();
+    var { MessageFlags: MessageFlags6, MessageReferenceType } = require_v106();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveFile } = require_DataResolver();
     var MessageFlagsBitField = require_MessageFlagsBitField();
@@ -52013,7 +52013,7 @@ var require_MessagePayload = __commonJS({
           flags = new MessageFlagsBitField(this.options.flags).bitfield;
         }
         if (isInteraction && this.options.ephemeral) {
-          flags |= MessageFlags5.Ephemeral;
+          flags |= MessageFlags6.Ephemeral;
         }
         let allowedMentions = this.options.allowedMentions === void 0 ? this.target.client.options.allowedMentions : this.options.allowedMentions;
         if (allowedMentions?.repliedUser !== void 0) {
@@ -57768,7 +57768,7 @@ var require_InteractionResponses = __commonJS({
     var { deprecate } = require("node:util");
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist5();
     var { isJSONEncodable } = require_dist();
-    var { InteractionResponseType, MessageFlags: MessageFlags5, Routes: Routes3, InteractionType } = require_v106();
+    var { InteractionResponseType, MessageFlags: MessageFlags6, Routes: Routes3, InteractionType } = require_v106();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessageFlagsBitField = require_MessageFlagsBitField();
     var InteractionCallbackResponse = require_InteractionCallbackResponse();
@@ -57862,7 +57862,7 @@ var require_InteractionResponses = __commonJS({
         }
         const flags = new MessageFlagsBitField(options.flags);
         if (options.ephemeral) {
-          flags.add(MessageFlags5.Ephemeral);
+          flags.add(MessageFlags6.Ephemeral);
         }
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
@@ -57875,7 +57875,7 @@ var require_InteractionResponses = __commonJS({
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
         this.deferred = true;
-        this.ephemeral = flags.has(MessageFlags5.Ephemeral);
+        this.ephemeral = flags.has(MessageFlags6.Ephemeral);
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
       /**
@@ -57930,7 +57930,7 @@ var require_InteractionResponses = __commonJS({
           auth: false,
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
-        this.ephemeral = Boolean(data.flags & MessageFlags5.Ephemeral);
+        this.ephemeral = Boolean(data.flags & MessageFlags6.Ephemeral);
         this.replied = true;
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
@@ -74990,7 +74990,7 @@ var require_src = __commonJS({
 });
 
 // src/bot/client.ts
-var import_discord9 = __toESM(require_src(), 1);
+var import_discord10 = __toESM(require_src(), 1);
 
 // console-logger:console-logger
 var logger = {
@@ -79578,35 +79578,327 @@ async function handlePrefixMessage(message) {
   }
 }
 
+// src/bot/closest/handlers.ts
+var import_discord9 = __toESM(require_src(), 1);
+
+// src/bot/closest/game.ts
+var games5 = /* @__PURE__ */ new Map();
+function createClosestGame(channelId, guildId, hostId, hostUsername) {
+  const game = {
+    channelId,
+    guildId,
+    hostId,
+    phase: "lobby",
+    players: [{ userId: hostId, username: hostUsername }],
+    secretNumber: Math.floor(Math.random() * 301),
+    currentPlayerIndex: 0,
+    roundCount: 0,
+    lobbyMessageId: null,
+    timers: []
+  };
+  games5.set(channelId, game);
+  lockChannel(channelId, "\u0627\u0644\u0623\u0642\u0631\u0628");
+  return game;
+}
+function getClosestGame(channelId) {
+  return games5.get(channelId);
+}
+function deleteClosestGame(channelId) {
+  const game = games5.get(channelId);
+  if (game) {
+    for (const t of game.timers) clearTimeout(t);
+    game.timers = [];
+  }
+  games5.delete(channelId);
+  unlockChannel(channelId);
+}
+function joinClosest(game, userId, username) {
+  if (game.phase !== "lobby") return false;
+  if (game.players.find((p) => p.userId === userId)) return false;
+  if (game.players.length >= 20) return false;
+  game.players.push({ userId, username });
+  return true;
+}
+function leaveClosest(game, userId) {
+  if (game.phase !== "lobby") return false;
+  const idx = game.players.findIndex((p) => p.userId === userId);
+  if (idx === -1) return false;
+  game.players.splice(idx, 1);
+  return true;
+}
+function startClosestGame(game) {
+  game.phase = "playing";
+  for (let i = game.players.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [game.players[i], game.players[j]] = [game.players[j], game.players[i]];
+  }
+  game.currentPlayerIndex = 0;
+  game.roundCount = 0;
+}
+function getCurrentPlayer(game) {
+  return game.players[game.currentPlayerIndex];
+}
+function handleGuess2(game, number) {
+  game.roundCount++;
+  if (number === game.secretNumber) return "correct";
+  if (number > game.secretNumber) return "higher";
+  return "lower";
+}
+function nextPlayer(game) {
+  game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
+  return game.players[game.currentPlayerIndex];
+}
+
+// src/bot/closest/embeds.ts
+var COLOR = 10181046;
+function closestLobbyEmbed(game, secondsLeft) {
+  const playerList = game.players.map((p, i) => `${i + 1}. **${p.username}**`).join("\n") || "\u2014";
+  return {
+    color: COLOR,
+    title: "\u{1F522} \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628",
+    description: "\u0627\u0644\u0628\u0648\u062A \u0627\u062E\u062A\u0627\u0631 \u0631\u0642\u0645\u0627\u064B \u0633\u0631\u064A\u0627\u064B \u0645\u0646 **0 \u0625\u0644\u0649 300**\n\u0643\u0644 \u0644\u0627\u0639\u0628 \u064A\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0628\u0627\u0644\u062F\u0648\u0631 \u2014 \u0645\u0646 \u064A\u0635\u064A\u0628 \u064A\u0641\u0648\u0632!",
+    fields: [
+      { name: "\u{1F465} \u0627\u0644\u0644\u0627\u0639\u0628\u0648\u0646", value: playerList, inline: true },
+      { name: "\u23F1\uFE0F \u062A\u0628\u062F\u0623 \u062E\u0644\u0627\u0644", value: `**${secondsLeft}** \u062B\u0627\u0646\u064A\u0629`, inline: true }
+    ],
+    footer: { text: "\u0646\u0642\u0627\u0637 \u0627\u0644\u0641\u0627\u0626\u0632 = 10 + \u0639\u062F\u062F \u0627\u0644\u062C\u0648\u0644\u0627\u062A \u0627\u0644\u0643\u0644\u064A\u0629" }
+  };
+}
+function closestWinEmbed(winner, secretNumber, rounds, points) {
+  return {
+    color: 15844367,
+    title: "\u{1F3C6} \u0644\u062F\u064A\u0646\u0627 \u0641\u0627\u0626\u0632!",
+    description: [
+      `\u{1F389} <@${winner.userId}> \u0623\u0635\u0627\u0628 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A!`,
+      `\u{1F522} \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0635\u062D\u064A\u062D \u0643\u0627\u0646: **${secretNumber}**`,
+      `\u{1F504} \u0639\u062F\u062F \u0627\u0644\u062C\u0648\u0644\u0627\u062A: **${rounds}**`,
+      `\u2B50 \u0627\u0644\u0646\u0642\u0627\u0637 \u0627\u0644\u0645\u0643\u062A\u0633\u0628\u0629: **${points}** \u0646\u0642\u0637\u0629`
+    ].join("\n")
+  };
+}
+
+// src/bot/closest/handlers.ts
+var LOBBY_SECONDS6 = 60;
+function lobbyButtons4() {
+  return new import_discord9.ActionRowBuilder().addComponents(
+    new import_discord9.ButtonBuilder().setCustomId("clst:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord9.ButtonStyle.Success),
+    new import_discord9.ButtonBuilder().setCustomId("clst:leave").setLabel("\u062E\u0631\u0648\u062C \u{1F6AA}").setStyle(import_discord9.ButtonStyle.Secondary),
+    new import_discord9.ButtonBuilder().setCustomId("clst:cancel").setLabel("\u0625\u0644\u063A\u0627\u0621 \u274C").setStyle(import_discord9.ButtonStyle.Danger)
+  );
+}
+function disabledButtons() {
+  return new import_discord9.ActionRowBuilder().addComponents(
+    new import_discord9.ButtonBuilder().setCustomId("clst:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord9.ButtonStyle.Success).setDisabled(true),
+    new import_discord9.ButtonBuilder().setCustomId("clst:leave").setLabel("\u062E\u0631\u0648\u062C \u{1F6AA}").setStyle(import_discord9.ButtonStyle.Secondary).setDisabled(true),
+    new import_discord9.ButtonBuilder().setCustomId("clst:cancel").setLabel("\u0625\u0644\u063A\u0627\u0621 \u274C").setStyle(import_discord9.ButtonStyle.Danger).setDisabled(true)
+  );
+}
+async function initClosestGame(channel, guildId, userId, username) {
+  const lock = getChannelLock(channel.id);
+  if (lock) {
+    return {
+      ok: false,
+      reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.`
+    };
+  }
+  if (getClosestGame(channel.id)) {
+    return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u0623\u0642\u0631\u0628 \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629." };
+  }
+  const game = createClosestGame(channel.id, guildId, userId, username);
+  let secondsLeft = LOBBY_SECONDS6;
+  const msg = await channel.send({
+    embeds: [closestLobbyEmbed(game, secondsLeft)],
+    components: [lobbyButtons4()]
+  });
+  game.lobbyMessageId = msg.id;
+  const updateTimer = setInterval(async () => {
+    secondsLeft -= 15;
+    const g = getClosestGame(channel.id);
+    if (!g || g.phase !== "lobby") {
+      clearInterval(updateTimer);
+      return;
+    }
+    try {
+      await msg.edit({
+        embeds: [closestLobbyEmbed(g, Math.max(0, secondsLeft))],
+        components: [lobbyButtons4()]
+      });
+    } catch {
+      clearInterval(updateTimer);
+    }
+  }, 15e3);
+  game.timers.push(updateTimer);
+  const startTimer = setTimeout(async () => {
+    clearInterval(updateTimer);
+    const g = getClosestGame(channel.id);
+    if (!g || g.phase !== "lobby") return;
+    if (g.players.length < 1) {
+      deleteClosestGame(channel.id);
+      try {
+        await msg.edit({ embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0641\u064A \u0623\u062D\u062F \u0627\u0646\u0636\u0645." }], components: [disabledButtons()] });
+      } catch {
+      }
+      return;
+    }
+    startClosestGame(g);
+    try {
+      await msg.edit({
+        embeds: [{ color: 10181046, title: "\u{1F522} \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u0628\u062F\u0623\u062A!", description: `${g.players.length} \u0644\u0627\u0639\u0628 \u0627\u0646\u0636\u0645\u0648\u0627. \u062D\u0638\u0627\u064B \u0644\u0644\u062C\u0645\u064A\u0639!` }],
+        components: [disabledButtons()]
+      });
+    } catch {
+    }
+    await sendTurnMessage(channel, g);
+  }, LOBBY_SECONDS6 * 1e3);
+  game.timers.push(startTimer);
+  return { ok: true };
+}
+async function sendTurnMessage(channel, game) {
+  const player = getCurrentPlayer(game);
+  await channel.send(`<@${player.userId}> \u062F\u0648\u0631\u0643! \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0646 **0** \u0625\u0644\u0649 **300**`);
+}
+async function handleClosestMessage(message) {
+  if (message.author.bot) return;
+  if (!message.channelId) return;
+  const game = getClosestGame(message.channelId);
+  if (!game || game.phase !== "playing") return;
+  const current = getCurrentPlayer(game);
+  if (message.author.id !== current.userId) return;
+  const num = parseInt(message.content.trim(), 10);
+  if (isNaN(num) || num < 0 || num > 300) return;
+  const result = handleGuess2(game, num);
+  const channel = message.channel;
+  if (result === "correct") {
+    const points = 10 + game.roundCount;
+    const winner = current;
+    const secret = game.secretNumber;
+    const rounds = game.roundCount;
+    addScrambleWin(game.guildId, winner.userId, winner.username, points);
+    deleteClosestGame(game.channelId);
+    await channel.send({ embeds: [closestWinEmbed(winner, secret, rounds, points)] });
+    return;
+  }
+  if (result === "higher") {
+    await channel.send(`<@${current.userId}> \u0627\u0644\u0631\u0642\u0645 **\u0623\u0635\u063A\u0631** \u0645\u0646 ${num} \u{1F4C9}`);
+  } else {
+    await channel.send(`<@${current.userId}> \u0627\u0644\u0631\u0642\u0645 **\u0623\u0643\u0628\u0631** \u0645\u0646 ${num} \u{1F4C8}`);
+  }
+  const next = nextPlayer(game);
+  await channel.send(`<@${next.userId}> \u062F\u0648\u0631\u0643! \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0646 **0** \u0625\u0644\u0649 **300**`);
+}
+async function handleClosestButton(interaction) {
+  const game = getClosestGame(interaction.channelId);
+  if (!game || game.phase !== "lobby") {
+    await interaction.reply({ content: "\u0627\u0644\u0644\u0648\u0628\u064A \u0627\u0646\u062A\u0647\u0649 \u0623\u0648 \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629.", flags: import_discord9.MessageFlags.Ephemeral });
+    return;
+  }
+  const userId = interaction.user.id;
+  const username = interaction.user.username;
+  const action = interaction.customId.split(":")[1];
+  if (action === "join") {
+    const joined = joinClosest(game, userId, username);
+    if (!joined) {
+      await interaction.reply({ content: "\u0623\u0646\u062A \u0645\u0646\u0636\u0645 \u0628\u0627\u0644\u0641\u0639\u0644 \u0623\u0648 \u0627\u0644\u0644\u0648\u0628\u064A \u0627\u0645\u062A\u0644\u0623.", flags: import_discord9.MessageFlags.Ephemeral });
+      return;
+    }
+    await interaction.update({
+      embeds: [closestLobbyEmbed(game, LOBBY_SECONDS6)],
+      components: [lobbyButtons4()]
+    });
+    return;
+  }
+  if (action === "leave") {
+    if (userId === game.hostId) {
+      await interaction.reply({ content: "\u0627\u0644\u0645\u0636\u064A\u0641 \u0645\u0627 \u064A\u0642\u062F\u0631 \u064A\u062E\u0631\u062C. \u0627\u0633\u062A\u062E\u062F\u0645 \u0632\u0631 \u0627\u0644\u0625\u0644\u063A\u0627\u0621.", flags: import_discord9.MessageFlags.Ephemeral });
+      return;
+    }
+    const left = leaveClosest(game, userId);
+    if (!left) {
+      await interaction.reply({ content: "\u0623\u0646\u062A \u0644\u0633\u062A \u0641\u064A \u0627\u0644\u0644\u0639\u0628\u0629.", flags: import_discord9.MessageFlags.Ephemeral });
+      return;
+    }
+    await interaction.update({
+      embeds: [closestLobbyEmbed(game, LOBBY_SECONDS6)],
+      components: [lobbyButtons4()]
+    });
+    return;
+  }
+  if (action === "cancel") {
+    if (userId !== game.hostId) {
+      await interaction.reply({ content: "\u0627\u0644\u0625\u0644\u063A\u0627\u0621 \u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637.", flags: import_discord9.MessageFlags.Ephemeral });
+      return;
+    }
+    deleteClosestGame(interaction.channelId);
+    await interaction.update({
+      embeds: [{ color: 15548997, title: "\u274C \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628", description: "\u0623\u0644\u063A\u0627\u0647\u0627 \u0627\u0644\u0645\u0636\u064A\u0641." }],
+      components: [disabledButtons()]
+    });
+    return;
+  }
+}
+async function handleClosestCommand(interaction) {
+  if (!interaction.guild || !interaction.channel) {
+    await interaction.reply({ content: "\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u0644\u0644\u0633\u064A\u0631\u0641\u0631\u0627\u062A \u0641\u0642\u0637.", flags: import_discord9.MessageFlags.Ephemeral });
+    return;
+  }
+  const channel = interaction.channel;
+  const result = await initClosestGame(
+    channel,
+    interaction.guildId,
+    interaction.user.id,
+    interaction.user.username
+  );
+  if (!result.ok) {
+    await interaction.reply({ content: result.reason, flags: import_discord9.MessageFlags.Ephemeral });
+    return;
+  }
+  await interaction.reply({ content: "\u062A\u0645 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F3AE}", flags: import_discord9.MessageFlags.Ephemeral });
+}
+async function handleClosestCancelCommand(interaction) {
+  const game = getClosestGame(interaction.channelId ?? "");
+  if (!game) {
+    await interaction.reply({ content: "\u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0623\u0642\u0631\u0628 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.", flags: import_discord9.MessageFlags.Ephemeral });
+    return;
+  }
+  if (interaction.user.id !== game.hostId) {
+    await interaction.reply({ content: "\u0627\u0644\u0625\u0644\u063A\u0627\u0621 \u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637.", flags: import_discord9.MessageFlags.Ephemeral });
+    return;
+  }
+  deleteClosestGame(game.channelId);
+  await interaction.reply({ content: "\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628.", flags: import_discord9.MessageFlags.Ephemeral });
+}
+
 // src/bot/client.ts
 var commands = [
-  new import_discord9.SlashCommandBuilder().setName("\u0627\u0645\u0628\u0648\u0633\u062A\u0631").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0645\u0633\u0627\u0639\u062F\u0629").setDescription("\u0627\u0639\u0631\u0636 \u0634\u0631\u062D \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0648\u0627\u0644\u0623\u0648\u0627\u0645\u0631").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u062D\u0631\u0648\u0641").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0646\u0642\u0627\u0637").setDescription("\u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643 \u0648\u0645\u0631\u062A\u0628\u062A\u0643 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
-  new import_discord9.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON()
+  new import_discord10.SlashCommandBuilder().setName("\u0627\u0645\u0628\u0648\u0633\u062A\u0631").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0645\u0633\u0627\u0639\u062F\u0629").setDescription("\u0627\u0639\u0631\u0636 \u0634\u0631\u062D \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0648\u0627\u0644\u0623\u0648\u0627\u0645\u0631").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u062D\u0631\u0648\u0641").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0646\u0642\u0627\u0637").setDescription("\u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643 \u0648\u0645\u0631\u062A\u0628\u062A\u0643 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0623\u0642\u0631\u0628").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300!").toJSON(),
+  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0623\u0642\u0631\u0628").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON()
 ];
 async function startBot(token2) {
-  const client = new import_discord9.Client({
+  const client = new import_discord10.Client({
     intents: [
-      import_discord9.GatewayIntentBits.Guilds,
-      import_discord9.GatewayIntentBits.GuildMessages,
-      import_discord9.GatewayIntentBits.DirectMessages,
-      import_discord9.GatewayIntentBits.MessageContent
+      import_discord10.GatewayIntentBits.Guilds,
+      import_discord10.GatewayIntentBits.GuildMessages,
+      import_discord10.GatewayIntentBits.DirectMessages,
+      import_discord10.GatewayIntentBits.MessageContent
     ],
-    partials: [import_discord9.Partials.Channel]
+    partials: [import_discord10.Partials.Channel]
   });
-  client.once(import_discord9.Events.ClientReady, async (c) => {
+  client.once(import_discord10.Events.ClientReady, async (c) => {
     logger.info({ tag: c.user.tag, id: c.user.id }, "discord bot ready");
     try {
-      const rest = new import_discord9.REST({ version: "10" }).setToken(token2);
-      await rest.put(import_discord9.Routes.applicationCommands(c.user.id), {
+      const rest = new import_discord10.REST({ version: "10" }).setToken(token2);
+      await rest.put(import_discord10.Routes.applicationCommands(c.user.id), {
         body: commands
       });
       logger.info(
@@ -79617,7 +79909,7 @@ async function startBot(token2) {
       logger.error({ err }, "failed to register slash commands");
     }
   });
-  client.on(import_discord9.Events.InteractionCreate, async (interaction) => {
+  client.on(import_discord10.Events.InteractionCreate, async (interaction) => {
     try {
       if (interaction.isChatInputCommand()) {
         const name = interaction.commandName;
@@ -79643,9 +79935,15 @@ async function startBot(token2) {
           await handleRouletteCancelCommand(interaction);
         } else if (name === "\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A") {
           await handleBackupCommand(interaction);
+        } else if (name === "\u0623\u0642\u0631\u0628") {
+          await handleClosestCommand(interaction);
+        } else if (name === "\u0627\u0644\u063A\u0627\u0621_\u0623\u0642\u0631\u0628") {
+          await handleClosestCancelCommand(interaction);
         }
       } else if (interaction.isButton()) {
-        if (interaction.customId.startsWith("scr:")) {
+        if (interaction.customId.startsWith("clst:")) {
+          await handleClosestButton(interaction);
+        } else if (interaction.customId.startsWith("scr:")) {
           await handleScrambleButton(interaction);
         } else if (interaction.customId.startsWith("search:")) {
           await handleSearchButton(interaction);
@@ -79670,14 +79968,15 @@ async function startBot(token2) {
       }
     }
   });
-  client.on(import_discord9.Events.MessageCreate, async (message) => {
+  client.on(import_discord10.Events.MessageCreate, async (message) => {
     try {
+      await handleClosestMessage(message);
       await handlePrefixMessage(message);
     } catch (err) {
       logger.error({ err }, "prefix handler failed");
     }
   });
-  client.on(import_discord9.Events.Error, (err) => {
+  client.on(import_discord10.Events.Error, (err) => {
     logger.error({ err }, "discord client error");
   });
   await client.login(token2);

@@ -75238,6 +75238,18 @@ function pickEightOptions(category, secret) {
   return options.sort(() => Math.random() - 0.5);
 }
 
+// src/bot/channelLock.ts
+var locks = /* @__PURE__ */ new Map();
+function getChannelLock(channelId) {
+  return locks.get(channelId) ?? null;
+}
+function lockChannel(channelId, gameType) {
+  locks.set(channelId, gameType);
+}
+function unlockChannel(channelId) {
+  locks.delete(channelId);
+}
+
 // src/bot/game.ts
 var games = /* @__PURE__ */ new Map();
 function getGame(channelId) {
@@ -75264,6 +75276,7 @@ function createGame(channelId, guildId, hostId, hostUsername) {
     seenWord: false
   });
   games.set(channelId, game);
+  lockChannel(channelId, "\u0625\u0645\u0628\u0648\u0633\u062A\u0631");
   return game;
 }
 function clearTimers(game) {
@@ -75278,6 +75291,7 @@ function deleteGame(channelId) {
   const game = games.get(channelId);
   if (game) clearTimers(game);
   games.delete(channelId);
+  unlockChannel(channelId);
 }
 function joinGame(channelId, userId, username) {
   const game = games.get(channelId);
@@ -75902,6 +75916,10 @@ function clearPhaseMessages(channelId) {
   phaseMessages.delete(channelId);
 }
 async function initImposterGame(channel, guildId, userId, username) {
+  const lock = getChannelLock(channel.id);
+  if (lock) {
+    return { ok: false, reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.` };
+  }
   const existing = getGame(channel.id);
   if (existing) {
     return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u0634\u063A\u0627\u0644\u0629 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u0627\u0644\u063A\u0647\u0627 \u0623\u0648\u0644\u0627\u064B \u0623\u0648 \u062E\u0644\u0635\u0648\u0647\u0627." };
@@ -76876,6 +76894,7 @@ function createScrambleGame(channelId, guildId, hostId, hostUsername) {
     timers: []
   };
   games2.set(channelId, game);
+  lockChannel(channelId, "\u062D\u0631\u0648\u0641");
   return game;
 }
 function deleteScrambleGame(channelId) {
@@ -76885,6 +76904,7 @@ function deleteScrambleGame(channelId) {
     game.timers = [];
   }
   games2.delete(channelId);
+  unlockChannel(channelId);
 }
 function joinScramble(game, userId, username) {
   if (game.players.has(userId)) return "already";
@@ -77024,6 +77044,10 @@ function lobbyButtons2() {
 }
 async function initScramble(channel, guildId, userId, username) {
   const channelId = channel.id;
+  const lock = getChannelLock(channelId);
+  if (lock) {
+    return { ok: false, reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.` };
+  }
   if (getScrambleGame(channelId)) {
     return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u062D\u0631\u0648\u0641 \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629." };
   }
@@ -77306,6 +77330,7 @@ function createSearchGame(channelId, guildId, hostId, hostUsername) {
     timers: []
   };
   games3.set(channelId, game);
+  lockChannel(channelId, "\u0628\u062D\u062B");
   return game;
 }
 function getSearchGame(channelId) {
@@ -77313,6 +77338,7 @@ function getSearchGame(channelId) {
 }
 function deleteSearchGame(channelId) {
   games3.delete(channelId);
+  unlockChannel(channelId);
 }
 function clearSearchTimers(game) {
   for (const t of game.timers) {
@@ -78087,6 +78113,10 @@ function voteButtons(labelA, labelB) {
   );
 }
 async function initSearchGame(channel, guildId, userId, username) {
+  const lock = getChannelLock(channel.id);
+  if (lock) {
+    return { ok: false, reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.` };
+  }
   if (getSearchGame(channel.id)) {
     return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u0628\u062D\u062B \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629." };
   }
@@ -78462,6 +78492,7 @@ function createRouletteGame(channelId, guildId, userId, username) {
   };
   game.players.set(userId, { userId, username, alive: true, number: hostNum });
   games4.set(channelId, game);
+  lockChannel(channelId, "\u0631\u0648\u0644\u064A\u062A");
   return game;
 }
 function pickFromPool(pool) {
@@ -78494,6 +78525,7 @@ function getRouletteGame(channelId) {
 }
 function deleteRouletteGame(channelId) {
   games4.delete(channelId);
+  unlockChannel(channelId);
 }
 function clearRouletteTimers(game) {
   for (const t of game.timers) clearTimeout(t);
@@ -78728,6 +78760,10 @@ function reviveButtons(game) {
   return rows;
 }
 async function initRouletteGame(channel, guildId, userId, username) {
+  const lock = getChannelLock(channel.id);
+  if (lock) {
+    return { ok: false, reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.` };
+  }
   if (getRouletteGame(channel.id)) {
     return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u0631\u0648\u0644\u064A\u062A \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629." };
   }

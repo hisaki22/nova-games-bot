@@ -79392,7 +79392,7 @@ function nextPlayer(game) {
 // src/bot/closest/embeds.ts
 var COLOR = 10181046;
 function closestLobbyEmbed(game, secondsLeft) {
-  const playerList = game.players.map((p, i) => `${i + 1}. **${p.username}**`).join("\n") || "\u2014";
+  const playerList = game.players.map((p, i) => `${i + 1}. <@${p.userId}>`).join("\n") || "\u2014";
   return {
     color: COLOR,
     title: "\u{1F522} \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628",
@@ -79469,11 +79469,11 @@ async function initClosestGame(channel, guildId, userId, username) {
     clearInterval(updateTimer);
     const g = getClosestGame(channel.id);
     if (!g || g.phase !== "lobby") return;
-    if (g.players.length < 1) {
+    if (g.players.length < 4) {
       deleteClosestGame(channel.id);
       try {
         await msg.edit({
-          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0641\u064A \u0623\u062D\u062F \u0627\u0646\u0636\u0645." }],
+          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0627\u0643\u062A\u0645\u0644 \u0627\u0644\u0639\u062F\u062F \u2014 \u062A\u062D\u062A\u0627\u062C \u0664 \u0644\u0627\u0639\u0628\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644." }],
           components: [disabledButtons()]
         });
       } catch {
@@ -79791,7 +79791,7 @@ function nextGuesser(game) {
 // src/bot/guess/embeds.ts
 var COLOR2 = 1752220;
 function guessLobbyEmbed(game, secondsLeft) {
-  const playerList = game.players.map((p, i) => `${i + 1}. **${p.username}**`).join("\n") || "\u2014";
+  const playerList = game.players.map((p, i) => `${i + 1}. <@${p.userId}>`).join("\n") || "\u2014";
   return {
     color: COLOR2,
     title: "\u{1F50E} \u0644\u0639\u0628\u0629 \u062E\u0645\u0651\u0646",
@@ -87111,11 +87111,11 @@ async function initGuessGame(channel, guildId, userId, username) {
     clearInterval(updateTimer);
     const g = getGuessGame(channel.id);
     if (!g || g.phase !== "lobby") return;
-    if (g.players.length < 2) {
+    if (g.players.length < 4) {
       deleteGuessGame(channel.id);
       try {
         await msg.edit({
-          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0627\u0643\u062A\u0645\u0644 \u0627\u0644\u0639\u062F\u062F (\u064A\u062D\u062A\u0627\u062C \u0644\u0627\u0639\u0628\u064E\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644)." }],
+          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0627\u0643\u062A\u0645\u0644 \u0627\u0644\u0639\u062F\u062F \u2014 \u062A\u062D\u062A\u0627\u062C \u0664 \u0644\u0627\u0639\u0628\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644." }],
           components: [disabledButtons2()]
         });
       } catch {

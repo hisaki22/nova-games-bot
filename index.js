@@ -75712,18 +75712,23 @@ async function connectPg() {
     await client.connect();
     await client.query(`
       CREATE TABLE IF NOT EXISTS scores (
-        guild_id        TEXT NOT NULL,
-        user_id         TEXT NOT NULL,
-        username        TEXT NOT NULL DEFAULT '',
-        points          INTEGER NOT NULL DEFAULT 0,
-        scramble_wins   INTEGER NOT NULL DEFAULT 0,
+        guild_id         TEXT NOT NULL,
+        user_id          TEXT NOT NULL,
+        username         TEXT NOT NULL DEFAULT '',
+        points           INTEGER NOT NULL DEFAULT 0,
+        scramble_wins    INTEGER NOT NULL DEFAULT 0,
         scramble_correct INTEGER NOT NULL DEFAULT 0,
-        imposter_points INTEGER NOT NULL DEFAULT 0,
-        search_wins     INTEGER NOT NULL DEFAULT 0,
-        roulette_wins   INTEGER NOT NULL DEFAULT 0,
+        imposter_points  INTEGER NOT NULL DEFAULT 0,
+        search_wins      INTEGER NOT NULL DEFAULT 0,
+        roulette_wins    INTEGER NOT NULL DEFAULT 0,
+        closest_wins     INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (guild_id, user_id)
       )
     `);
+    await client.query(`
+      ALTER TABLE scores ADD COLUMN IF NOT EXISTS closest_wins INTEGER NOT NULL DEFAULT 0
+    `).catch(() => {
+    });
     logger.info("PostgreSQL connected \u2014 scores will be persisted");
     return client;
   } catch (err) {
@@ -75736,8 +75741,8 @@ async function pgUpsert(guildId, rec) {
   try {
     await pgClient.query(
       `INSERT INTO scores
-         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins, closest_wins)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
        ON CONFLICT (guild_id, user_id) DO UPDATE SET
          username         = EXCLUDED.username,
          points           = EXCLUDED.points,
@@ -75745,7 +75750,8 @@ async function pgUpsert(guildId, rec) {
          scramble_correct = EXCLUDED.scramble_correct,
          imposter_points  = EXCLUDED.imposter_points,
          search_wins      = EXCLUDED.search_wins,
-         roulette_wins    = EXCLUDED.roulette_wins`,
+         roulette_wins    = EXCLUDED.roulette_wins,
+         closest_wins     = EXCLUDED.closest_wins`,
       [
         guildId,
         rec.userId,
@@ -75755,7 +75761,8 @@ async function pgUpsert(guildId, rec) {
         rec.scrambleCorrect,
         rec.imposterPoints,
         rec.searchWins,
-        rec.rouletteWins
+        rec.rouletteWins,
+        rec.closestWins
       ]
     );
   } catch (err) {
@@ -75777,7 +75784,8 @@ async function loadScores() {
           scrambleCorrect: Number(row.scramble_correct),
           imposterPoints: Number(row.imposter_points),
           searchWins: Number(row.search_wins),
-          rouletteWins: Number(row.roulette_wins)
+          rouletteWins: Number(row.roulette_wins),
+          closestWins: Number(row.closest_wins)
         };
       }
       logger.info({ rows: result.rowCount }, "scores loaded from PostgreSQL");
@@ -75826,7 +75834,8 @@ function getOrCreate(guildId, userId, username) {
       scrambleCorrect: 0,
       imposterPoints: 0,
       searchWins: 0,
-      rouletteWins: 0
+      rouletteWins: 0,
+      closestWins: 0
     };
   } else {
     store[guildId][userId].username = username;
@@ -75858,6 +75867,12 @@ function addRouletteWin(guildId, userId, username, pts) {
   rec.rouletteWins = (rec.rouletteWins ?? 0) + 1;
   scheduleSave(guildId, rec);
 }
+function addClosestWin(guildId, userId, username, pts) {
+  const rec = getOrCreate(guildId, userId, username);
+  rec.points += pts;
+  rec.closestWins = (rec.closestWins ?? 0) + 1;
+  scheduleSave(guildId, rec);
+}
 function getLeaderboard(guildId) {
   const guild = store[guildId];
   if (!guild) return [];
@@ -75879,7 +75894,13 @@ function getStoreSnapshot() {
 function getGuildStats(guildId) {
   const guild = store[guildId];
   if (!guild) {
-    return { totalPlayers: 0, totalPoints: 0, topGame: "\u2014", topPlayer: null, gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0 } };
+    return {
+      totalPlayers: 0,
+      totalPoints: 0,
+      topGame: "\u2014",
+      topPlayer: null,
+      gameCounts: { imposter: 0, scramble: 0, search: 0, roulette: 0, closest: 0 }
+    };
   }
   const records = Object.values(guild).filter((r) => r.points > 0);
   const totalPoints = records.reduce((s, r) => s + r.points, 0);
@@ -75887,10 +75908,17 @@ function getGuildStats(guildId) {
     imposter: records.filter((r) => r.imposterPoints > 0).length,
     scramble: records.reduce((s, r) => s + r.scrambleWins, 0),
     search: records.reduce((s, r) => s + (r.searchWins ?? 0), 0),
-    roulette: records.reduce((s, r) => s + (r.rouletteWins ?? 0), 0)
+    roulette: records.reduce((s, r) => s + (r.rouletteWins ?? 0), 0),
+    closest: records.reduce((s, r) => s + (r.closestWins ?? 0), 0)
   };
   const topGameEntry = Object.entries(gameCounts).sort((a, b) => b[1] - a[1])[0];
-  const gameNames = { imposter: "\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631", scramble: "\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641", search: "\u{1F50D} \u0627\u0644\u0628\u062D\u062B", roulette: "\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A" };
+  const gameNames = {
+    imposter: "\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631",
+    scramble: "\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641",
+    search: "\u{1F50D} \u0627\u0644\u0628\u062D\u062B",
+    roulette: "\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A",
+    closest: "\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628"
+  };
   const topGame = topGameEntry && topGameEntry[1] > 0 ? gameNames[topGameEntry[0]] ?? "\u2014" : "\u2014";
   const topPlayer = records.sort((a, b) => b.points - a.points)[0] ?? null;
   return { totalPlayers: records.length, totalPoints, topGame, topPlayer, gameCounts };
@@ -76002,28 +76030,6 @@ async function handleHelpCommand(interaction) {
   await interaction.reply({
     embeds: [helpEmbed()],
     flags: import_discord3.MessageFlags.Ephemeral
-  });
-}
-async function handleCancelCommand(interaction) {
-  const game = getGame(interaction.channelId);
-  if (!game) {
-    await interaction.reply({
-      embeds: [errorEmbed("\u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0634\u063A\u0627\u0644\u0629.")],
-      flags: import_discord3.MessageFlags.Ephemeral
-    });
-    return;
-  }
-  if (game.hostId !== interaction.user.id) {
-    await interaction.reply({
-      embeds: [errorEmbed("\u0628\u0633 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A \u0627\u0644\u0644\u0639\u0628\u0629.")],
-      flags: import_discord3.MessageFlags.Ephemeral
-    });
-    return;
-  }
-  deleteGame(interaction.channelId);
-  clearPhaseMessages(interaction.channelId);
-  await interaction.reply({
-    embeds: [successEmbed("\u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0644\u0639\u0628\u0629.")]
   });
 }
 async function handleButton(interaction) {
@@ -77286,21 +77292,6 @@ async function handleScrambleButton(interaction) {
     await interaction.update({ embeds: [scrambleCancelledEmbed()], components: [] });
     return;
   }
-}
-async function handleScrambleCancel(interaction) {
-  const channelId = interaction.channelId;
-  const game = getScrambleGame(channelId);
-  if (!game) {
-    await interaction.reply({ content: "\u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u062D\u0631\u0648\u0641 \u0646\u0634\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.", flags: import_discord5.MessageFlags.Ephemeral });
-    return;
-  }
-  if (interaction.user.id !== game.hostId) {
-    await interaction.reply({ content: "\u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A.", flags: import_discord5.MessageFlags.Ephemeral });
-    return;
-  }
-  clearScrambleTimers(game);
-  deleteScrambleGame(channelId);
-  await interaction.reply({ embeds: [scrambleCancelledEmbed()] });
 }
 
 // src/bot/search/handlers.ts
@@ -79004,24 +78995,6 @@ async function endGame2(channel, winner) {
     "roulette game ended"
   );
 }
-async function handleRouletteCancelCommand(interaction) {
-  if (!interaction.guildId || !interaction.channel?.isTextBased()) {
-    await interaction.reply({ content: "\u0647\u0630\u0627 \u0627\u0644\u0623\u0645\u0631 \u064A\u0634\u062A\u063A\u0644 \u0641\u0642\u0637 \u0641\u064A \u0642\u0646\u0648\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631.", flags: import_discord8.MessageFlags.Ephemeral });
-    return;
-  }
-  const game = getRouletteGame(interaction.channelId);
-  if (!game) {
-    await interaction.reply({ content: "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0631\u0648\u0644\u064A\u062A \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.", flags: import_discord8.MessageFlags.Ephemeral });
-    return;
-  }
-  if (game.hostId !== interaction.user.id) {
-    await interaction.reply({ content: "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A \u0627\u0644\u0644\u0639\u0628\u0629.", flags: import_discord8.MessageFlags.Ephemeral });
-    return;
-  }
-  clearRouletteTimers(game);
-  deleteRouletteGame(interaction.channelId);
-  await interaction.reply({ embeds: [rouletteCancelledEmbed()] });
-}
 async function handleRouletteButton(interaction) {
   const customId = interaction.customId;
   const game = getRouletteGame(interaction.channelId);
@@ -79337,247 +79310,6 @@ async function handleRouletteButton(interaction) {
   void MAX_LOBBY_NUMBERS;
 }
 
-// src/bot/prefix.ts
-var PREFIX = "$";
-var RANK_MEDALS2 = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
-async function replyTemp(msg, content) {
-  try {
-    const sent = await msg.reply(content);
-    setTimeout(() => sent.delete().catch(() => null), 5e3);
-  } catch {
-  }
-}
-async function handlePrefixMessage(message) {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(PREFIX)) return;
-  if (!message.guild || !message.channel.isTextBased()) return;
-  const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = args[0];
-  const guildId = message.guildId ?? "";
-  const userId = message.author.id;
-  const username = message.author.username;
-  const channel = message.channel;
-  try {
-    switch (cmd) {
-      case "\u0627\u0645\u0628\u0648\u0633\u062A\u0631": {
-        const result = await initImposterGame(channel, guildId, userId, username);
-        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
-        break;
-      }
-      case "\u062D\u0631\u0648\u0641": {
-        const result = await initScramble(channel, guildId, userId, username);
-        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
-        break;
-      }
-      case "\u0627\u0644\u063A\u0627\u0621": {
-        const game = getGame(channel.id);
-        if (!game) {
-          await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0646\u0634\u0637\u0629.");
-          break;
-        }
-        if (game.hostId !== userId) {
-          await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A.");
-          break;
-        }
-        deleteGame(channel.id);
-        await message.reply("\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631.");
-        break;
-      }
-      case "\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641": {
-        const game = getScrambleGame(channel.id);
-        if (!game) {
-          await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u062D\u0631\u0648\u0641 \u0646\u0634\u0637\u0629.");
-          break;
-        }
-        if (game.hostId !== userId) {
-          await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A.");
-          break;
-        }
-        clearScrambleTimers(game);
-        deleteScrambleGame(channel.id);
-        await message.reply("\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641.");
-        break;
-      }
-      case "\u0628\u062D\u062B": {
-        const result = await initSearchGame(channel, guildId, userId, username);
-        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
-        break;
-      }
-      case "\u0627\u0644\u063A\u0627\u0621_\u0628\u062D\u062B": {
-        const game = getSearchGame(channel.id);
-        if (!game) {
-          await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0628\u062D\u062B \u0646\u0634\u0637\u0629.");
-          break;
-        }
-        if (game.hostId !== userId) {
-          await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A.");
-          break;
-        }
-        clearSearchTimers(game);
-        deleteSearchGame(channel.id);
-        await message.reply("\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B.");
-        break;
-      }
-      case "\u0631\u0648\u0644\u064A\u062A": {
-        const displayName = message.member?.displayName ?? message.author.username;
-        const result = await initRouletteGame(channel, guildId, userId, displayName);
-        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
-        break;
-      }
-      case "\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A": {
-        const game = getRouletteGame(channel.id);
-        if (!game) {
-          await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0631\u0648\u0644\u064A\u062A \u0646\u0634\u0637\u0629.");
-          break;
-        }
-        if (game.hostId !== userId) {
-          await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0644\u063A\u064A.");
-          break;
-        }
-        clearRouletteTimers(game);
-        deleteRouletteGame(channel.id);
-        await message.reply("\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A.");
-        break;
-      }
-      case "\u0646\u0642\u0627\u0637": {
-        const mention = args[1];
-        const mentionMatch = mention?.match(/^<@!?(\d+)>$/);
-        const targetId = mentionMatch ? mentionMatch[1] : userId;
-        const targetUsername = mentionMatch ? (await message.guild?.members.fetch(targetId).catch(() => null))?.user.username ?? targetId : username;
-        const rec = getUserRecord(guildId, targetId);
-        const rank = getUserRank(guildId, targetId);
-        if (!rec || rec.points === 0) {
-          const who = targetId === userId ? "\u0645\u0627 \u0644\u062F\u064A\u0643" : `\u0645\u0627 \u0644\u062F\u0649 <@${targetId}>`;
-          await message.reply(`${who} \u0646\u0642\u0627\u0637 \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u062D\u0635\u0644 \u0639\u0644\u0649 \u0646\u0642\u0627\u0637! \u{1F3AE}`);
-          break;
-        }
-        const rankText = rank > 0 ? ` \u2022 \u0627\u0644\u0645\u0631\u062A\u0628\u0629: **#${rank}**` : "";
-        await message.reply({
-          embeds: [{
-            color: 16426522,
-            title: `\u{1F3C5} \u0646\u0642\u0627\u0637 ${targetId === userId ? username : targetUsername}`,
-            description: [
-              `**\u0627\u0644\u0645\u062C\u0645\u0648\u0639:** ${rec.points} \u0646\u0642\u0637\u0629${rankText}`,
-              "",
-              `\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641: **${rec.scrambleCorrect}** \u0625\u062C\u0627\u0628\u0629 \u2022 **${rec.scrambleWins}** \u0641\u0648\u0632`,
-              `\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631: **${rec.imposterPoints}** \u0646\u0642\u0637\u0629`,
-              `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${rec.searchWins ?? 0}** \u0641\u0648\u0632`,
-              `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${rec.rouletteWins ?? 0}** \u0641\u0648\u0632`
-            ].join("\n")
-          }]
-        });
-        break;
-      }
-      case "\u062A\u0648\u0628": {
-        const top = getLeaderboard(guildId);
-        if (top.length === 0) {
-          await message.reply("\u0645\u0627 \u0641\u064A \u0646\u0642\u0627\u0637 \u0645\u0633\u062C\u0651\u0644\u0629 \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u0628\u062F\u0623! \u{1F3AE}");
-          break;
-        }
-        const rows = top.map((r, i) => {
-          const medal = RANK_MEDALS2[i] ?? `\`${i + 1}.\``;
-          return `${medal} <@${r.userId}> \u2014 **${r.points}** \u0646\u0642\u0637\u0629`;
-        }).join("\n");
-        await message.reply({
-          embeds: [{
-            color: 16426522,
-            title: "\u{1F3C6} \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646",
-            description: rows,
-            footer: { text: "\u0645\u062C\u0645\u0648\u0639 \u0646\u0642\u0627\u0637 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628" }
-          }]
-        });
-        break;
-      }
-      case "\u0627\u0644\u0639\u0627\u0628": {
-        await message.reply({
-          embeds: [{
-            color: 5793266,
-            title: "\u{1F3AE} \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u0627\u0644\u0645\u062A\u0627\u062D\u0629",
-            description: [
-              "**\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631**",
-              "`$\u0627\u0645\u0628\u0648\u0633\u062A\u0631` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631",
-              "`$\u0627\u0644\u063A\u0627\u0621` \u2014 \u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 (\u0644\u0644\u0645\u0636\u064A\u0641)",
-              "",
-              "**\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629**",
-              "`$\u062D\u0631\u0648\u0641` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641",
-              "`$\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641` \u2014 \u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 (\u0644\u0644\u0645\u0636\u064A\u0641)",
-              "",
-              "**\u{1F50D} \u0627\u0644\u0628\u062D\u062B**",
-              "`$\u0628\u062D\u062B` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u0639\u0644\u0649 \u062C\u0648\u062C\u0644",
-              "`$\u0627\u0644\u063A\u0627\u0621_\u0628\u062D\u062B` \u2014 \u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B (\u0644\u0644\u0645\u0636\u064A\u0641)",
-              "",
-              "**\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A**",
-              "`$\u0631\u0648\u0644\u064A\u062A` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062C\u0645\u0627\u0639\u064A\u0629",
-              "`$\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A` \u2014 \u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A (\u0644\u0644\u0645\u0636\u064A\u0641)",
-              "",
-              "\u{1F4CC} \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u062A\u062D\u062A\u0627\u062C **\u0664 \u0644\u0627\u0639\u0628\u064A\u0646** \u0644\u0644\u0628\u062F\u0621 \u0648\u062A\u0628\u062F\u0623 \u062A\u0644\u0642\u0627\u0626\u064A\u0627\u064B \u0628\u0639\u062F \u062F\u0642\u064A\u0642\u0629"
-            ].join("\n")
-          }]
-        });
-        break;
-      }
-      case "\u0627\u062D\u0635\u0627\u0621": {
-        const stats = getGuildStats(guildId);
-        if (stats.totalPlayers === 0) {
-          await message.reply("\u0645\u0627 \u0641\u064A \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u0628\u062F\u0623! \u{1F3AE}");
-          break;
-        }
-        await message.reply({
-          embeds: [{
-            color: 3066993,
-            title: "\u{1F4CA} \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
-            fields: [
-              { name: "\u{1F465} \u0627\u0644\u0644\u0627\u0639\u0628\u064A\u0646 \u0627\u0644\u0646\u0634\u0637\u064A\u0646", value: `**${stats.totalPlayers}**`, inline: true },
-              { name: "\u{1F4B0} \u0645\u062C\u0645\u0648\u0639 \u0627\u0644\u0646\u0642\u0627\u0637", value: `**${stats.totalPoints}**`, inline: true },
-              { name: "\u{1F3C6} \u0623\u0643\u062B\u0631 \u0644\u0639\u0628\u0629 \u0634\u0639\u0628\u064A\u0629", value: stats.topGame, inline: true },
-              {
-                name: "\u{1F3AE} \u0625\u062C\u0645\u0627\u0644\u064A \u0627\u0644\u0641\u0648\u0632 \u0628\u0643\u0644 \u0644\u0639\u0628\u0629",
-                value: [
-                  `\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631: **${stats.gameCounts.imposter}** \u0644\u0627\u0639\u0628 \u0641\u0627\u0632`,
-                  `\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641: **${stats.gameCounts.scramble}** \u0641\u0648\u0632`,
-                  `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${stats.gameCounts.search}** \u0641\u0648\u0632`,
-                  `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${stats.gameCounts.roulette}** \u0641\u0648\u0632`
-                ].join("\n"),
-                inline: false
-              },
-              ...stats.topPlayer ? [{
-                name: "\u{1F451} \u0623\u0641\u0636\u0644 \u0644\u0627\u0639\u0628",
-                value: `<@${stats.topPlayer.userId}> \u2014 **${stats.topPlayer.points}** \u0646\u0642\u0637\u0629`,
-                inline: false
-              }] : []
-            ]
-          }]
-        });
-        break;
-      }
-      case "\u0645\u0633\u0627\u0639\u062F\u0629": {
-        await message.reply({
-          embeds: [{
-            color: 5793266,
-            title: "\u{1F4CB} \u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0628\u0631\u064A\u0641\u0643\u0633 $",
-            description: [
-              "**\u{1F3AE} \u0627\u0644\u0623\u0644\u0639\u0627\u0628**",
-              "`$\u0627\u0644\u0639\u0627\u0628` \u2014 \u0639\u0631\u0636 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628",
-              "",
-              "**\u{1F3C6} \u0627\u0644\u0646\u0642\u0627\u0637**",
-              "`$\u0646\u0642\u0627\u0637` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643",
-              "`$\u0646\u0642\u0627\u0637 @\u0634\u062E\u0635` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637 \u0634\u062E\u0635 \u0622\u062E\u0631",
-              "`$\u062A\u0648\u0628` \u2014 \u0644\u0648\u062D\u0629 \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u064A\u0646",
-              "`$\u0627\u062D\u0635\u0627\u0621` \u2014 \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
-              "`$\u0645\u0633\u0627\u0639\u062F\u0629` \u2014 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0626\u0645\u0629"
-            ].join("\n")
-          }]
-        });
-        break;
-      }
-      default:
-        break;
-    }
-  } catch (err) {
-    logger.error({ err, cmd }, "prefix command failed");
-  }
-}
-
 // src/bot/closest/handlers.ts
 var import_discord9 = __toESM(require_src(), 1);
 
@@ -79698,11 +79430,8 @@ async function initClosestGame(channel, guildId, userId, username) {
   if (lock) {
     return {
       ok: false,
-      reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u062E\u0644\u0651\u0648\u0647\u0627 \u062A\u062E\u0644\u0635 \u0623\u0648 \u0623\u0644\u063A\u0648\u0647\u0627 \u0623\u0648\u0644\u0627\u064B.`
+      reason: `\u26A0\uFE0F \u0641\u064A \u0644\u0639\u0628\u0629 **${lock}** \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u064A \u0627\u0644\u0642\u0646\u0627\u0629. \u0627\u0643\u062A\u0628 \`$\u062A\u0648\u0642\u0641\` \u0644\u0625\u064A\u0642\u0627\u0641\u0647\u0627.`
     };
-  }
-  if (getClosestGame(channel.id)) {
-    return { ok: false, reason: "\u0641\u064A \u0644\u0639\u0628\u0629 \u0623\u0642\u0631\u0628 \u0634\u063A\u0651\u0627\u0644\u0629 \u0628\u0627\u0644\u0641\u0639\u0644 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629." };
   }
   const game = createClosestGame(channel.id, guildId, userId, username);
   let secondsLeft = LOBBY_SECONDS6;
@@ -79735,7 +79464,10 @@ async function initClosestGame(channel, guildId, userId, username) {
     if (g.players.length < 1) {
       deleteClosestGame(channel.id);
       try {
-        await msg.edit({ embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0641\u064A \u0623\u062D\u062F \u0627\u0646\u0636\u0645." }], components: [disabledButtons()] });
+        await msg.edit({
+          embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u0644\u0648\u0628\u064A", description: "\u0645\u0627 \u0641\u064A \u0623\u062D\u062F \u0627\u0646\u0636\u0645." }],
+          components: [disabledButtons()]
+        });
       } catch {
       }
       return;
@@ -79743,7 +79475,11 @@ async function initClosestGame(channel, guildId, userId, username) {
     startClosestGame(g);
     try {
       await msg.edit({
-        embeds: [{ color: 10181046, title: "\u{1F522} \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u0628\u062F\u0623\u062A!", description: `${g.players.length} \u0644\u0627\u0639\u0628 \u0627\u0646\u0636\u0645\u0648\u0627. \u062D\u0638\u0627\u064B \u0644\u0644\u062C\u0645\u064A\u0639!` }],
+        embeds: [{
+          color: 10181046,
+          title: "\u{1F522} \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u0628\u062F\u0623\u062A!",
+          description: `${g.players.length} \u0644\u0627\u0639\u0628 \u0627\u0646\u0636\u0645\u0648\u0627. \u062D\u0638\u0627\u064B \u0644\u0644\u062C\u0645\u064A\u0639!`
+        }],
         components: [disabledButtons()]
       });
     } catch {
@@ -79770,10 +79506,10 @@ async function handleClosestMessage(message) {
   const channel = message.channel;
   if (result === "correct") {
     const points = 10 + game.roundCount;
-    const winner = current;
+    const winner = { ...current };
     const secret = game.secretNumber;
     const rounds = game.roundCount;
-    addScrambleWin(game.guildId, winner.userId, winner.username, points);
+    addClosestWin(game.guildId, winner.userId, winner.username, points);
     deleteClosestGame(game.channelId);
     await channel.send({ embeds: [closestWinEmbed(winner, secret, rounds, points)] });
     return;
@@ -79854,35 +79590,272 @@ async function handleClosestCommand(interaction) {
   }
   await interaction.reply({ content: "\u062A\u0645 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F3AE}", flags: import_discord9.MessageFlags.Ephemeral });
 }
-async function handleClosestCancelCommand(interaction) {
-  const game = getClosestGame(interaction.channelId ?? "");
-  if (!game) {
-    await interaction.reply({ content: "\u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0623\u0642\u0631\u0628 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.", flags: import_discord9.MessageFlags.Ephemeral });
-    return;
+
+// src/bot/prefix.ts
+var PREFIX = "$";
+var RANK_MEDALS2 = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
+async function replyTemp(msg, content) {
+  try {
+    const sent = await msg.reply(content);
+    setTimeout(() => sent.delete().catch(() => null), 5e3);
+  } catch {
   }
-  if (interaction.user.id !== game.hostId) {
-    await interaction.reply({ content: "\u0627\u0644\u0625\u0644\u063A\u0627\u0621 \u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637.", flags: import_discord9.MessageFlags.Ephemeral });
-    return;
+}
+async function handlePrefixMessage(message) {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(PREFIX)) return;
+  if (!message.guild || !message.channel.isTextBased()) return;
+  const args = message.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd = args[0];
+  const guildId = message.guildId ?? "";
+  const userId = message.author.id;
+  const username = message.author.username;
+  const channel = message.channel;
+  try {
+    switch (cmd) {
+      // ─── Games ───────────────────────────────────────────────────────────
+      case "\u0627\u0645\u0628\u0648\u0633\u062A\u0631": {
+        const result = await initImposterGame(channel, guildId, userId, username);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      case "\u062D\u0631\u0648\u0641": {
+        const result = await initScramble(channel, guildId, userId, username);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      case "\u0628\u062D\u062B": {
+        const result = await initSearchGame(channel, guildId, userId, username);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      case "\u0631\u0648\u0644\u064A\u062A": {
+        const displayName = message.member?.displayName ?? message.author.username;
+        const result = await initRouletteGame(channel, guildId, userId, displayName);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      case "\u0623\u0642\u0631\u0628": {
+        const result = await initClosestGame(channel, guildId, userId, username);
+        if (!result.ok) await replyTemp(message, `\u274C ${result.reason}`);
+        break;
+      }
+      // ─── Universal stop ───────────────────────────────────────────────────
+      case "\u062A\u0648\u0642\u0641": {
+        const channelId = channel.id;
+        let stopped = false;
+        const imposter = getGame(channelId);
+        if (imposter) {
+          if (imposter.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          deleteGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631**.");
+          stopped = true;
+        }
+        const scramble = getScrambleGame(channelId);
+        if (!stopped && scramble) {
+          if (scramble.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          clearScrambleTimers(scramble);
+          deleteScrambleGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u062D\u0631\u0648\u0641**.");
+          stopped = true;
+        }
+        const search = getSearchGame(channelId);
+        if (!stopped && search) {
+          if (search.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          clearSearchTimers(search);
+          deleteSearchGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u0628\u062D\u062B**.");
+          stopped = true;
+        }
+        const roulette = getRouletteGame(channelId);
+        if (!stopped && roulette) {
+          if (roulette.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          clearRouletteTimers(roulette);
+          deleteRouletteGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u0631\u0648\u0644\u064A\u062A**.");
+          stopped = true;
+        }
+        const closest = getClosestGame(channelId);
+        if (!stopped && closest) {
+          if (closest.hostId !== userId) {
+            await replyTemp(message, "\u274C \u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629.");
+            break;
+          }
+          deleteClosestGame(channelId);
+          await message.reply("\u2705 \u062A\u0645 \u0625\u064A\u0642\u0627\u0641 \u0644\u0639\u0628\u0629 **\u0627\u0644\u0623\u0642\u0631\u0628**.");
+          stopped = true;
+        }
+        if (!stopped) {
+          await replyTemp(message, "\u274C \u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629.");
+        }
+        break;
+      }
+      // ─── Scores ───────────────────────────────────────────────────────────
+      case "\u0646\u0642\u0627\u0637": {
+        const mention = args[1];
+        const mentionMatch = mention?.match(/^<@!?(\d+)>$/);
+        const targetId = mentionMatch ? mentionMatch[1] : userId;
+        const targetUsername = mentionMatch ? (await message.guild?.members.fetch(targetId).catch(() => null))?.user.username ?? targetId : username;
+        const rec = getUserRecord(guildId, targetId);
+        const rank = getUserRank(guildId, targetId);
+        if (!rec || rec.points === 0) {
+          const who = targetId === userId ? "\u0645\u0627 \u0644\u062F\u064A\u0643" : `\u0645\u0627 \u0644\u062F\u0649 <@${targetId}>`;
+          await message.reply(`${who} \u0646\u0642\u0627\u0637 \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u062D\u0635\u0644 \u0639\u0644\u0649 \u0646\u0642\u0627\u0637! \u{1F3AE}`);
+          break;
+        }
+        const rankText = rank > 0 ? ` \u2022 \u0627\u0644\u0645\u0631\u062A\u0628\u0629: **#${rank}**` : "";
+        await message.reply({
+          embeds: [{
+            color: 16426522,
+            title: `\u{1F3C5} \u0646\u0642\u0627\u0637 ${targetId === userId ? username : targetUsername}`,
+            description: [
+              `**\u0627\u0644\u0645\u062C\u0645\u0648\u0639:** ${rec.points} \u0646\u0642\u0637\u0629${rankText}`,
+              "",
+              `\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641: **${rec.scrambleCorrect}** \u0625\u062C\u0627\u0628\u0629 \u2022 **${rec.scrambleWins}** \u0641\u0648\u0632`,
+              `\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631: **${rec.imposterPoints}** \u0646\u0642\u0637\u0629`,
+              `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${rec.searchWins ?? 0}** \u0641\u0648\u0632`,
+              `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${rec.rouletteWins ?? 0}** \u0641\u0648\u0632`,
+              `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${rec.closestWins ?? 0}** \u0641\u0648\u0632`
+            ].join("\n")
+          }]
+        });
+        break;
+      }
+      case "\u062A\u0648\u0628": {
+        const top = getLeaderboard(guildId);
+        if (top.length === 0) {
+          await message.reply("\u0645\u0627 \u0641\u064A \u0646\u0642\u0627\u0637 \u0645\u0633\u062C\u0651\u0644\u0629 \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u0628\u062F\u0623! \u{1F3AE}");
+          break;
+        }
+        const rows = top.map((r, i) => {
+          const medal = RANK_MEDALS2[i] ?? `\`${i + 1}.\``;
+          return `${medal} <@${r.userId}> \u2014 **${r.points}** \u0646\u0642\u0637\u0629`;
+        }).join("\n");
+        await message.reply({
+          embeds: [{
+            color: 16426522,
+            title: "\u{1F3C6} \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u0648\u0646",
+            description: rows,
+            footer: { text: "\u0645\u062C\u0645\u0648\u0639 \u0646\u0642\u0627\u0637 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628" }
+          }]
+        });
+        break;
+      }
+      case "\u0627\u062D\u0635\u0627\u0621": {
+        const stats = getGuildStats(guildId);
+        if (stats.totalPlayers === 0) {
+          await message.reply("\u0645\u0627 \u0641\u064A \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0628\u0639\u062F. \u0627\u0644\u0639\u0628 \u0644\u062A\u0628\u062F\u0623! \u{1F3AE}");
+          break;
+        }
+        await message.reply({
+          embeds: [{
+            color: 3066993,
+            title: "\u{1F4CA} \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
+            fields: [
+              { name: "\u{1F465} \u0627\u0644\u0644\u0627\u0639\u0628\u064A\u0646 \u0627\u0644\u0646\u0634\u0637\u064A\u0646", value: `**${stats.totalPlayers}**`, inline: true },
+              { name: "\u{1F4B0} \u0645\u062C\u0645\u0648\u0639 \u0627\u0644\u0646\u0642\u0627\u0637", value: `**${stats.totalPoints}**`, inline: true },
+              { name: "\u{1F3C6} \u0623\u0643\u062B\u0631 \u0644\u0639\u0628\u0629 \u0634\u0639\u0628\u064A\u0629", value: stats.topGame, inline: true },
+              {
+                name: "\u{1F3AE} \u0625\u062C\u0645\u0627\u0644\u064A \u0627\u0644\u0641\u0648\u0632 \u0628\u0643\u0644 \u0644\u0639\u0628\u0629",
+                value: [
+                  `\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631: **${stats.gameCounts.imposter}** \u0644\u0627\u0639\u0628 \u0641\u0627\u0632`,
+                  `\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641: **${stats.gameCounts.scramble}** \u0641\u0648\u0632`,
+                  `\u{1F50D} \u0627\u0644\u0628\u062D\u062B: **${stats.gameCounts.search}** \u0641\u0648\u0632`,
+                  `\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A: **${stats.gameCounts.roulette}** \u0641\u0648\u0632`,
+                  `\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628: **${stats.gameCounts.closest}** \u0641\u0648\u0632`
+                ].join("\n"),
+                inline: false
+              },
+              ...stats.topPlayer ? [{
+                name: "\u{1F451} \u0623\u0641\u0636\u0644 \u0644\u0627\u0639\u0628",
+                value: `<@${stats.topPlayer.userId}> \u2014 **${stats.topPlayer.points}** \u0646\u0642\u0637\u0629`,
+                inline: false
+              }] : []
+            ]
+          }]
+        });
+        break;
+      }
+      // ─── Help & Games List ────────────────────────────────────────────────
+      case "\u0627\u0644\u0639\u0627\u0628": {
+        await message.reply({
+          embeds: [{
+            color: 5793266,
+            title: "\u{1F3AE} \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u0627\u0644\u0645\u062A\u0627\u062D\u0629",
+            description: [
+              "**\u{1F575}\uFE0F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631**",
+              "`$\u0627\u0645\u0628\u0648\u0633\u062A\u0631` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631",
+              "",
+              "**\u{1F524} \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629**",
+              "`$\u062D\u0631\u0648\u0641` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641",
+              "",
+              "**\u{1F50D} \u0627\u0644\u0628\u062D\u062B**",
+              "`$\u0628\u062D\u062B` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u0639\u0644\u0649 \u062C\u0648\u062C\u0644",
+              "",
+              "**\u{1F3A1} \u0627\u0644\u0631\u0648\u0644\u064A\u062A**",
+              "`$\u0631\u0648\u0644\u064A\u062A` \u2014 \u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062C\u0645\u0627\u0639\u064A\u0629",
+              "",
+              "**\u{1F522} \u0627\u0644\u0623\u0642\u0631\u0628**",
+              "`$\u0623\u0642\u0631\u0628` \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300",
+              "",
+              "\u{1F4CC} \u0627\u0643\u062A\u0628 `$\u062A\u0648\u0642\u0641` \u0644\u0625\u064A\u0642\u0627\u0641 \u0623\u064A \u0644\u0639\u0628\u0629 \u0646\u0634\u0637\u0629 \u0641\u064A \u0627\u0644\u0642\u0646\u0627\u0629"
+            ].join("\n")
+          }]
+        });
+        break;
+      }
+      case "\u0645\u0633\u0627\u0639\u062F\u0629": {
+        await message.reply({
+          embeds: [{
+            color: 5793266,
+            title: "\u{1F4CB} \u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0628\u0631\u064A\u0641\u0643\u0633 $",
+            description: [
+              "**\u{1F3AE} \u0627\u0644\u0623\u0644\u0639\u0627\u0628**",
+              "`$\u0627\u0644\u0639\u0627\u0628` \u2014 \u0639\u0631\u0636 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u0644\u0639\u0627\u0628",
+              "`$\u062A\u0648\u0642\u0641` \u2014 \u0623\u0648\u0642\u0641 \u0627\u0644\u0644\u0639\u0628\u0629 \u0627\u0644\u0646\u0634\u0637\u0629 \u0641\u064A \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641)",
+              "",
+              "**\u{1F3C6} \u0627\u0644\u0646\u0642\u0627\u0637**",
+              "`$\u0646\u0642\u0627\u0637` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643",
+              "`$\u0646\u0642\u0627\u0637 @\u0634\u062E\u0635` \u2014 \u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637 \u0634\u062E\u0635 \u0622\u062E\u0631",
+              "`$\u062A\u0648\u0628` \u2014 \u0644\u0648\u062D\u0629 \u0627\u0644\u0645\u062A\u0635\u062F\u0631\u064A\u0646",
+              "`$\u0627\u062D\u0635\u0627\u0621` \u2014 \u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A \u0627\u0644\u0633\u064A\u0631\u0641\u0631",
+              "`$\u0645\u0633\u0627\u0639\u062F\u0629` \u2014 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0626\u0645\u0629"
+            ].join("\n")
+          }]
+        });
+        break;
+      }
+      default:
+        break;
+    }
+  } catch (err) {
+    logger.error({ err, cmd }, "prefix command failed");
   }
-  deleteClosestGame(game.channelId);
-  await interaction.reply({ content: "\u2705 \u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628.", flags: import_discord9.MessageFlags.Ephemeral });
 }
 
 // src/bot/client.ts
 var commands = [
   new import_discord10.SlashCommandBuilder().setName("\u0627\u0645\u0628\u0648\u0633\u062A\u0631").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u062C\u062F\u064A\u062F\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u0645\u0633\u0627\u0639\u062F\u0629").setDescription("\u0627\u0639\u0631\u0636 \u0634\u0631\u062D \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0648\u0627\u0644\u0623\u0648\u0627\u0645\u0631").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u062D\u0631\u0648\u0641").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u0645\u062E\u0631\u0628\u0637\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u062D\u0631\u0648\u0641 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u0646\u0642\u0627\u0637").setDescription("\u0627\u0639\u0631\u0636 \u0646\u0642\u0627\u0637\u0643 \u0648\u0645\u0631\u062A\u0628\u062A\u0643 \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u062A\u0648\u0628").setDescription("\u0627\u0639\u0631\u0636 \u0623\u0641\u0636\u0644 \u0661\u0660 \u0644\u0627\u0639\u0628\u064A\u0646 \u0641\u064A \u0627\u0644\u0633\u064A\u0631\u0641\u0631").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u0628\u062D\u062B").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0628\u062D\u062B \u2014 \u0623\u064A\u0647\u0645\u0627 \u064A\u064F\u0628\u062D\u062B \u0639\u0646\u0647 \u0623\u0643\u062B\u0631 \u0639\u0644\u0649 \u062C\u0648\u062C\u0644\u061F").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u0631\u0648\u0644\u064A\u062A").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u2014 \u062A\u062F\u0648\u0631 \u0648\u062A\u0637\u0631\u062F \u0644\u0627\u0639\u0628\u0627\u064B \u0643\u0644 \u062C\u0648\u0644\u0629 \u062D\u062A\u0649 \u064A\u0628\u0642\u0649 \u0627\u0644\u0641\u0627\u0626\u0632!").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0631\u0648\u0644\u064A\u062A \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON(),
   new import_discord10.SlashCommandBuilder().setName("\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A").setDescription("\u0627\u062D\u0641\u0638 \u0646\u0633\u062E\u0629 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u0629 \u0645\u0646 \u0627\u0644\u0646\u0642\u0627\u0637 \u0639\u0644\u0649 Google Drive \u0627\u0644\u0622\u0646 (\u0644\u0644\u0645\u0634\u0631\u0641\u064A\u0646 \u0641\u0642\u0637)").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0623\u0642\u0631\u0628").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300!").toJSON(),
-  new import_discord10.SlashCommandBuilder().setName("\u0627\u0644\u063A\u0627\u0621_\u0623\u0642\u0631\u0628").setDescription("\u0623\u0644\u063A\u0650 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u0627\u0644\u062D\u0627\u0644\u064A\u0629 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0646\u0627\u0629 (\u0644\u0644\u0645\u0636\u064A\u0641 \u0641\u0642\u0637)").toJSON()
+  new import_discord10.SlashCommandBuilder().setName("\u0623\u0642\u0631\u0628").setDescription("\u0627\u0628\u062F\u0623 \u0644\u0639\u0628\u0629 \u0627\u0644\u0623\u0642\u0631\u0628 \u2014 \u062E\u0645\u0651\u0646 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A \u0645\u0646 0 \u0625\u0644\u0649 300!").toJSON()
 ];
 async function startBot(token2) {
   const client = new import_discord10.Client({
@@ -79917,12 +79890,8 @@ async function startBot(token2) {
           await handleStartCommand(interaction);
         } else if (name === "\u0645\u0633\u0627\u0639\u062F\u0629") {
           await handleHelpCommand(interaction);
-        } else if (name === "\u0627\u0644\u063A\u0627\u0621") {
-          await handleCancelCommand(interaction);
         } else if (name === "\u062D\u0631\u0648\u0641") {
           await handleScrambleCommand(interaction);
-        } else if (name === "\u0627\u0644\u063A\u0627\u0621_\u062D\u0631\u0648\u0641") {
-          await handleScrambleCancel(interaction);
         } else if (name === "\u0646\u0642\u0627\u0637") {
           await handleMyScoreCommand(interaction);
         } else if (name === "\u062A\u0648\u0628") {
@@ -79931,14 +79900,10 @@ async function startBot(token2) {
           await handleSearchCommand(interaction);
         } else if (name === "\u0631\u0648\u0644\u064A\u062A") {
           await handleRouletteCommand(interaction);
-        } else if (name === "\u0627\u0644\u063A\u0627\u0621_\u0631\u0648\u0644\u064A\u062A") {
-          await handleRouletteCancelCommand(interaction);
         } else if (name === "\u0646\u0633\u062E_\u0627\u062D\u062A\u064A\u0627\u0637\u064A") {
           await handleBackupCommand(interaction);
         } else if (name === "\u0623\u0642\u0631\u0628") {
           await handleClosestCommand(interaction);
-        } else if (name === "\u0627\u0644\u063A\u0627\u0621_\u0623\u0642\u0631\u0628") {
-          await handleClosestCancelCommand(interaction);
         }
       } else if (interaction.isButton()) {
         if (interaction.customId.startsWith("clst:")) {

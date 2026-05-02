@@ -42637,8 +42637,8 @@ var require_dist8 = __commonJS({
       RoleSelectMenuBuilder: () => RoleSelectMenuBuilder,
       SectionBuilder: () => SectionBuilder,
       SelectMenuAssertions: () => Assertions_exports6,
-      SelectMenuBuilder: () => StringSelectMenuBuilder,
-      SelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder,
+      SelectMenuBuilder: () => StringSelectMenuBuilder2,
+      SelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder2,
       SeparatorBuilder: () => SeparatorBuilder,
       SharedNameAndDescription: () => SharedNameAndDescription,
       SharedSlashCommand: () => SharedSlashCommand,
@@ -42657,8 +42657,8 @@ var require_dist8 = __commonJS({
       SlashCommandSubcommandBuilder: () => SlashCommandSubcommandBuilder,
       SlashCommandSubcommandGroupBuilder: () => SlashCommandSubcommandGroupBuilder,
       SlashCommandUserOption: () => SlashCommandUserOption,
-      StringSelectMenuBuilder: () => StringSelectMenuBuilder,
-      StringSelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder,
+      StringSelectMenuBuilder: () => StringSelectMenuBuilder2,
+      StringSelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder2,
       TextDisplayBuilder: () => TextDisplayBuilder,
       TextInputAssertions: () => Assertions_exports5,
       TextInputBuilder: () => TextInputBuilder2,
@@ -42988,7 +42988,7 @@ var require_dist8 = __commonJS({
     });
     var import_shapeshift2 = require_cjs4();
     var import_v10 = require_v106();
-    var StringSelectMenuOptionBuilder = class {
+    var StringSelectMenuOptionBuilder2 = class {
       /**
        * Creates a new string select menu option from API data.
        *
@@ -43092,7 +43092,7 @@ var require_dist8 = __commonJS({
       emoji: emojiValidator.optional(),
       default: import_shapeshift2.s.boolean().optional()
     }).setValidationEnabled(isValidationEnabled);
-    var optionValidator = import_shapeshift2.s.instance(StringSelectMenuOptionBuilder).setValidationEnabled(isValidationEnabled);
+    var optionValidator = import_shapeshift2.s.instance(StringSelectMenuOptionBuilder2).setValidationEnabled(isValidationEnabled);
     var optionsValidator = optionValidator.array().lengthGreaterThanOrEqual(0).setValidationEnabled(isValidationEnabled);
     var optionsLengthValidator = import_shapeshift2.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
     function validateRequiredSelectMenuParameters(options, customId) {
@@ -44349,7 +44349,7 @@ var require_dist8 = __commonJS({
       }
       return import_shapeshift6.Result.ok(value);
     }).setValidationEnabled(isValidationEnabled);
-    var StringSelectMenuBuilder = class extends BaseSelectMenuBuilder {
+    var StringSelectMenuBuilder2 = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "StringSelectMenuBuilder");
       }
@@ -44391,7 +44391,7 @@ var require_dist8 = __commonJS({
       constructor(data) {
         const { options, ...initData } = data ?? {};
         super({ ...initData, type: import_v1014.ComponentType.StringSelect });
-        this.options = options?.map((option) => new StringSelectMenuOptionBuilder(option)) ?? [];
+        this.options = options?.map((option) => new StringSelectMenuOptionBuilder2(option)) ?? [];
       }
       /**
        * Adds options to this select menu.
@@ -44403,7 +44403,7 @@ var require_dist8 = __commonJS({
         optionsLengthValidator.parse(this.options.length + normalizedOptions.length);
         this.options.push(
           ...normalizedOptions.map(
-            (normalizedOption) => normalizedOption instanceof StringSelectMenuOptionBuilder ? normalizedOption : new StringSelectMenuOptionBuilder(selectMenuStringOptionPredicate.parse(normalizedOption))
+            (normalizedOption) => normalizedOption instanceof StringSelectMenuOptionBuilder2 ? normalizedOption : new StringSelectMenuOptionBuilder2(selectMenuStringOptionPredicate.parse(normalizedOption))
           )
         );
         return this;
@@ -44450,7 +44450,7 @@ var require_dist8 = __commonJS({
           index,
           deleteCount,
           ...normalizedOptions.map(
-            (normalizedOption) => normalizedOption instanceof StringSelectMenuOptionBuilder ? normalizedOption : new StringSelectMenuOptionBuilder(selectMenuStringOptionPredicate.parse(normalizedOption))
+            (normalizedOption) => normalizedOption instanceof StringSelectMenuOptionBuilder2 ? normalizedOption : new StringSelectMenuOptionBuilder2(selectMenuStringOptionPredicate.parse(normalizedOption))
           )
         );
         optionsLengthValidator.parse(clone.length);
@@ -44748,7 +44748,7 @@ var require_dist8 = __commonJS({
        * @param input - A function that returns a component builder or an already built builder
        */
       setStringSelectMenuComponent(input) {
-        this.data.component = resolveBuilder(input, StringSelectMenuBuilder);
+        this.data.component = resolveBuilder(input, StringSelectMenuBuilder2);
         return this;
       }
       /**
@@ -45599,7 +45599,7 @@ var require_dist8 = __commonJS({
         case import_v1027.ComponentType.Button:
           return new ButtonBuilder7(data);
         case import_v1027.ComponentType.StringSelect:
-          return new StringSelectMenuBuilder(data);
+          return new StringSelectMenuBuilder2(data);
         case import_v1027.ComponentType.TextInput:
           return new TextInputBuilder2(data);
         case import_v1027.ComponentType.UserSelect:
@@ -49059,7 +49059,7 @@ var require_StringSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
-    var StringSelectMenuBuilder = class _StringSelectMenuBuilder extends BuildersSelectMenu {
+    var StringSelectMenuBuilder2 = class _StringSelectMenuBuilder extends BuildersSelectMenu {
       constructor({ options, ...data } = {}) {
         super(
           toSnakeCase({
@@ -49115,7 +49115,7 @@ var require_StringSelectMenuBuilder = __commonJS({
         return new this(other);
       }
     };
-    module2.exports = StringSelectMenuBuilder;
+    module2.exports = StringSelectMenuBuilder2;
   }
 });
 
@@ -49327,7 +49327,7 @@ var require_Components = __commonJS({
     var RoleSelectMenuComponent = require_RoleSelectMenuComponent();
     var SectionComponent = require_SectionComponent();
     var SeparatorComponent = require_SeparatorComponent();
-    var StringSelectMenuBuilder = require_StringSelectMenuBuilder();
+    var StringSelectMenuBuilder2 = require_StringSelectMenuBuilder();
     var StringSelectMenuComponent = require_StringSelectMenuComponent();
     var TextDisplayComponent = require_TextDisplayComponent();
     var TextInputBuilder2 = require_TextInputBuilder();
@@ -49356,7 +49356,7 @@ var require_Components = __commonJS({
     var ComponentTypeToBuilder = {
       [ComponentType.ActionRow]: ActionRowBuilder7,
       [ComponentType.Button]: ButtonBuilder7,
-      [ComponentType.StringSelect]: StringSelectMenuBuilder,
+      [ComponentType.StringSelect]: StringSelectMenuBuilder2,
       [ComponentType.TextInput]: TextInputBuilder2,
       [ComponentType.UserSelect]: UserSelectMenuBuilder,
       [ComponentType.RoleSelect]: RoleSelectMenuBuilder,
@@ -74616,9 +74616,9 @@ var require_SelectMenuBuilder = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/structures/SelectMenuBuilder.js"(exports2, module2) {
     "use strict";
     var process2 = require("node:process");
-    var StringSelectMenuBuilder = require_StringSelectMenuBuilder();
+    var StringSelectMenuBuilder2 = require_StringSelectMenuBuilder();
     var deprecationEmitted = false;
-    var SelectMenuBuilder2 = class extends StringSelectMenuBuilder {
+    var SelectMenuBuilder2 = class extends StringSelectMenuBuilder2 {
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -74688,7 +74688,7 @@ var require_StringSelectMenuOptionBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
-    var StringSelectMenuOptionBuilder = class extends BuildersSelectMenuOption {
+    var StringSelectMenuOptionBuilder2 = class extends BuildersSelectMenuOption {
       constructor({ emoji, ...data } = {}) {
         super(
           toSnakeCase({
@@ -74717,7 +74717,7 @@ var require_StringSelectMenuOptionBuilder = __commonJS({
         return new this(isJSONEncodable(other) ? other.toJSON() : other);
       }
     };
-    module2.exports = StringSelectMenuOptionBuilder;
+    module2.exports = StringSelectMenuOptionBuilder2;
   }
 });
 
@@ -74726,9 +74726,9 @@ var require_SelectMenuOptionBuilder = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/structures/SelectMenuOptionBuilder.js"(exports2, module2) {
     "use strict";
     var process2 = require("node:process");
-    var StringSelectMenuOptionBuilder = require_StringSelectMenuOptionBuilder();
+    var StringSelectMenuOptionBuilder2 = require_StringSelectMenuOptionBuilder();
     var deprecationEmitted = false;
-    var SelectMenuOptionBuilder2 = class extends StringSelectMenuOptionBuilder {
+    var SelectMenuOptionBuilder2 = class extends StringSelectMenuOptionBuilder2 {
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -75533,6 +75533,11 @@ function pickRound() {
   const word = category.words[Math.floor(Math.random() * category.words.length)];
   return { category, word };
 }
+function pickRoundFromCategory(categoryName) {
+  const category = categories.find((c) => c.name === categoryName) ?? categories[Math.floor(Math.random() * categories.length)];
+  const word = category.words[Math.floor(Math.random() * category.words.length)];
+  return { category, word };
+}
 function pickEightOptions(category, secret) {
   const pool = category.words.filter((w) => w !== secret);
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
@@ -75633,7 +75638,7 @@ function startGame(channelId, userId) {
     return { ok: false, reason: "\u0627\u0644\u0644\u0639\u0628\u0629 \u0628\u062F\u0623\u062A \u0645\u0646 \u0642\u0628\u0644." };
   if (game.players.size < 4)
     return { ok: false, reason: "\u062A\u062D\u062A\u0627\u062C \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644 \u0664 \u0644\u0627\u0639\u0628\u064A\u0646." };
-  const { category, word } = pickRound();
+  const { category, word } = game.selectedCategoryName ? pickRoundFromCategory(game.selectedCategoryName) : pickRound();
   game.category = category;
   game.secretWord = word;
   game.eightOptions = pickEightOptions(category, word);
@@ -75749,6 +75754,7 @@ var COLOR_INFO = 47316;
 function lobbyEmbed(game, secondsLeft) {
   const playerList = Array.from(game.players.values()).map((p, i) => `\`${i + 1}.\` <@${p.id}>`).join("\n");
   const timerLine = secondsLeft !== void 0 ? `\u23F1\uFE0F \u062A\u0628\u062F\u0623 \u062A\u0644\u0642\u0627\u0626\u064A\u0627\u064B \u0628\u0639\u062F **${secondsLeft} \u062B\u0627\u0646\u064A\u0629**` : "";
+  const categoryLine = game.selectedCategoryName ? `**\u0627\u0644\u0641\u0626\u0629 \u0627\u0644\u0645\u062E\u062A\u0627\u0631\u0629:** \`${game.selectedCategoryName}\`` : `**\u0627\u0644\u0641\u0626\u0629:** \u{1F3B2} \u0639\u0634\u0648\u0627\u0626\u064A\u0629`;
   return new import_discord.EmbedBuilder().setColor(COLOR_PRIMARY).setTitle("\u{1F575}\uFE0F \u0644\u0639\u0628\u0629 \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631 \u2014 \u0644\u0648\u0628\u064A \u0627\u0644\u0627\u0646\u0636\u0645\u0627\u0645").setDescription(
     [
       "> \u0627\u0636\u063A\u0637 **\u0627\u0646\u0636\u0645** \u0644\u0644\u062F\u062E\u0648\u0644. \u062A\u0628\u062F\u0623 \u0627\u0644\u0644\u0639\u0628\u0629 \u062A\u0644\u0642\u0627\u0626\u064A\u0627\u064B \u0628\u0639\u062F \u062F\u0642\u064A\u0642\u0629.",
@@ -75756,6 +75762,7 @@ function lobbyEmbed(game, secondsLeft) {
       `**\u0627\u0644\u0645\u0636\u064A\u0641:** <@${game.hostId}>`,
       `**\u0627\u0644\u0644\u0627\u0639\u0628\u0648\u0646:** ${game.players.size} / 15  (\u0627\u0644\u062D\u062F \u0627\u0644\u0623\u062F\u0646\u0649 \u0664)`,
       `**\u0639\u062F\u062F \u0627\u0644\u0625\u0645\u0628\u0648\u0633\u062A\u0631\u064A\u0646:** 1`,
+      categoryLine,
       timerLine
     ].filter(Boolean).join("\n")
   ).addFields({
@@ -75943,13 +75950,36 @@ function helpEmbed() {
 
 // src/bot/components.ts
 var import_discord2 = __toESM(require_src(), 1);
+var CATEGORY_EMOJIS = {
+  "\u0641\u0648\u0627\u0643\u0647": "\u{1F34E}",
+  "\u062D\u064A\u0648\u0627\u0646\u0627\u062A": "\u{1F43E}",
+  "\u0631\u064A\u0627\u0636\u0627\u062A": "\u26BD",
+  "\u062F\u0648\u0644": "\u{1F30D}",
+  "\u0637\u0639\u0627\u0645": "\u{1F35B}",
+  "\u0645\u0647\u0646": "\u{1F454}",
+  "\u0623\u0645\u0627\u0643\u0646": "\u{1F4CD}",
+  "\u062A\u0643\u0646\u0648\u0644\u0648\u062C\u064A\u0627": "\u{1F4BB}",
+  "\u0623\u0641\u0644\u0627\u0645 \u0648\u0645\u0633\u0644\u0633\u0644\u0627\u062A": "\u{1F3AC}",
+  "\u0623\u0644\u0639\u0627\u0628": "\u{1F3AE}"
+};
 function lobbyButtons() {
   const row = new import_discord2.ActionRowBuilder().addComponents(
     new import_discord2.ButtonBuilder().setCustomId("imp:join").setLabel("\u0627\u0646\u0636\u0645").setEmoji("\u270B").setStyle(import_discord2.ButtonStyle.Success),
     new import_discord2.ButtonBuilder().setCustomId("imp:leave").setLabel("\u062E\u0631\u0648\u062C").setEmoji("\u{1F6AA}").setStyle(import_discord2.ButtonStyle.Secondary),
+    new import_discord2.ButtonBuilder().setCustomId("imp:category").setLabel("\u0627\u062E\u062A\u0631 \u0627\u0644\u0641\u0626\u0629").setEmoji("\u{1F5C2}\uFE0F").setStyle(import_discord2.ButtonStyle.Primary),
     new import_discord2.ButtonBuilder().setCustomId("imp:cancel").setLabel("\u0625\u0644\u063A\u0627\u0621").setEmoji("\u{1F6D1}").setStyle(import_discord2.ButtonStyle.Danger)
   );
   return row.toJSON();
+}
+function categorySelectMenu(selectedName) {
+  const options = [
+    new import_discord2.StringSelectMenuOptionBuilder().setValue("random").setLabel("\u0639\u0634\u0648\u0627\u0626\u064A").setDescription("\u064A\u062A\u0645 \u0627\u062E\u062A\u064A\u0627\u0631 \u0641\u0626\u0629 \u0639\u0634\u0648\u0627\u0626\u064A\u0629 \u0639\u0646\u062F \u0628\u062F\u0621 \u0627\u0644\u0644\u0639\u0628\u0629").setEmoji("\u{1F3B2}").setDefault(!selectedName),
+    ...categories.map(
+      (c) => new import_discord2.StringSelectMenuOptionBuilder().setValue(c.name).setLabel(c.name).setEmoji(CATEGORY_EMOJIS[c.name] ?? "\u{1F4CC}").setDefault(c.name === selectedName)
+    )
+  ];
+  const menu = new import_discord2.StringSelectMenuBuilder().setCustomId("imp:cat_select").setPlaceholder("\u0627\u062E\u062A\u0631 \u0641\u0626\u0629 \u0623\u0648 \u0627\u062A\u0631\u0643\u0647\u0627 \u0639\u0634\u0648\u0627\u0626\u064A\u0629").addOptions(options);
+  return new import_discord2.ActionRowBuilder().addComponents(menu).toJSON();
 }
 function revealButton() {
   const row = new import_discord2.ActionRowBuilder().addComponents(
@@ -76114,6 +76144,7 @@ async function handleButton(interaction) {
   if (id === "imp:join") return handleJoin(interaction);
   if (id === "imp:leave") return handleLeave(interaction);
   if (id === "imp:cancel") return handleCancel(interaction);
+  if (id === "imp:category") return handleCategoryButton(interaction);
   if (id === "imp:reveal") return handleReveal(interaction);
   if (id === "imp:suggest") return handleSuggestOpen(interaction);
   if (id.startsWith("imp:vote:")) {
@@ -76121,6 +76152,55 @@ async function handleButton(interaction) {
   }
   if (id.startsWith("imp:guess:")) {
     return handleGuess(interaction, Number(id.slice("imp:guess:".length)));
+  }
+}
+async function handleCategoryButton(interaction) {
+  const game = getGame(interaction.channelId);
+  if (!game) {
+    await interaction.reply({ embeds: [errorEmbed("\u0645\u0627 \u0641\u064A \u0644\u0639\u0628\u0629 \u0634\u063A\u0627\u0644\u0629.")], flags: import_discord3.MessageFlags.Ephemeral });
+    return;
+  }
+  if (game.phase !== "lobby") {
+    await interaction.reply({ embeds: [errorEmbed("\u0627\u0644\u0644\u0639\u0628\u0629 \u0628\u062F\u0623\u062A \u0628\u0627\u0644\u0641\u0639\u0644.")], flags: import_discord3.MessageFlags.Ephemeral });
+    return;
+  }
+  if (game.hostId !== interaction.user.id) {
+    await interaction.reply({ embeds: [errorEmbed("\u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u062E\u062A\u0627\u0631 \u0627\u0644\u0641\u0626\u0629.")], flags: import_discord3.MessageFlags.Ephemeral });
+    return;
+  }
+  await interaction.reply({
+    content: "\u{1F5C2}\uFE0F \u0627\u062E\u062A\u0631 \u0641\u0626\u0629 \u0627\u0644\u0644\u0639\u0628\u0629:",
+    components: [categorySelectMenu(game.selectedCategoryName)],
+    flags: import_discord3.MessageFlags.Ephemeral
+  });
+}
+async function handleCategorySelect(interaction) {
+  const game = getGame(interaction.channelId ?? "");
+  if (!game || game.phase !== "lobby") {
+    await interaction.reply({ embeds: [errorEmbed("\u0645\u0627 \u0641\u064A \u0644\u0648\u0628\u064A \u0634\u063A\u0627\u0644.")], flags: import_discord3.MessageFlags.Ephemeral });
+    return;
+  }
+  if (game.hostId !== interaction.user.id) {
+    await interaction.reply({ embeds: [errorEmbed("\u0641\u0642\u0637 \u0627\u0644\u0645\u0636\u064A\u0641 \u064A\u0642\u062F\u0631 \u064A\u062E\u062A\u0627\u0631 \u0627\u0644\u0641\u0626\u0629.")], flags: import_discord3.MessageFlags.Ephemeral });
+    return;
+  }
+  const value = interaction.values[0];
+  game.selectedCategoryName = value === "random" ? void 0 : value;
+  const label = game.selectedCategoryName ? `\`${game.selectedCategoryName}\`` : "\u{1F3B2} \u0639\u0634\u0648\u0627\u0626\u064A\u0629";
+  await interaction.reply({
+    embeds: [successEmbed(`\u062A\u0645 \u0636\u0628\u0637 \u0627\u0644\u0641\u0626\u0629 \u0639\u0644\u0649 ${label}`)],
+    flags: import_discord3.MessageFlags.Ephemeral
+  });
+  try {
+    if (game.lobbyMessageId) {
+      const msg = await interaction.channel?.messages.fetch(game.lobbyMessageId).catch(() => null);
+      if (msg) {
+        const secLeft = Math.max(0, LOBBY_SECONDS - Math.floor((Date.now() - game.createdAt) / 1e3));
+        await msg.edit({ embeds: [lobbyEmbed(game, secLeft)], components: [lobbyButtons()] });
+      }
+    }
+  } catch (err) {
+    logger.warn({ err }, "failed to refresh lobby after category select");
   }
 }
 async function refreshLobby(interaction) {
@@ -87937,6 +88017,10 @@ async function startBot(token2) {
           await handleClosestCommand(interaction);
         } else if (name === "\u062E\u0645\u0646") {
           await handleGuessCommand(interaction);
+        }
+      } else if (interaction.isStringSelectMenu()) {
+        if (interaction.customId === "imp:cat_select") {
+          await handleCategorySelect(interaction);
         }
       } else if (interaction.isButton()) {
         if (interaction.customId.startsWith("gss:")) {

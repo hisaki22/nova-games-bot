@@ -74993,14 +74993,9 @@ var require_src = __commonJS({
 var import_discord11 = __toESM(require_src(), 1);
 
 // console-logger:console-logger
-var logger = {
-  info: (obj, msg) => console.log("[INFO]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
-  warn: (obj, msg) => console.warn("[WARN]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
-  error: (obj, msg) => console.error("[ERROR]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
-  child: function() {
-    return this;
-  }
-};
+var logger = { info: (o, m) => console.log("[INFO]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), warn: (o, m) => console.warn("[WARN]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), error: (o, m) => console.error("[ERROR]", m ?? (typeof o === "string" ? o : JSON.stringify(o))), child: function() {
+  return this;
+} };
 
 // src/bot/handlers.ts
 var import_discord3 = __toESM(require_src(), 1);
@@ -86995,33 +86990,54 @@ OpenAI.Videos = Videos;
 
 // src/bot/guess/ai.ts
 var _client = null;
+var _initialized = false;
 function getClient() {
-  if (_client) return _client;
-  const baseURL = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL;
-  const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY ?? process.env.OPENAI_API_KEY ?? "no-key";
-  if (!baseURL && !process.env.OPENAI_API_KEY) return null;
-  _client = new OpenAI({
-    apiKey,
-    ...baseURL ? { baseURL } : {}
-  });
-  return _client;
+  if (_initialized) return _client;
+  _initialized = true;
+  const groqKey = process.env.GROQ_API_KEY;
+  if (groqKey) {
+    _client = new OpenAI({
+      apiKey: groqKey,
+      baseURL: "https://api.groq.com/openai/v1"
+    });
+    console.log("[INFO] \u062E\u0645\u0651\u0646: AI powered by Groq \u2705");
+    return _client;
+  }
+  const replitBase = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL;
+  const replitKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
+  if (replitBase && replitKey) {
+    _client = new OpenAI({ apiKey: replitKey, baseURL: replitBase });
+    console.log("[INFO] \u062E\u0645\u0651\u0646: AI powered by Replit Integration \u2705");
+    return _client;
+  }
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (openaiKey) {
+    _client = new OpenAI({ apiKey: openaiKey });
+    console.log("[INFO] \u062E\u0645\u0651\u0646: AI powered by OpenAI \u2705");
+    return _client;
+  }
+  console.warn("[WARN] \u062E\u0645\u0651\u0646: No AI key found \u2014 falling back to keyword matching");
+  return null;
+}
+function getModel() {
+  if (process.env.GROQ_API_KEY) return "llama-3.3-70b-versatile";
+  return "gpt-5-mini";
 }
 async function aiAnswerQuestion(question, word) {
   const client = getClient();
   if (!client) return null;
   try {
     const response = await client.chat.completions.create({
-      model: "gpt-5-mini",
-      max_completion_tokens: 5,
+      model: getModel(),
+      max_tokens: 5,
       messages: [
         {
           role: "system",
           content: [
-            `\u0623\u0646\u062A \u0645\u0633\u0627\u0639\u062F \u0641\u064A \u0644\u0639\u0628\u0629 "\u062E\u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629".`,
+            `\u0623\u0646\u062A \u0645\u0633\u0627\u0639\u062F \u0641\u064A \u0644\u0639\u0628\u0629 "\u062E\u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629" \u2014 \u0644\u0639\u0628\u0629 \u0646\u0639\u0645 \u0623\u0648 \u0644\u0627 \u0628\u0627\u0644\u0644\u063A\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629.`,
             `\u0627\u0644\u0643\u0644\u0645\u0629 \u0627\u0644\u0633\u0631\u064A\u0629 \u0647\u064A: "${word}"`,
-            `\u0645\u0647\u0645\u062A\u0643: \u0623\u062C\u0628 \u0639\u0644\u0649 \u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0644\u0627\u0639\u0628\u064A\u0646 \u0628\u0640 "\u0646\u0639\u0645" \u0623\u0648 "\u0644\u0627" \u0641\u0642\u0637.`,
-            `\u0644\u0627 \u062A\u0643\u062A\u0628 \u0623\u064A \u0634\u064A\u0621 \u0622\u062E\u0631 \u0633\u0648\u0649 \u0643\u0644\u0645\u0629 \u0648\u0627\u062D\u062F\u0629: \u0646\u0639\u0645 \u0623\u0648 \u0644\u0627.`,
-            `\u0641\u0643\u0631 \u0628\u062F\u0642\u0629 \u0641\u064A \u0645\u0639\u0646\u0649 \u0627\u0644\u0643\u0644\u0645\u0629 \u0648\u0627\u0644\u0633\u0624\u0627\u0644 \u0642\u0628\u0644 \u0627\u0644\u0625\u062C\u0627\u0628\u0629.`
+            `\u0642\u0627\u0639\u062F\u0629 \u0635\u0627\u0631\u0645\u0629: \u0623\u062C\u0628 \u0628\u0640 "\u0646\u0639\u0645" \u0623\u0648 "\u0644\u0627" \u0641\u0642\u0637 \u2014 \u0643\u0644\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0644\u0627 \u063A\u064A\u0631.`,
+            `\u0641\u0643\u0651\u0631 \u062C\u064A\u062F\u0627\u064B \u0641\u064A \u0645\u0639\u0646\u0649 \u0627\u0644\u0643\u0644\u0645\u0629 \u0648\u062E\u0635\u0627\u0626\u0635\u0647\u0627 \u0642\u0628\u0644 \u0627\u0644\u0625\u062C\u0627\u0628\u0629.`
           ].join("\n")
         },
         {
@@ -87030,13 +87046,14 @@ async function aiAnswerQuestion(question, word) {
         }
       ]
     });
-    const text = response.choices[0]?.message?.content?.trim() ?? "";
+    const text = (response.choices[0]?.message?.content ?? "").trim();
     if (/^نعم/.test(text)) return true;
     if (/^لا/.test(text)) return false;
     if (/yes/i.test(text)) return true;
     if (/no/i.test(text)) return false;
     return null;
-  } catch {
+  } catch (err) {
+    console.error("[ERROR] AI answer failed:", err);
     return null;
   }
 }
@@ -87665,13 +87682,11 @@ if (!token) {
   console.error("[ERROR] DISCORD_BOT_TOKEN is not set!");
   process.exit(1);
 }
-console.log("[INFO] Nova Games Bot starting...");
 loadScores().then(() => {
-  console.log("[INFO] Scores loaded");
   startDailyBackup(getStoreSnapshot);
-}).catch((e) => console.warn("[WARN] Scores:", e));
+}).catch((e) => console.warn("[WARN]", e));
 startBot(token).then(() => console.log("[INFO] Bot online \u2705")).catch((err) => {
-  console.error("[ERROR] Bot failed:", err);
+  console.error("[ERROR]", err);
   process.exit(1);
 });
 /*! Bundled license information:

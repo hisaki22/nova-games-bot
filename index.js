@@ -590,13 +590,13 @@ function __disposeResources(env) {
   }
   return next();
 }
-function __rewriteRelativeImportExtension(path2, preserveJsx) {
-  if (typeof path2 === "string" && /^\.\.?\//.test(path2)) {
-    return path2.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function(m, tsx, d, ext, cm) {
+function __rewriteRelativeImportExtension(path3, preserveJsx) {
+  if (typeof path3 === "string" && /^\.\.?\//.test(path3)) {
+    return path3.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function(m, tsx, d, ext, cm) {
       return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : d + ext + "." + cm.toLowerCase() + "js";
     });
   }
-  return path2;
+  return path3;
 }
 var extendStatics, __assign, __createBinding, __setModuleDefault, ownKeys, _SuppressedError, tslib_es6_default;
 var init_tslib_es6 = __esm({
@@ -1383,7 +1383,7 @@ var require_util = __commonJS({
     var net = require("node:net");
     var { Blob: Blob2 } = require("node:buffer");
     var nodeUtil = require("node:util");
-    var { stringify } = require("node:querystring");
+    var { stringify: stringify2 } = require("node:querystring");
     var { EventEmitter: EE } = require("node:events");
     var { InvalidArgumentError } = require_errors();
     var { headerNameLowerCasedRecord } = require_constants();
@@ -1427,7 +1427,7 @@ var require_util = __commonJS({
     function isStream(obj) {
       return obj && typeof obj === "object" && typeof obj.pipe === "function" && typeof obj.on === "function";
     }
-    function isBlobLike(object) {
+    function isBlobLike2(object) {
       if (object === null) {
         return false;
       } else if (object instanceof Blob2) {
@@ -1443,7 +1443,7 @@ var require_util = __commonJS({
       if (url.includes("?") || url.includes("#")) {
         throw new Error('Query params cannot be passed when url already contains "?" or "#".');
       }
-      const stringified = stringify(queryParams);
+      const stringified = stringify2(queryParams);
       if (stringified) {
         url += "?" + stringified;
       }
@@ -1488,14 +1488,14 @@ var require_util = __commonJS({
         }
         const port = url.port != null ? url.port : url.protocol === "https:" ? 443 : 80;
         let origin = url.origin != null ? url.origin : `${url.protocol || ""}//${url.hostname || ""}:${port}`;
-        let path2 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
+        let path3 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
         if (origin[origin.length - 1] === "/") {
           origin = origin.slice(0, origin.length - 1);
         }
-        if (path2 && path2[0] !== "/") {
-          path2 = `/${path2}`;
+        if (path3 && path3[0] !== "/") {
+          path3 = `/${path3}`;
         }
-        return new URL(`${origin}${path2}`);
+        return new URL(`${origin}${path3}`);
       }
       if (!isHttpOrHttpsPrefixed(url.origin || url.protocol)) {
         throw new InvalidArgumentError("Invalid URL protocol: the URL must start with `http:` or `https:`.");
@@ -1533,7 +1533,7 @@ var require_util = __commonJS({
     function deepClone(obj) {
       return JSON.parse(JSON.stringify(obj));
     }
-    function isAsyncIterable(obj) {
+    function isAsyncIterable2(obj) {
       return !!(obj != null && typeof obj[Symbol.asyncIterator] === "function");
     }
     function isIterable(obj) {
@@ -1545,7 +1545,7 @@ var require_util = __commonJS({
       } else if (isStream(body)) {
         const state = body._readableState;
         return state && state.objectMode === false && state.ended === true && Number.isFinite(state.length) ? state.length : null;
-      } else if (isBlobLike(body)) {
+      } else if (isBlobLike2(body)) {
         return body.size != null ? body.size : null;
       } else if (isBuffer(body)) {
         return body.byteLength;
@@ -1689,7 +1689,7 @@ var require_util = __commonJS({
         bytesRead: socket.bytesRead
       };
     }
-    function ReadableStreamFrom(iterable) {
+    function ReadableStreamFrom2(iterable) {
       let iterator;
       return new ReadableStream(
         {
@@ -1836,13 +1836,13 @@ var require_util = __commonJS({
       isReadable,
       toUSVString,
       isUSVString,
-      isBlobLike,
+      isBlobLike: isBlobLike2,
       parseOrigin,
       parseURL,
       getServerName,
       isStream,
       isIterable,
-      isAsyncIterable,
+      isAsyncIterable: isAsyncIterable2,
       isDestroyed,
       headerNameToString,
       bufferToLowerCasedHeaderName,
@@ -1855,7 +1855,7 @@ var require_util = __commonJS({
       destroy,
       bodyLength,
       deepClone,
-      ReadableStreamFrom,
+      ReadableStreamFrom: ReadableStreamFrom2,
       isBuffer,
       validateHandler,
       getSocketInfo,
@@ -1946,39 +1946,39 @@ var require_diagnostics = __commonJS({
       });
       diagnosticsChannel.channel("undici:client:sendHeaders").subscribe((evt) => {
         const {
-          request: { method, path: path2, origin }
+          request: { method, path: path3, origin }
         } = evt;
-        debuglog("sending request to %s %s/%s", method, origin, path2);
+        debuglog("sending request to %s %s/%s", method, origin, path3);
       });
       diagnosticsChannel.channel("undici:request:headers").subscribe((evt) => {
         const {
-          request: { method, path: path2, origin },
+          request: { method, path: path3, origin },
           response: { statusCode }
         } = evt;
         debuglog(
           "received response to %s %s/%s - HTTP %d",
           method,
           origin,
-          path2,
+          path3,
           statusCode
         );
       });
       diagnosticsChannel.channel("undici:request:trailers").subscribe((evt) => {
         const {
-          request: { method, path: path2, origin }
+          request: { method, path: path3, origin }
         } = evt;
-        debuglog("trailers received from %s %s/%s", method, origin, path2);
+        debuglog("trailers received from %s %s/%s", method, origin, path3);
       });
       diagnosticsChannel.channel("undici:request:error").subscribe((evt) => {
         const {
-          request: { method, path: path2, origin },
+          request: { method, path: path3, origin },
           error
         } = evt;
         debuglog(
           "request to %s %s/%s errored - %s",
           method,
           origin,
-          path2,
+          path3,
           error.message
         );
       });
@@ -2027,9 +2027,9 @@ var require_diagnostics = __commonJS({
         });
         diagnosticsChannel.channel("undici:client:sendHeaders").subscribe((evt) => {
           const {
-            request: { method, path: path2, origin }
+            request: { method, path: path3, origin }
           } = evt;
-          debuglog("sending request to %s %s/%s", method, origin, path2);
+          debuglog("sending request to %s %s/%s", method, origin, path3);
         });
       }
       diagnosticsChannel.channel("undici:websocket:open").subscribe((evt) => {
@@ -2080,7 +2080,7 @@ var require_request = __commonJS({
       isBuffer,
       isFormDataLike,
       isIterable,
-      isBlobLike,
+      isBlobLike: isBlobLike2,
       buildURL,
       validateHandler,
       getServerName,
@@ -2092,7 +2092,7 @@ var require_request = __commonJS({
     var kHandler = /* @__PURE__ */ Symbol("handler");
     var Request = class {
       constructor(origin, {
-        path: path2,
+        path: path3,
         method,
         body,
         headers,
@@ -2107,11 +2107,11 @@ var require_request = __commonJS({
         expectContinue,
         servername
       }, handler) {
-        if (typeof path2 !== "string") {
+        if (typeof path3 !== "string") {
           throw new InvalidArgumentError("path must be a string");
-        } else if (path2[0] !== "/" && !(path2.startsWith("http://") || path2.startsWith("https://")) && method !== "CONNECT") {
+        } else if (path3[0] !== "/" && !(path3.startsWith("http://") || path3.startsWith("https://")) && method !== "CONNECT") {
           throw new InvalidArgumentError("path must be an absolute URL or start with a slash");
-        } else if (invalidPathRegex.test(path2)) {
+        } else if (invalidPathRegex.test(path3)) {
           throw new InvalidArgumentError("invalid request path");
         }
         if (typeof method !== "string") {
@@ -2169,7 +2169,7 @@ var require_request = __commonJS({
           this.body = body.byteLength ? Buffer.from(body) : null;
         } else if (typeof body === "string") {
           this.body = body.length ? Buffer.from(body) : null;
-        } else if (isFormDataLike(body) || isIterable(body) || isBlobLike(body)) {
+        } else if (isFormDataLike(body) || isIterable(body) || isBlobLike2(body)) {
           this.body = body;
         } else {
           throw new InvalidArgumentError("body must be a string, a Buffer, a Readable stream, an iterable, or an async iterable");
@@ -2177,7 +2177,7 @@ var require_request = __commonJS({
         this.completed = false;
         this.aborted = false;
         this.upgrade = upgrade || null;
-        this.path = query ? buildURL(path2, query) : path2;
+        this.path = query ? buildURL(path3, query) : path3;
         this.origin = origin;
         this.idempotent = idempotent == null ? method === "HEAD" || method === "GET" : idempotent;
         this.blocking = blocking == null ? false : blocking;
@@ -2852,7 +2852,7 @@ var require_connect = __commonJS({
     var util = require_util();
     var { InvalidArgumentError, ConnectTimeoutError } = require_errors();
     var timers = require_timers();
-    function noop() {
+    function noop2() {
     }
     var tls;
     var SessionCache;
@@ -2977,7 +2977,7 @@ var require_connect = __commonJS({
     }
     var setupConnectTimeout = process.platform === "win32" ? (socketWeakRef, opts) => {
       if (!opts.timeout) {
-        return noop;
+        return noop2;
       }
       let s1 = null;
       let s2 = null;
@@ -2993,7 +2993,7 @@ var require_connect = __commonJS({
       };
     } : (socketWeakRef, opts) => {
       if (!opts.timeout) {
-        return noop;
+        return noop2;
       }
       let s1 = null;
       const fastTimer = timers.setFastTimeout(() => {
@@ -3898,25 +3898,25 @@ var require_data_url = __commonJS({
     function isHTTPWhiteSpace(char) {
       return char === 13 || char === 10 || char === 9 || char === 32;
     }
-    function removeHTTPWhitespace(str, leading = true, trailing = true) {
-      return removeChars(str, leading, trailing, isHTTPWhiteSpace);
+    function removeHTTPWhitespace(str2, leading = true, trailing = true) {
+      return removeChars(str2, leading, trailing, isHTTPWhiteSpace);
     }
     function isASCIIWhitespace(char) {
       return char === 13 || char === 10 || char === 9 || char === 12 || char === 32;
     }
-    function removeASCIIWhitespace(str, leading = true, trailing = true) {
-      return removeChars(str, leading, trailing, isASCIIWhitespace);
+    function removeASCIIWhitespace(str2, leading = true, trailing = true) {
+      return removeChars(str2, leading, trailing, isASCIIWhitespace);
     }
-    function removeChars(str, leading, trailing, predicate) {
+    function removeChars(str2, leading, trailing, predicate) {
       let lead = 0;
-      let trail = str.length - 1;
+      let trail = str2.length - 1;
       if (leading) {
-        while (lead < str.length && predicate(str.charCodeAt(lead))) lead++;
+        while (lead < str2.length && predicate(str2.charCodeAt(lead))) lead++;
       }
       if (trailing) {
-        while (trail > 0 && predicate(str.charCodeAt(trail))) trail--;
+        while (trail > 0 && predicate(str2.charCodeAt(trail))) trail--;
       }
-      return lead === 0 && trail === str.length - 1 ? str : str.slice(lead, trail + 1);
+      return lead === 0 && trail === str2.length - 1 ? str2 : str2.slice(lead, trail + 1);
     }
     function isomorphicDecode(input) {
       const length = input.length;
@@ -4417,16 +4417,16 @@ var require_util2 = __commonJS({
     var { getGlobalOrigin } = require_global();
     var { collectASequenceOfCodePoints, collectAnHTTPQuotedString, removeChars, parseMIMEType } = require_data_url();
     var { performance: performance2 } = require("node:perf_hooks");
-    var { isBlobLike, ReadableStreamFrom, isValidHTTPToken, normalizedMethodRecordsBase } = require_util();
+    var { isBlobLike: isBlobLike2, ReadableStreamFrom: ReadableStreamFrom2, isValidHTTPToken, normalizedMethodRecordsBase } = require_util();
     var assert = require("node:assert");
     var { isUint8Array } = require("node:util/types");
     var { webidl } = require_webidl();
     var supportedHashes = [];
-    var crypto;
+    var crypto2;
     try {
-      crypto = require("node:crypto");
+      crypto2 = require("node:crypto");
       const possibleRelevantHashes = ["sha256", "sha384", "sha512"];
-      supportedHashes = crypto.getHashes().filter((hash) => possibleRelevantHashes.includes(hash));
+      supportedHashes = crypto2.getHashes().filter((hash) => possibleRelevantHashes.includes(hash));
     } catch {
     }
     function responseURL(response) {
@@ -4699,7 +4699,7 @@ var require_util2 = __commonJS({
       }
     }
     function bytesMatch(bytes, metadataList) {
-      if (crypto === void 0) {
+      if (crypto2 === void 0) {
         return true;
       }
       const parsedMetadata = parseMetadata(metadataList);
@@ -4714,7 +4714,7 @@ var require_util2 = __commonJS({
       for (const item of metadata) {
         const algorithm = item.algo;
         const expectedValue = item.hash;
-        let actualValue = crypto.createHash(algorithm).update(bytes).digest("base64");
+        let actualValue = crypto2.createHash(algorithm).update(bytes).digest("base64");
         if (actualValue[actualValue.length - 1] === "=") {
           if (actualValue[actualValue.length - 2] === "=") {
             actualValue = actualValue.slice(0, -2);
@@ -5226,7 +5226,7 @@ var require_util2 = __commonJS({
       isCancelled,
       isValidEncodedURL,
       createDeferredPromise,
-      ReadableStreamFrom,
+      ReadableStreamFrom: ReadableStreamFrom2,
       tryUpgradeRequestToAPotentiallyTrustworthyURL,
       clampAndCoarsenConnectionTimingInfo,
       coarsenedSharedCurrentTime,
@@ -5245,7 +5245,7 @@ var require_util2 = __commonJS({
       requestCurrentURL,
       responseURL,
       responseLocationURL,
-      isBlobLike,
+      isBlobLike: isBlobLike2,
       isURLPotentiallyTrustworthy,
       isValidReasonPhrase,
       sameOrigin,
@@ -5295,7 +5295,7 @@ var require_symbols2 = __commonJS({
 var require_file = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/fetch/file.js"(exports2, module2) {
     "use strict";
-    var { Blob: Blob2, File } = require("node:buffer");
+    var { Blob: Blob2, File: File2 } = require("node:buffer");
     var { kState } = require_symbols2();
     var { webidl } = require_webidl();
     var FileLike = class _FileLike {
@@ -5347,10 +5347,10 @@ var require_file = __commonJS({
       }
     };
     webidl.converters.Blob = webidl.interfaceConverter(Blob2);
-    function isFileLike(object) {
-      return object instanceof File || object && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && object[Symbol.toStringTag] === "File";
+    function isFileLike2(object) {
+      return object instanceof File2 || object && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && object[Symbol.toStringTag] === "File";
     }
-    module2.exports = { FileLike, isFileLike };
+    module2.exports = { FileLike, isFileLike: isFileLike2 };
   }
 });
 
@@ -5358,14 +5358,14 @@ var require_file = __commonJS({
 var require_formdata = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/fetch/formdata.js"(exports2, module2) {
     "use strict";
-    var { isBlobLike, iteratorMixin } = require_util2();
+    var { isBlobLike: isBlobLike2, iteratorMixin } = require_util2();
     var { kState } = require_symbols2();
     var { kEnumerableProperty } = require_util();
-    var { FileLike, isFileLike } = require_file();
+    var { FileLike, isFileLike: isFileLike2 } = require_file();
     var { webidl } = require_webidl();
     var { File: NativeFile } = require("node:buffer");
     var nodeUtil = require("node:util");
-    var File = globalThis.File ?? NativeFile;
+    var File2 = globalThis.File ?? NativeFile;
     var FormData2 = class _FormData {
       constructor(form) {
         webidl.util.markAsUncloneable(this);
@@ -5382,13 +5382,13 @@ var require_formdata = __commonJS({
         webidl.brandCheck(this, _FormData);
         const prefix = "FormData.append";
         webidl.argumentLengthCheck(arguments, 2, prefix);
-        if (arguments.length === 3 && !isBlobLike(value)) {
+        if (arguments.length === 3 && !isBlobLike2(value)) {
           throw new TypeError(
             "Failed to execute 'append' on 'FormData': parameter 2 is not of type 'Blob'"
           );
         }
         name = webidl.converters.USVString(name, prefix, "name");
-        value = isBlobLike(value) ? webidl.converters.Blob(value, prefix, "value", { strict: false }) : webidl.converters.USVString(value, prefix, "value");
+        value = isBlobLike2(value) ? webidl.converters.Blob(value, prefix, "value", { strict: false }) : webidl.converters.USVString(value, prefix, "value");
         filename = arguments.length === 3 ? webidl.converters.USVString(filename, prefix, "filename") : void 0;
         const entry = makeEntry(name, value, filename);
         this[kState].push(entry);
@@ -5429,13 +5429,13 @@ var require_formdata = __commonJS({
         webidl.brandCheck(this, _FormData);
         const prefix = "FormData.set";
         webidl.argumentLengthCheck(arguments, 2, prefix);
-        if (arguments.length === 3 && !isBlobLike(value)) {
+        if (arguments.length === 3 && !isBlobLike2(value)) {
           throw new TypeError(
             "Failed to execute 'set' on 'FormData': parameter 2 is not of type 'Blob'"
           );
         }
         name = webidl.converters.USVString(name, prefix, "name");
-        value = isBlobLike(value) ? webidl.converters.Blob(value, prefix, "name", { strict: false }) : webidl.converters.USVString(value, prefix, "name");
+        value = isBlobLike2(value) ? webidl.converters.Blob(value, prefix, "name", { strict: false }) : webidl.converters.USVString(value, prefix, "name");
         filename = arguments.length === 3 ? webidl.converters.USVString(filename, prefix, "name") : void 0;
         const entry = makeEntry(name, value, filename);
         const idx = this[kState].findIndex((entry2) => entry2.name === name);
@@ -5484,15 +5484,15 @@ var require_formdata = __commonJS({
     function makeEntry(name, value, filename) {
       if (typeof value === "string") {
       } else {
-        if (!isFileLike(value)) {
-          value = value instanceof Blob ? new File([value], "blob", { type: value.type }) : new FileLike(value, "blob", { type: value.type });
+        if (!isFileLike2(value)) {
+          value = value instanceof Blob ? new File2([value], "blob", { type: value.type }) : new FileLike(value, "blob", { type: value.type });
         }
         if (filename !== void 0) {
           const options = {
             type: value.type,
             lastModified: value.lastModified
           };
-          value = value instanceof NativeFile ? new File([value], filename, options) : new FileLike(value, filename, options);
+          value = value instanceof NativeFile ? new File2([value], filename, options) : new FileLike(value, filename, options);
         }
       }
       return { name, value };
@@ -5508,11 +5508,11 @@ var require_formdata_parser = __commonJS({
     var { isUSVString, bufferToLowerCasedHeaderName } = require_util();
     var { utf8DecodeBytes } = require_util2();
     var { HTTP_TOKEN_CODEPOINTS, isomorphicDecode } = require_data_url();
-    var { isFileLike } = require_file();
+    var { isFileLike: isFileLike2 } = require_file();
     var { makeEntry } = require_formdata();
     var assert = require("node:assert");
     var { File: NodeFile } = require("node:buffer");
-    var File = globalThis.File ?? NodeFile;
+    var File2 = globalThis.File ?? NodeFile;
     var formDataNameBuffer = Buffer.from('form-data; name="');
     var filenameBuffer = Buffer.from("; filename");
     var dd = Buffer.from("--");
@@ -5599,12 +5599,12 @@ var require_formdata_parser = __commonJS({
           if (!isAsciiString(contentType)) {
             contentType = "";
           }
-          value = new File([body], filename, { type: contentType });
+          value = new File2([body], filename, { type: contentType });
         } else {
           value = utf8DecodeBytes(Buffer.from(body));
         }
         assert(isUSVString(name));
-        assert(typeof value === "string" && isUSVString(value) || isFileLike(value));
+        assert(typeof value === "string" && isUSVString(value) || isFileLike2(value));
         entryList.push(makeEntry(name, value, filename));
       }
     }
@@ -5758,8 +5758,8 @@ var require_body = __commonJS({
     "use strict";
     var util = require_util();
     var {
-      ReadableStreamFrom,
-      isBlobLike,
+      ReadableStreamFrom: ReadableStreamFrom2,
+      isBlobLike: isBlobLike2,
       isReadableStreamLike,
       readableStreamClose,
       createDeferredPromise,
@@ -5778,13 +5778,13 @@ var require_body = __commonJS({
     var { multipartFormDataParser } = require_formdata_parser();
     var random;
     try {
-      const crypto = require("node:crypto");
-      random = (max) => crypto.randomInt(0, max);
+      const crypto2 = require("node:crypto");
+      random = (max) => crypto2.randomInt(0, max);
     } catch {
       random = (max) => Math.floor(Math.random(max));
     }
     var textEncoder = new TextEncoder();
-    function noop() {
+    function noop2() {
     }
     var hasFinalizationRegistry = globalThis.FinalizationRegistry && process.version.indexOf("v18") !== 0;
     var streamRegistry;
@@ -5792,7 +5792,7 @@ var require_body = __commonJS({
       streamRegistry = new FinalizationRegistry((weakRef) => {
         const stream = weakRef.deref();
         if (stream && !stream.locked && !isDisturbed(stream) && !isErrored(stream)) {
-          stream.cancel("Response object has been garbage collected").catch(noop);
+          stream.cancel("Response object has been garbage collected").catch(noop2);
         }
       });
     }
@@ -5800,7 +5800,7 @@ var require_body = __commonJS({
       let stream = null;
       if (object instanceof ReadableStream) {
         stream = object;
-      } else if (isBlobLike(object)) {
+      } else if (isBlobLike2(object)) {
         stream = object.stream();
       } else {
         stream = new ReadableStream({
@@ -5835,7 +5835,7 @@ var require_body = __commonJS({
         const boundary = `----formdata-undici-0${`${random(1e11)}`.padStart(11, "0")}`;
         const prefix = `--${boundary}\r
 Content-Disposition: form-data`;
-        const escape2 = (str) => str.replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
+        const escape2 = (str2) => str2.replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
         const normalizeLinefeeds = (value) => value.replace(/\r?\n|\r/g, "\r\n");
         const blobParts = [];
         const rn = new Uint8Array([13, 10]);
@@ -5880,7 +5880,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           }
         };
         type = `multipart/form-data; boundary=${boundary}`;
-      } else if (isBlobLike(object)) {
+      } else if (isBlobLike2(object)) {
         source = object;
         length = object.size;
         if (object.type) {
@@ -5895,7 +5895,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
             "Response body object should not be disturbed or locked"
           );
         }
-        stream = object instanceof ReadableStream ? object : ReadableStreamFrom(object);
+        stream = object instanceof ReadableStream ? object : ReadableStreamFrom2(object);
       }
       if (typeof source === "string" || util.isBuffer(source)) {
         length = Buffer.byteLength(source);
@@ -6696,7 +6696,7 @@ var require_client_h1 = __commonJS({
       return method !== "GET" && method !== "HEAD" && method !== "OPTIONS" && method !== "TRACE" && method !== "CONNECT";
     }
     function writeH1(client, request) {
-      const { method, path: path2, host, upgrade, blocking, reset } = request;
+      const { method, path: path3, host, upgrade, blocking, reset } = request;
       let { body, headers, contentLength } = request;
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH" || method === "QUERY" || method === "PROPFIND" || method === "PROPPATCH";
       if (util.isFormDataLike(body)) {
@@ -6762,7 +6762,7 @@ var require_client_h1 = __commonJS({
       if (blocking) {
         socket[kBlocking] = true;
       }
-      let header = `${method} ${path2} HTTP/1.1\r
+      let header = `${method} ${path3} HTTP/1.1\r
 `;
       if (typeof host === "string") {
         header += `host: ${host}\r
@@ -7288,7 +7288,7 @@ var require_client_h2 = __commonJS({
     }
     function writeH2(client, request) {
       const session = client[kHTTP2Session];
-      const { method, path: path2, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
+      const { method, path: path3, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let { body } = request;
       if (upgrade) {
         util.errorRequest(client, request, new Error("Upgrade not supported for H2"));
@@ -7355,7 +7355,7 @@ var require_client_h2 = __commonJS({
         });
         return true;
       }
-      headers[HTTP2_HEADER_PATH] = path2;
+      headers[HTTP2_HEADER_PATH] = path3;
       headers[HTTP2_HEADER_SCHEME] = "https";
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
@@ -7708,9 +7708,9 @@ var require_redirect_handler = __commonJS({
           return this.handler.onHeaders(statusCode, headers, resume, statusText);
         }
         const { origin, pathname, search } = util.parseURL(new URL(this.location, this.opts.origin && new URL(this.opts.path, this.opts.origin)));
-        const path2 = search ? `${pathname}${search}` : pathname;
+        const path3 = search ? `${pathname}${search}` : pathname;
         this.opts.headers = cleanRequestHeaders(this.opts.headers, statusCode === 303, this.opts.origin !== origin);
-        this.opts.path = path2;
+        this.opts.path = path3;
         this.opts.origin = origin;
         this.opts.maxRedirections = 0;
         this.opts.query = null;
@@ -7871,7 +7871,7 @@ var require_client = __commonJS({
     var connectH2 = require_client_h2();
     var deprecatedInterceptorWarned = false;
     var kClosedResolve = /* @__PURE__ */ Symbol("kClosedResolve");
-    var noop = () => {
+    var noop2 = () => {
     };
     function getPipelining(client) {
       return client[kPipelining] ?? client[kHTTPContext]?.defaultPipelining ?? 1;
@@ -8161,14 +8161,14 @@ var require_client = __commonJS({
           });
         });
         if (client.destroyed) {
-          util.destroy(socket.on("error", noop), new ClientDestroyedError());
+          util.destroy(socket.on("error", noop2), new ClientDestroyedError());
           return;
         }
         assert(socket);
         try {
           client[kHTTPContext] = socket.alpnProtocol === "h2" ? await connectH2(client, socket) : await connectH1(client, socket);
         } catch (err) {
-          socket.destroy().on("error", noop);
+          socket.destroy().on("error", noop2);
           throw err;
         }
         client[kConnecting] = false;
@@ -8909,7 +8909,7 @@ var require_proxy_agent = __commonJS({
     function defaultFactory(origin, opts) {
       return new Pool(origin, opts);
     }
-    var noop = () => {
+    var noop2 = () => {
     };
     function defaultAgentFactory(origin, opts) {
       if (opts.connections === 1) {
@@ -8944,10 +8944,10 @@ var require_proxy_agent = __commonJS({
         };
         const {
           origin,
-          path: path2 = "/",
+          path: path3 = "/",
           headers = {}
         } = opts;
-        opts.path = origin + path2;
+        opts.path = origin + path3;
         if (!("host" in headers) && !("Host" in headers)) {
           const { host } = new URL2(origin);
           headers.host = host;
@@ -9026,7 +9026,7 @@ var require_proxy_agent = __commonJS({
                 servername: this[kProxyTls]?.servername || proxyHostname
               });
               if (statusCode !== 200) {
-                socket.on("error", noop).destroy();
+                socket.on("error", noop2).destroy();
                 callback(new RequestAbortedError(`Proxy response (${statusCode}) !== 200 when HTTP Tunneling`));
               }
               if (opts2.protocol !== "https:") {
@@ -9051,7 +9051,7 @@ var require_proxy_agent = __commonJS({
         });
       }
       dispatch(opts, handler) {
-        const headers = buildHeaders(opts.headers);
+        const headers = buildHeaders2(opts.headers);
         throwIfProxyAuthIsSent(headers);
         if (headers && !("host" in headers) && !("Host" in headers)) {
           const { host } = new URL2(opts.origin);
@@ -9087,7 +9087,7 @@ var require_proxy_agent = __commonJS({
         await this[kClient].destroy();
       }
     };
-    function buildHeaders(headers) {
+    function buildHeaders2(headers) {
       if (Array.isArray(headers)) {
         const headersPair = {};
         for (let i = 0; i < headers.length; i += 2) {
@@ -9584,14 +9584,14 @@ var require_readable = __commonJS({
     var { Readable } = require("node:stream");
     var { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = require_errors();
     var util = require_util();
-    var { ReadableStreamFrom } = require_util();
+    var { ReadableStreamFrom: ReadableStreamFrom2 } = require_util();
     var kConsume = /* @__PURE__ */ Symbol("kConsume");
     var kReading = /* @__PURE__ */ Symbol("kReading");
     var kBody = /* @__PURE__ */ Symbol("kBody");
     var kAbort = /* @__PURE__ */ Symbol("kAbort");
     var kContentType = /* @__PURE__ */ Symbol("kContentType");
     var kContentLength = /* @__PURE__ */ Symbol("kContentLength");
-    var noop = () => {
+    var noop2 = () => {
     };
     var BodyReadable = class extends Readable {
       constructor({
@@ -9690,7 +9690,7 @@ var require_readable = __commonJS({
       // https://fetch.spec.whatwg.org/#dom-body-body
       get body() {
         if (!this[kBody]) {
-          this[kBody] = ReadableStreamFrom(this);
+          this[kBody] = ReadableStreamFrom2(this);
           if (this[kConsume]) {
             this[kBody].getReader();
             assert(this[kBody].locked);
@@ -9699,7 +9699,7 @@ var require_readable = __commonJS({
         return this[kBody];
       }
       async dump(opts) {
-        let limit = Number.isFinite(opts?.limit) ? opts.limit : 128 * 1024;
+        let limit2 = Number.isFinite(opts?.limit) ? opts.limit : 128 * 1024;
         const signal = opts?.signal;
         if (signal != null && (typeof signal !== "object" || !("aborted" in signal))) {
           throw new InvalidArgumentError("signal must be an AbortSignal");
@@ -9709,7 +9709,7 @@ var require_readable = __commonJS({
           return null;
         }
         return await new Promise((resolve, reject) => {
-          if (this[kContentLength] > limit) {
+          if (this[kContentLength] > limit2) {
             this.destroy(new AbortError());
           }
           const onAbort = () => {
@@ -9723,9 +9723,9 @@ var require_readable = __commonJS({
             } else {
               resolve(null);
             }
-          }).on("error", noop).on("data", function(chunk) {
-            limit -= chunk.length;
-            if (limit <= 0) {
+          }).on("error", noop2).on("data", function(chunk) {
+            limit2 -= chunk.length;
+            if (limit2 <= 0) {
               this.destroy();
             }
           }).resume();
@@ -10868,20 +10868,20 @@ var require_mock_utils = __commonJS({
       }
       return true;
     }
-    function safeUrl(path2) {
-      if (typeof path2 !== "string") {
-        return path2;
+    function safeUrl(path3) {
+      if (typeof path3 !== "string") {
+        return path3;
       }
-      const pathSegments = path2.split("?");
+      const pathSegments = path3.split("?");
       if (pathSegments.length !== 2) {
-        return path2;
+        return path3;
       }
       const qp = new URLSearchParams(pathSegments.pop());
       qp.sort();
       return [...pathSegments, qp.toString()].join("?");
     }
-    function matchKey(mockDispatch2, { path: path2, method, body, headers }) {
-      const pathMatch = matchValue(mockDispatch2.path, path2);
+    function matchKey(mockDispatch2, { path: path3, method, body, headers }) {
+      const pathMatch = matchValue(mockDispatch2.path, path3);
       const methodMatch = matchValue(mockDispatch2.method, method);
       const bodyMatch = typeof mockDispatch2.body !== "undefined" ? matchValue(mockDispatch2.body, body) : true;
       const headersMatch = matchHeaders(mockDispatch2, headers);
@@ -10903,7 +10903,7 @@ var require_mock_utils = __commonJS({
     function getMockDispatch(mockDispatches, key) {
       const basePath = key.query ? buildURL(key.path, key.query) : key.path;
       const resolvedPath = typeof basePath === "string" ? safeUrl(basePath) : basePath;
-      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path2 }) => matchValue(safeUrl(path2), resolvedPath));
+      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path3 }) => matchValue(safeUrl(path3), resolvedPath));
       if (matchedMockDispatches.length === 0) {
         throw new MockNotMatchedError(`Mock dispatch not matched for path '${resolvedPath}'`);
       }
@@ -10941,9 +10941,9 @@ var require_mock_utils = __commonJS({
       }
     }
     function buildKey(opts) {
-      const { path: path2, method, body, headers, query } = opts;
+      const { path: path3, method, body, headers, query } = opts;
       return {
-        path: path2,
+        path: path3,
         method,
         body,
         headers,
@@ -11406,10 +11406,10 @@ var require_pending_interceptors_formatter = __commonJS({
       }
       format(pendingInterceptors) {
         const withPrettyHeaders = pendingInterceptors.map(
-          ({ method, path: path2, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
+          ({ method, path: path3, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
             Method: method,
             Origin: origin,
-            Path: path2,
+            Path: path3,
             "Status code": statusCode,
             Persistent: persist ? PERSISTENT : NOT_PERSISTENT,
             Invocations: timesInvoked,
@@ -12300,7 +12300,7 @@ var require_headers = __commonJS({
         }
       }
     };
-    var Headers = class _Headers {
+    var Headers2 = class _Headers {
       #guard;
       #headersList;
       constructor(init = void 0) {
@@ -12450,13 +12450,13 @@ var require_headers = __commonJS({
         o.#headersList = list;
       }
     };
-    var { getHeadersGuard, setHeadersGuard, getHeadersList, setHeadersList } = Headers;
-    Reflect.deleteProperty(Headers, "getHeadersGuard");
-    Reflect.deleteProperty(Headers, "setHeadersGuard");
-    Reflect.deleteProperty(Headers, "getHeadersList");
-    Reflect.deleteProperty(Headers, "setHeadersList");
-    iteratorMixin("Headers", Headers, kHeadersSortedMap, 0, 1);
-    Object.defineProperties(Headers.prototype, {
+    var { getHeadersGuard, setHeadersGuard, getHeadersList, setHeadersList } = Headers2;
+    Reflect.deleteProperty(Headers2, "getHeadersGuard");
+    Reflect.deleteProperty(Headers2, "setHeadersGuard");
+    Reflect.deleteProperty(Headers2, "getHeadersList");
+    Reflect.deleteProperty(Headers2, "setHeadersList");
+    iteratorMixin("Headers", Headers2, kHeadersSortedMap, 0, 1);
+    Object.defineProperties(Headers2.prototype, {
       append: kEnumerableProperty,
       delete: kEnumerableProperty,
       get: kEnumerableProperty,
@@ -12474,7 +12474,7 @@ var require_headers = __commonJS({
     webidl.converters.HeadersInit = function(V, prefix, argument) {
       if (webidl.util.Type(V) === "Object") {
         const iterator = Reflect.get(V, Symbol.iterator);
-        if (!util.types.isProxy(V) && iterator === Headers.prototype.entries) {
+        if (!util.types.isProxy(V) && iterator === Headers2.prototype.entries) {
           try {
             return getHeadersList(V).entriesList;
           } catch {
@@ -12495,7 +12495,7 @@ var require_headers = __commonJS({
       fill,
       // for test.
       compareHeaderName,
-      Headers,
+      Headers: Headers2,
       HeadersList,
       getHeadersGuard,
       setHeadersGuard,
@@ -12509,7 +12509,7 @@ var require_headers = __commonJS({
 var require_response = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/fetch/response.js"(exports2, module2) {
     "use strict";
-    var { Headers, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = require_headers();
+    var { Headers: Headers2, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = require_headers();
     var { extractBody, cloneBody, mixinBody, hasFinalizationRegistry, streamRegistry, bodyUnusable } = require_body();
     var util = require_util();
     var nodeUtil = require("node:util");
@@ -12518,7 +12518,7 @@ var require_response = __commonJS({
       isValidReasonPhrase,
       isCancelled,
       isAborted,
-      isBlobLike,
+      isBlobLike: isBlobLike2,
       serializeJavascriptValueToJSONString,
       isErrorLike,
       isomorphicEncode,
@@ -12587,7 +12587,7 @@ var require_response = __commonJS({
         }
         init = webidl.converters.ResponseInit(init);
         this[kState] = makeResponse({});
-        this[kHeaders] = new Headers(kConstruct);
+        this[kHeaders] = new Headers2(kConstruct);
         setHeadersGuard(this[kHeaders], "response");
         setHeadersList(this[kHeaders], this[kState].headersList);
         let bodyWithType = null;
@@ -12831,7 +12831,7 @@ var require_response = __commonJS({
     function fromInnerResponse(innerResponse, guard) {
       const response = new Response2(kConstruct);
       response[kState] = innerResponse;
-      response[kHeaders] = new Headers(kConstruct);
+      response[kHeaders] = new Headers2(kConstruct);
       setHeadersList(response[kHeaders], innerResponse.headersList);
       setHeadersGuard(response[kHeaders], guard);
       if (hasFinalizationRegistry && innerResponse.body?.stream) {
@@ -12852,7 +12852,7 @@ var require_response = __commonJS({
       if (typeof V === "string") {
         return webidl.converters.USVString(V, prefix, name);
       }
-      if (isBlobLike(V)) {
+      if (isBlobLike2(V)) {
         return webidl.converters.Blob(V, prefix, name, { strict: false });
       }
       if (ArrayBuffer.isView(V) || types.isArrayBuffer(V)) {
@@ -12951,7 +12951,7 @@ var require_request2 = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/fetch/request.js"(exports2, module2) {
     "use strict";
     var { extractBody, mixinBody, cloneBody, bodyUnusable } = require_body();
-    var { Headers, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = require_headers();
+    var { Headers: Headers2, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = require_headers();
     var { FinalizationRegistry: FinalizationRegistry2 } = require_dispatcher_weakref()();
     var util = require_util();
     var nodeUtil = require("node:util");
@@ -13044,15 +13044,15 @@ var require_request2 = __commonJS({
           signal = input[kSignal];
         }
         const origin = environmentSettingsObject.settingsObject.origin;
-        let window = "client";
+        let window2 = "client";
         if (request.window?.constructor?.name === "EnvironmentSettingsObject" && sameOrigin(request.window, origin)) {
-          window = request.window;
+          window2 = request.window;
         }
         if (init.window != null) {
-          throw new TypeError(`'window' option '${window}' must be null`);
+          throw new TypeError(`'window' option '${window2}' must be null`);
         }
         if ("window" in init) {
-          window = "no-window";
+          window2 = "no-window";
         }
         request = makeRequest({
           // URL request’s URL.
@@ -13067,7 +13067,7 @@ var require_request2 = __commonJS({
           // client This’s relevant settings object.
           client: environmentSettingsObject.settingsObject,
           // window window.
-          window,
+          window: window2,
           // priority request’s priority.
           priority: request.priority,
           // origin request’s origin. The propagation of the origin is only significant for navigation requests
@@ -13219,7 +13219,7 @@ var require_request2 = __commonJS({
             requestFinalizer.register(ac, { signal, abort }, abort);
           }
         }
-        this[kHeaders] = new Headers(kConstruct);
+        this[kHeaders] = new Headers2(kConstruct);
         setHeadersList(this[kHeaders], request.headersList);
         setHeadersGuard(this[kHeaders], "request");
         if (mode === "no-cors") {
@@ -13508,7 +13508,7 @@ var require_request2 = __commonJS({
       const request = new Request(kConstruct);
       request[kState] = innerRequest;
       request[kSignal] = signal;
-      request[kHeaders] = new Headers(kConstruct);
+      request[kHeaders] = new Headers2(kConstruct);
       setHeadersList(request[kHeaders], innerRequest.headersList);
       setHeadersGuard(request[kHeaders], guard);
       return request;
@@ -13673,7 +13673,7 @@ var require_fetch = __commonJS({
       determineRequestsReferrer,
       coarsenedSharedCurrentTime,
       createDeferredPromise,
-      isBlobLike,
+      isBlobLike: isBlobLike2,
       sameOrigin,
       isCancelled,
       isAborted,
@@ -14040,7 +14040,7 @@ var require_fetch = __commonJS({
             return Promise.resolve(makeNetworkError("NetworkError when attempting to fetch resource."));
           }
           const blob = resolveObjectURL(blobURLEntry.toString());
-          if (request.method !== "GET" || !isBlobLike(blob)) {
+          if (request.method !== "GET" || !isBlobLike2(blob)) {
             return Promise.resolve(makeNetworkError("invalid method"));
           }
           const response = makeResponse();
@@ -14112,7 +14112,7 @@ var require_fetch = __commonJS({
         }
       }
     }
-    function finalizeResponse(fetchParams, response) {
+    function finalizeResponse2(fetchParams, response) {
       fetchParams.request.done = true;
       if (fetchParams.processResponseDone != null) {
         queueMicrotask(() => fetchParams.processResponseDone(response));
@@ -14523,7 +14523,7 @@ var require_fetch = __commonJS({
           }
           if (bytes === void 0) {
             readableStreamClose(fetchParams.controller.controller);
-            finalizeResponse(fetchParams, response);
+            finalizeResponse2(fetchParams, response);
             return;
           }
           timingInfo.decodedBodySize += bytes?.byteLength ?? 0;
@@ -15093,7 +15093,7 @@ var require_util4 = __commonJS({
     var { serializeAMimeType, parseMIMEType } = require_data_url();
     var { types } = require("node:util");
     var { StringDecoder } = require("string_decoder");
-    var { btoa } = require("node:buffer");
+    var { btoa: btoa2 } = require("node:buffer");
     var staticPropertyDescriptors = {
       enumerable: true,
       writable: false,
@@ -15185,9 +15185,9 @@ var require_util4 = __commonJS({
           dataURL += ";base64,";
           const decoder = new StringDecoder("latin1");
           for (const chunk of bytes) {
-            dataURL += btoa(decoder.write(chunk));
+            dataURL += btoa2(decoder.write(chunk));
           }
-          dataURL += btoa(decoder.end());
+          dataURL += btoa2(decoder.end());
           return dataURL;
         }
         case "Text": {
@@ -16290,9 +16290,9 @@ var require_util6 = __commonJS({
         }
       }
     }
-    function validateCookiePath(path2) {
-      for (let i = 0; i < path2.length; ++i) {
-        const code = path2.charCodeAt(i);
+    function validateCookiePath(path3) {
+      for (let i = 0; i < path3.length; ++i) {
+        const code = path3.charCodeAt(i);
         if (code < 32 || // exclude CTLs (0-31)
         code === 127 || // DEL
         code === 59) {
@@ -16340,7 +16340,7 @@ var require_util6 = __commonJS({
         throw new Error("Invalid cookie max-age");
       }
     }
-    function stringify(cookie) {
+    function stringify2(cookie) {
       if (cookie.name.length === 0) {
         return null;
       }
@@ -16394,7 +16394,7 @@ var require_util6 = __commonJS({
       validateCookiePath,
       validateCookieValue,
       toIMFDate,
-      stringify
+      stringify: stringify2
     };
   }
 });
@@ -16544,12 +16544,12 @@ var require_cookies = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/cookies/index.js"(exports2, module2) {
     "use strict";
     var { parseSetCookie } = require_parse();
-    var { stringify } = require_util6();
+    var { stringify: stringify2 } = require_util6();
     var { webidl } = require_webidl();
-    var { Headers } = require_headers();
+    var { Headers: Headers2 } = require_headers();
     function getCookies(headers) {
       webidl.argumentLengthCheck(arguments, 1, "getCookies");
-      webidl.brandCheck(headers, Headers, { strict: false });
+      webidl.brandCheck(headers, Headers2, { strict: false });
       const cookie = headers.get("cookie");
       const out = {};
       if (!cookie) {
@@ -16562,7 +16562,7 @@ var require_cookies = __commonJS({
       return out;
     }
     function deleteCookie(headers, name, attributes) {
-      webidl.brandCheck(headers, Headers, { strict: false });
+      webidl.brandCheck(headers, Headers2, { strict: false });
       const prefix = "deleteCookie";
       webidl.argumentLengthCheck(arguments, 2, prefix);
       name = webidl.converters.DOMString(name, prefix, "name");
@@ -16576,7 +16576,7 @@ var require_cookies = __commonJS({
     }
     function getSetCookies(headers) {
       webidl.argumentLengthCheck(arguments, 1, "getSetCookies");
-      webidl.brandCheck(headers, Headers, { strict: false });
+      webidl.brandCheck(headers, Headers2, { strict: false });
       const cookies = headers.getSetCookie();
       if (!cookies) {
         return [];
@@ -16585,11 +16585,11 @@ var require_cookies = __commonJS({
     }
     function setCookie(headers, cookie) {
       webidl.argumentLengthCheck(arguments, 2, "setCookie");
-      webidl.brandCheck(headers, Headers, { strict: false });
+      webidl.brandCheck(headers, Headers2, { strict: false });
       cookie = webidl.converters.Cookie(cookie);
-      const str = stringify(cookie);
-      if (str) {
-        headers.append("Set-Cookie", str);
+      const str2 = stringify2(cookie);
+      if (str2) {
+        headers.append("Set-Cookie", str2);
       }
     }
     webidl.converters.DeleteCookieAttributes = webidl.dictionaryConverter([
@@ -17187,13 +17187,13 @@ var require_frame = __commonJS({
     "use strict";
     var { maxUnsigned16Bit } = require_constants5();
     var BUFFER_SIZE = 16386;
-    var crypto;
+    var crypto2;
     var buffer = null;
     var bufIdx = BUFFER_SIZE;
     try {
-      crypto = require("node:crypto");
+      crypto2 = require("node:crypto");
     } catch {
-      crypto = {
+      crypto2 = {
         // not full compatibility, but minimum.
         randomFillSync: function randomFillSync(buffer2, _offset, _size) {
           for (let i = 0; i < buffer2.length; ++i) {
@@ -17206,7 +17206,7 @@ var require_frame = __commonJS({
     function generateMask() {
       if (bufIdx === BUFFER_SIZE) {
         bufIdx = 0;
-        crypto.randomFillSync(buffer ??= Buffer.allocUnsafe(BUFFER_SIZE), 0, BUFFER_SIZE);
+        crypto2.randomFillSync(buffer ??= Buffer.allocUnsafe(BUFFER_SIZE), 0, BUFFER_SIZE);
       }
       return [buffer[bufIdx++], buffer[bufIdx++], buffer[bufIdx++], buffer[bufIdx++]];
     }
@@ -17275,12 +17275,12 @@ var require_connection = __commonJS({
     var { CloseEvent } = require_events();
     var { makeRequest } = require_request2();
     var { fetching } = require_fetch();
-    var { Headers, getHeadersList } = require_headers();
+    var { Headers: Headers2, getHeadersList } = require_headers();
     var { getDecodeSplit } = require_util2();
     var { WebsocketFrameSend } = require_frame();
-    var crypto;
+    var crypto2;
     try {
-      crypto = require("node:crypto");
+      crypto2 = require("node:crypto");
     } catch {
     }
     function establishWebSocketConnection(url, protocols, client, ws, onEstablish, options) {
@@ -17297,10 +17297,10 @@ var require_connection = __commonJS({
         redirect: "error"
       });
       if (options.headers) {
-        const headersList = getHeadersList(new Headers(options.headers));
+        const headersList = getHeadersList(new Headers2(options.headers));
         request.headersList = headersList;
       }
-      const keyValue = crypto.randomBytes(16).toString("base64");
+      const keyValue = crypto2.randomBytes(16).toString("base64");
       request.headersList.append("sec-websocket-key", keyValue);
       request.headersList.append("sec-websocket-version", "13");
       for (const protocol of protocols) {
@@ -17330,7 +17330,7 @@ var require_connection = __commonJS({
             return;
           }
           const secWSAccept = response.headersList.get("Sec-WebSocket-Accept");
-          const digest = crypto.createHash("sha1").update(keyValue + uid).digest("base64");
+          const digest = crypto2.createHash("sha1").update(keyValue + uid).digest("base64");
           if (secWSAccept !== digest) {
             failWebsocketConnection(ws, "Incorrect hash received in Sec-WebSocket-Accept header.");
             return;
@@ -17953,7 +17953,7 @@ var require_websocket = __commonJS({
     } = require_util7();
     var { establishWebSocketConnection, closeWebSocketConnection } = require_connection();
     var { ByteParser } = require_receiver();
-    var { kEnumerableProperty, isBlobLike } = require_util();
+    var { kEnumerableProperty, isBlobLike: isBlobLike2 } = require_util();
     var { getGlobalDispatcher } = require_global2();
     var { types } = require("node:util");
     var { ErrorEvent, CloseEvent } = require_events();
@@ -18088,7 +18088,7 @@ var require_websocket = __commonJS({
           this.#sendQueue.add(data, () => {
             this.#bufferedAmount -= data.byteLength;
           }, sendHints.typedArray);
-        } else if (isBlobLike(data)) {
+        } else if (isBlobLike2(data)) {
           this.#bufferedAmount += data.size;
           this.#sendQueue.add(data, () => {
             this.#bufferedAmount -= data.size;
@@ -18281,7 +18281,7 @@ var require_websocket = __commonJS({
     };
     webidl.converters.WebSocketSendData = function(V) {
       if (webidl.util.Type(V) === "Object") {
-        if (isBlobLike(V)) {
+        if (isBlobLike2(V)) {
           return webidl.converters.Blob(V, { strict: false });
         }
         if (ArrayBuffer.isView(V) || types.isArrayBuffer(V)) {
@@ -18932,11 +18932,11 @@ var require_undici = __commonJS({
           if (typeof opts.path !== "string") {
             throw new InvalidArgumentError("invalid opts.path");
           }
-          let path2 = opts.path;
+          let path3 = opts.path;
           if (!opts.path.startsWith("/")) {
-            path2 = `/${path2}`;
+            path3 = `/${path3}`;
           }
-          url = new URL(util.parseOrigin(url).origin + path2);
+          url = new URL(util.parseOrigin(url).origin + path3);
         } else {
           if (!opts) {
             opts = typeof url === "object" ? url : {};
@@ -23341,12 +23341,12 @@ var require_cjs = __commonJS({
     var MaximumProcessId = 0b11111n;
     var MaximumIncrement = 0b111111111111n;
     var TimestampFieldDivisor = 2 ** 22;
-    var _a;
+    var _a3;
     var _b;
     var _c;
     var _d;
     var _e;
-    _e = EpochSymbol, _d = EpochNumberSymbol, _c = IncrementSymbol, _b = ProcessIdSymbol, _a = WorkerIdSymbol;
+    _e = EpochSymbol, _d = EpochNumberSymbol, _c = IncrementSymbol, _b = ProcessIdSymbol, _a3 = WorkerIdSymbol;
     var _Snowflake = class _Snowflake {
       /**
        * @param epoch the epoch to use
@@ -23357,7 +23357,7 @@ var require_cjs = __commonJS({
         __publicField(this, _d);
         __publicField(this, _c, 0n);
         __publicField(this, _b, 1n);
-        __publicField(this, _a, 0n);
+        __publicField(this, _a3, 0n);
         this[EpochSymbol] = BigInt(epoch instanceof Date ? epoch.getTime() : epoch);
         this[EpochNumberSymbol] = Number(this[EpochSymbol]);
       }
@@ -25808,8 +25808,8 @@ Emitted 'error' event${ctorInfo} at:
     __name(enhanceStackTrace, "enhanceStackTrace");
     var brandSymbol = /* @__PURE__ */ Symbol.for("async-event-emitter.ts-brand");
     var kCapturePromiseRejections = /* @__PURE__ */ Symbol.for("async-event-emitter.ts-capture-promise-rejections");
-    var _a;
-    brandSymbol, _a = kCapturePromiseRejections;
+    var _a3;
+    brandSymbol, _a3 = kCapturePromiseRejections;
     var _AsyncEventEmitter = class _AsyncEventEmitter2 {
       constructor() {
         this._events = {
@@ -25819,7 +25819,7 @@ Emitted 'error' event${ctorInfo} at:
         this._maxListeners = 10;
         this._internalPromiseMap = /* @__PURE__ */ new Map();
         this._wrapperId = 0n;
-        this[_a] = true;
+        this[_a3] = true;
       }
       addListener(eventName, listener) {
         validateListener(listener);
@@ -26343,13 +26343,13 @@ var require_tree2 = __commonJS({
       mime: leaf.info.mime,
       extension: leaf.info.extension
     });
-    var isLeafNode = (tree, path2) => tree && path2.length === 0;
+    var isLeafNode = (tree, path3) => tree && path3.length === 0;
     var merge = (node, tree) => {
       if (node.bytes.length === 0)
         return tree;
-      const [currentByte, ...path2] = node.bytes;
+      const [currentByte, ...path3] = node.bytes;
       const currentTree = tree.bytes[currentByte];
-      if (isLeafNode(currentTree, path2)) {
+      if (isLeafNode(currentTree, path3)) {
         const matchingNode = tree.bytes[currentByte];
         tree.bytes[currentByte] = {
           ...matchingNode,
@@ -26361,9 +26361,9 @@ var require_tree2 = __commonJS({
         return tree;
       }
       if (tree.bytes[currentByte]) {
-        tree.bytes[currentByte] = exports2.merge(exports2.createNode(node.typename, path2, node.info), tree.bytes[currentByte]);
+        tree.bytes[currentByte] = exports2.merge(exports2.createNode(node.typename, path3, node.info), tree.bytes[currentByte]);
       } else {
-        tree.bytes[currentByte] = exports2.createComplexNode(node.typename, path2, node.info);
+        tree.bytes[currentByte] = exports2.createComplexNode(node.typename, path3, node.info);
       }
       return tree;
     };
@@ -26377,7 +26377,7 @@ var require_tree2 = __commonJS({
         bytes: {},
         matches: void 0
       };
-      const [currentKey, ...path2] = bytes;
+      const [currentKey, ...path3] = bytes;
       if (bytes.length === 0) {
         return {
           matches: [
@@ -26389,7 +26389,7 @@ var require_tree2 = __commonJS({
           bytes: {}
         };
       }
-      obj.bytes[currentKey] = exports2.createComplexNode(typename, path2, info);
+      obj.bytes[currentKey] = exports2.createComplexNode(typename, path3, info);
       return obj;
     };
     exports2.createComplexNode = createComplexNode;
@@ -27793,11 +27793,11 @@ var require_dist5 = __commonJS({
       OverwrittenMimeTypes: () => OverwrittenMimeTypes,
       REST: () => REST2,
       RESTEvents: () => RESTEvents,
-      RateLimitError: () => RateLimitError,
+      RateLimitError: () => RateLimitError2,
       RequestMethod: () => RequestMethod,
       calculateUserDefaultAvatarIndex: () => calculateUserDefaultAvatarIndex,
       makeURLSearchParams: () => makeURLSearchParams2,
-      parseResponse: () => parseResponse,
+      parseResponse: () => parseResponse2,
       version: () => version
     });
     module2.exports = __toCommonJS2(index_exports);
@@ -27932,7 +27932,7 @@ var require_dist5 = __commonJS({
     };
     var BurstHandlerMajorIdKey = "burst";
     var DEPRECATION_WARNING_PREFIX = "DeprecationWarning";
-    var RateLimitError = class _RateLimitError extends Error {
+    var RateLimitError2 = class _RateLimitError extends Error {
       static {
         __name(this, "RateLimitError");
       }
@@ -27949,7 +27949,7 @@ var require_dist5 = __commonJS({
       scope;
       constructor({
         timeToReset,
-        limit,
+        limit: limit2,
         method,
         hash,
         url,
@@ -27962,7 +27962,7 @@ var require_dist5 = __commonJS({
       }) {
         super();
         this.timeToReset = timeToReset;
-        this.limit = limit;
+        this.limit = limit2;
         this.method = method;
         this.hash = hash;
         this.url = url;
@@ -28018,13 +28018,13 @@ var require_dist5 = __commonJS({
       return params;
     }
     __name(makeURLSearchParams2, "makeURLSearchParams");
-    async function parseResponse(res) {
+    async function parseResponse2(res) {
       if (res.headers.get("Content-Type")?.startsWith("application/json")) {
         return res.json();
       }
       return res.arrayBuffer();
     }
-    __name(parseResponse, "parseResponse");
+    __name(parseResponse2, "parseResponse");
     function hasSublimit(bucketRoute, body, method) {
       if (bucketRoute === "/channels/:id") {
         if (typeof body !== "object" || body === null) return false;
@@ -28045,7 +28045,7 @@ var require_dist5 = __commonJS({
       if (!options.rejectOnRateLimit) return;
       const shouldThrow = typeof options.rejectOnRateLimit === "function" ? await options.rejectOnRateLimit(rateLimitData) : options.rejectOnRateLimit.some((route) => rateLimitData.route.startsWith(route.toLowerCase()));
       if (shouldThrow) {
-        throw new RateLimitError(rateLimitData);
+        throw new RateLimitError2(rateLimitData);
       }
     }
     __name(onRateLimit, "onRateLimit");
@@ -28053,12 +28053,12 @@ var require_dist5 = __commonJS({
       return Number(BigInt(userId) >> 22n) % 6;
     }
     __name(calculateUserDefaultAvatarIndex, "calculateUserDefaultAvatarIndex");
-    async function sleep2(ms) {
+    async function sleep3(ms) {
       return new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
       });
     }
-    __name(sleep2, "sleep");
+    __name(sleep3, "sleep");
     function isBufferLike(value) {
       return value instanceof ArrayBuffer || value instanceof Uint8Array || value instanceof Uint8ClampedArray;
     }
@@ -28495,7 +28495,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           if (status === 401 && requestData.auth) {
             manager.setToken(null);
           }
-          const data = await parseResponse(res);
+          const data = await parseResponse2(res);
           throw new DiscordAPIError(data, "code" in data ? data.code : data.error, status, method, url, requestData);
         }
         return res;
@@ -28595,7 +28595,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
               `  Scope          : ${scope}`
             ].join("\n")
           );
-          await sleep2(retryAfter);
+          await sleep3(retryAfter);
           return this.runRequest(routeId, url, options, requestData, retries);
         } else {
           const handled = await handleErrors(this.manager, res, method, url, requestData, retries);
@@ -28699,7 +28699,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
        * @param time - The amount of time to delay all requests for
        */
       async globalDelayFor(time) {
-        await sleep2(time);
+        await sleep3(time);
         this.manager.globalDelay = null;
       }
       /**
@@ -28749,21 +28749,21 @@ ${flattened}` : error.message || flattened || "Unknown Error";
       async runRequest(routeId, url, options, requestData, retries = 0) {
         while (this.limited) {
           const isGlobal = this.globalLimited;
-          let limit2;
+          let limit22;
           let timeout;
           let delay;
           if (isGlobal) {
             const offset2 = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
-            limit2 = this.manager.options.globalRequestsPerSecond;
+            limit22 = this.manager.options.globalRequestsPerSecond;
             timeout = this.manager.globalReset + offset2 - Date.now();
             if (!this.manager.globalDelay) {
               this.manager.globalDelay = this.globalDelayFor(timeout);
             }
             delay = this.manager.globalDelay;
           } else {
-            limit2 = this.limit;
+            limit22 = this.limit;
             timeout = this.getTimeToReset(routeId);
-            delay = sleep2(timeout);
+            delay = sleep3(timeout);
           }
           const rateLimitData = {
             global: isGlobal,
@@ -28772,7 +28772,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             route: routeId.bucketRoute,
             majorParameter: this.majorParameter,
             hash: this.hash,
-            limit: limit2,
+            limit: limit22,
             timeToReset: timeout,
             retryAfter: timeout,
             sublimitTimeout: 0,
@@ -28799,14 +28799,14 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         }
         const status = res.status;
         let retryAfter = 0;
-        const limit = res.headers.get("X-RateLimit-Limit");
+        const limit2 = res.headers.get("X-RateLimit-Limit");
         const remaining = res.headers.get("X-RateLimit-Remaining");
         const reset = res.headers.get("X-RateLimit-Reset-After");
         const hash = res.headers.get("X-RateLimit-Bucket");
         const retry = res.headers.get("Retry-After");
         const scope = res.headers.get("X-RateLimit-Scope") ?? "user";
         const offset = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
-        this.limit = limit ? Number(limit) : Number.POSITIVE_INFINITY;
+        this.limit = limit2 ? Number(limit2) : Number.POSITIVE_INFINITY;
         this.remaining = remaining ? Number(remaining) : 1;
         this.reset = reset ? Number(reset) * 1e3 + Date.now() + offset : Date.now();
         if (retry) retryAfter = Number(retry) * 1e3 + offset;
@@ -28835,14 +28835,14 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           return res;
         } else if (status === 429) {
           const isGlobal = this.globalLimited;
-          let limit2;
+          let limit22;
           let timeout;
           if (isGlobal) {
             const offset2 = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
-            limit2 = this.manager.options.globalRequestsPerSecond;
+            limit22 = this.manager.options.globalRequestsPerSecond;
             timeout = this.manager.globalReset + offset2 - Date.now();
           } else {
-            limit2 = this.limit;
+            limit22 = this.limit;
             timeout = this.getTimeToReset(routeId);
           }
           await onRateLimit(this.manager, {
@@ -28852,7 +28852,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             route: routeId.bucketRoute,
             majorParameter: this.majorParameter,
             hash: this.hash,
-            limit: limit2,
+            limit: limit22,
             timeToReset: timeout,
             retryAfter,
             sublimitTimeout: sublimitTimeout ?? 0,
@@ -28867,7 +28867,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
               `  Bucket         : ${routeId.bucketRoute}`,
               `  Major parameter: ${routeId.majorParameter}`,
               `  Hash           : ${this.hash}`,
-              `  Limit          : ${limit2}`,
+              `  Limit          : ${limit22}`,
               `  Retry After    : ${retryAfter}ms`,
               `  Sublimit       : ${sublimitTimeout ? `${sublimitTimeout}ms` : "None"}`,
               `  Scope          : ${scope}`
@@ -28882,7 +28882,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             }
             this.#sublimitPromise?.resolve();
             this.#sublimitPromise = null;
-            await sleep2(sublimitTimeout);
+            await sleep3(sublimitTimeout);
             let resolve;
             const promise = new Promise((res2) => resolve = res2);
             this.#sublimitPromise = { promise, resolve };
@@ -29061,7 +29061,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
        */
       async request(options) {
         const response = await this.queueRequest(options);
-        return parseResponse(response);
+        return parseResponse2(response);
       }
       /**
        * Sets the default agent to use for requests performed by this manager
@@ -29375,7 +29375,7 @@ var require_Messages = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/errors/Messages.js"(exports2, module2) {
     "use strict";
     var DjsErrorCodes = require_ErrorCodes();
-    var Messages = {
+    var Messages3 = {
       [DjsErrorCodes.ClientInvalidOption]: (prop, must) => `The ${prop} option must be ${must}`,
       [DjsErrorCodes.ClientInvalidProvidedShards]: "None of the provided shards were valid.",
       [DjsErrorCodes.ClientMissingIntents]: "Valid intents must be provided for the Client.",
@@ -29496,7 +29496,7 @@ var require_Messages = __commonJS({
       [DjsErrorCodes.BulkBanUsersOptionEmpty]: 'Option "users" array or collection is empty',
       [DjsErrorCodes.PollAlreadyExpired]: "This poll has already expired."
     };
-    module2.exports = Messages;
+    module2.exports = Messages3;
   }
 });
 
@@ -29505,7 +29505,7 @@ var require_DJSError = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/errors/DJSError.js"(exports2, module2) {
     "use strict";
     var ErrorCodes2 = require_ErrorCodes();
-    var Messages = require_Messages();
+    var Messages3 = require_Messages();
     function makeDiscordjsError(Base) {
       return class extends Base {
         static {
@@ -29523,7 +29523,7 @@ var require_DJSError = __commonJS({
     }
     function message(code, args) {
       if (!(code in ErrorCodes2)) throw new Error("Error code must be a valid DiscordjsErrorCodes");
-      const msg = Messages[code];
+      const msg = Messages3[code];
       if (!msg) throw new Error(`No message associated with error code: ${code}.`);
       if (typeof msg === "function") return msg(...args);
       if (!args?.length) return msg;
@@ -29551,7 +29551,7 @@ var require_errors2 = __commonJS({
 // ../../node_modules/.pnpm/lodash.snakecase@4.1.1/node_modules/lodash.snakecase/index.js
 var require_lodash = __commonJS({
   "../../node_modules/.pnpm/lodash.snakecase@4.1.1/node_modules/lodash.snakecase/index.js"(exports2, module2) {
-    var INFINITY = 1 / 0;
+    var INFINITY2 = 1 / 0;
     var symbolTag = "[object Symbol]";
     var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
     var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
@@ -29836,7 +29836,7 @@ var require_lodash = __commonJS({
         return symbolToString ? symbolToString.call(value) : "";
       }
       var result = value + "";
-      return result == "0" && 1 / value == -INFINITY ? "-0" : result;
+      return result == "0" && 1 / value == -INFINITY2 ? "-0" : result;
     }
     function createCompounder(callback) {
       return function(string) {
@@ -30722,7 +30722,7 @@ var require_cjs3 = __commonJS({
     var MaximumWorkerId = 0b11111n;
     var MaximumProcessId = 0b11111n;
     var MaximumIncrement = 0b111111111111n;
-    var _a;
+    var _a3;
     var _b;
     var _c;
     var _d;
@@ -30732,7 +30732,7 @@ var require_cjs3 = __commonJS({
        */
       constructor(epoch) {
         __publicField(this, "decode", this.deconstruct);
-        __publicField(this, _a);
+        __publicField(this, _a3);
         __publicField(this, _b, 0n);
         __publicField(this, _c, 1n);
         __publicField(this, _d, 0n);
@@ -30855,7 +30855,7 @@ var require_cjs3 = __commonJS({
         return typeA === typeof b ? typeA === "string" ? cmpString(a, b) : cmpBigInt(a, b) : cmpBigInt(BigInt(a), BigInt(b));
       }
     };
-    _a = EpochSymbol, _b = IncrementSymbol, _c = ProcessIdSymbol, _d = WorkerIdSymbol;
+    _a3 = EpochSymbol, _b = IncrementSymbol, _c = ProcessIdSymbol, _d = WorkerIdSymbol;
     __name(_Snowflake, "Snowflake");
     var Snowflake = _Snowflake;
     function cmpBigInt(a, b) {
@@ -33076,12 +33076,12 @@ var require_Util = __commonJS({
       await client.rest.patch(route, { body: updatedItems, reason });
       return updatedItems;
     }
-    function basename(path2, ext) {
-      const res = parse(path2);
+    function basename(path3, ext) {
+      const res = parse(path3);
       return ext && res.ext.startsWith(ext) ? res.name : res.base.split("?")[0];
     }
-    function cleanContent(str, channel) {
-      return str.replaceAll(
+    function cleanContent(str2, channel) {
+      return str2.replaceAll(
         /* eslint-disable max-len */
         /<(?:(?<type>@[!&]?|#)|(?:\/(?<commandName>[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai} ]+):)|(?:a?:(?<emojiName>[\w]+):))(?<id>\d{17,19})>/gu,
         (match, type, commandName, emojiName, id) => {
@@ -35560,7 +35560,7 @@ var require_DataResolver = __commonJS({
     "use strict";
     var { Buffer: Buffer2 } = require("node:buffer");
     var fs = require("node:fs/promises");
-    var path2 = require("node:path");
+    var path3 = require("node:path");
     var { fetch: fetch2 } = require_undici();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Invite2 = require_Invite();
@@ -35586,7 +35586,7 @@ var require_DataResolver = __commonJS({
           const res = await fetch2(resource);
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
-        const file = path2.resolve(resource);
+        const file = path3.resolve(resource);
         const stats = await fs.stat(file);
         if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
         return { data: await fs.readFile(file) };
@@ -37485,9 +37485,9 @@ var require_EntitlementManager = __commonJS({
         const data = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
         return this._add(data, cache);
       }
-      async _fetchMany({ limit, guild, user, skus, excludeEnded, excludeDeleted, cache, before, after } = {}) {
+      async _fetchMany({ limit: limit2, guild, user, skus, excludeEnded, excludeDeleted, cache, before, after } = {}) {
         const query = makeURLSearchParams2({
-          limit,
+          limit: limit2,
           guild_id: guild && this.client.guilds.resolveId(guild),
           user_id: user && this.client.users.resolveId(user),
           sku_ids: skus?.map((sku) => resolveSKUId(sku)).join(","),
@@ -37664,7 +37664,7 @@ var require_SubscriptionManager = __commonJS({
        */
       async fetch(options = {}) {
         if (typeof options !== "object") throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
-        const { after, before, cache, limit, sku, subscriptionId, user } = options;
+        const { after, before, cache, limit: limit2, sku, subscriptionId, user } = options;
         const skuId = resolveSKUId(sku);
         if (!skuId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sku", "SKUResolvable");
         if (subscriptionId) {
@@ -37672,7 +37672,7 @@ var require_SubscriptionManager = __commonJS({
           return this._add(subscription, cache);
         }
         const query = makeURLSearchParams2({
-          limit,
+          limit: limit2,
           user_id: this.client.users.resolveId(user) ?? void 0,
           sku_id: skuId,
           before,
@@ -37965,8 +37965,8 @@ var require_ClientApplication = __commonJS({
 // ../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/isArray.js
 var require_isArray = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/isArray.js"(exports2, module2) {
-    var isArray = Array.isArray;
-    module2.exports = isArray;
+    var isArray2 = Array.isArray;
+    module2.exports = isArray2;
   }
 });
 
@@ -38083,12 +38083,12 @@ var require_isSymbol = __commonJS({
 // ../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_isKey.js
 var require_isKey = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_isKey.js"(exports2, module2) {
-    var isArray = require_isArray();
+    var isArray2 = require_isArray();
     var isSymbol = require_isSymbol();
     var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
     var reIsPlainProp = /^\w*$/;
     function isKey(value, object) {
-      if (isArray(value)) {
+      if (isArray2(value)) {
         return false;
       }
       var type = typeof value;
@@ -38671,23 +38671,23 @@ var require_baseToString = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_baseToString.js"(exports2, module2) {
     var Symbol2 = require_Symbol();
     var arrayMap = require_arrayMap();
-    var isArray = require_isArray();
+    var isArray2 = require_isArray();
     var isSymbol = require_isSymbol();
-    var INFINITY = 1 / 0;
+    var INFINITY2 = 1 / 0;
     var symbolProto = Symbol2 ? Symbol2.prototype : void 0;
     var symbolToString = symbolProto ? symbolProto.toString : void 0;
     function baseToString(value) {
       if (typeof value == "string") {
         return value;
       }
-      if (isArray(value)) {
+      if (isArray2(value)) {
         return arrayMap(value, baseToString) + "";
       }
       if (isSymbol(value)) {
         return symbolToString ? symbolToString.call(value) : "";
       }
       var result = value + "";
-      return result == "0" && 1 / value == -INFINITY ? "-0" : result;
+      return result == "0" && 1 / value == -INFINITY2 ? "-0" : result;
     }
     module2.exports = baseToString;
   }
@@ -38707,12 +38707,12 @@ var require_toString = __commonJS({
 // ../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_castPath.js
 var require_castPath = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_castPath.js"(exports2, module2) {
-    var isArray = require_isArray();
+    var isArray2 = require_isArray();
     var isKey = require_isKey();
     var stringToPath = require_stringToPath();
     var toString = require_toString();
     function castPath(value, object) {
-      if (isArray(value)) {
+      if (isArray2(value)) {
         return value;
       }
       return isKey(value, object) ? [value] : stringToPath(toString(value));
@@ -38725,13 +38725,13 @@ var require_castPath = __commonJS({
 var require_toKey = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_toKey.js"(exports2, module2) {
     var isSymbol = require_isSymbol();
-    var INFINITY = 1 / 0;
+    var INFINITY2 = 1 / 0;
     function toKey(value) {
       if (typeof value == "string" || isSymbol(value)) {
         return value;
       }
       var result = value + "";
-      return result == "0" && 1 / value == -INFINITY ? "-0" : result;
+      return result == "0" && 1 / value == -INFINITY2 ? "-0" : result;
     }
     module2.exports = toKey;
   }
@@ -38742,11 +38742,11 @@ var require_baseGet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_baseGet.js"(exports2, module2) {
     var castPath = require_castPath();
     var toKey = require_toKey();
-    function baseGet(object, path2) {
-      path2 = castPath(path2, object);
-      var index = 0, length = path2.length;
+    function baseGet(object, path3) {
+      path3 = castPath(path3, object);
+      var index = 0, length = path3.length;
       while (object != null && index < length) {
-        object = object[toKey(path2[index++])];
+        object = object[toKey(path3[index++])];
       }
       return index && index == length ? object : void 0;
     }
@@ -38758,8 +38758,8 @@ var require_baseGet = __commonJS({
 var require_get = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/get.js"(exports2, module2) {
     var baseGet = require_baseGet();
-    function get(object, path2, defaultValue) {
-      var result = object == null ? void 0 : baseGet(object, path2);
+    function get(object, path3, defaultValue) {
+      var result = object == null ? void 0 : baseGet(object, path3);
       return result === void 0 ? defaultValue : result;
     }
     module2.exports = get;
@@ -38969,9 +38969,9 @@ var require_Set = __commonJS({
 // ../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/noop.js
 var require_noop = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/noop.js"(exports2, module2) {
-    function noop() {
+    function noop2() {
     }
-    module2.exports = noop;
+    module2.exports = noop2;
   }
 });
 
@@ -38993,10 +38993,10 @@ var require_setToArray = __commonJS({
 var require_createSet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/_createSet.js"(exports2, module2) {
     var Set2 = require_Set();
-    var noop = require_noop();
+    var noop2 = require_noop();
     var setToArray = require_setToArray();
-    var INFINITY = 1 / 0;
-    var createSet = !(Set2 && 1 / setToArray(new Set2([, -0]))[1] == INFINITY) ? noop : function(values) {
+    var INFINITY2 = 1 / 0;
+    var createSet = !(Set2 && 1 / setToArray(new Set2([, -0]))[1] == INFINITY2) ? noop2 : function(values) {
       return new Set2(values);
     };
     module2.exports = createSet;
@@ -42200,8 +42200,8 @@ var require_util9 = __commonJS({
     };
     exports2.nearestCommonProto = nearestCommonProto;
     var hardMixProtos = (ingredients, constructor, exclude = []) => {
-      var _a;
-      const base = (_a = (0, exports2.nearestCommonProto)(...ingredients)) !== null && _a !== void 0 ? _a : Object.prototype;
+      var _a3;
+      const base = (_a3 = (0, exports2.nearestCommonProto)(...ingredients)) !== null && _a3 !== void 0 ? _a3 : Object.prototype;
       const mixedProto = Object.create(base);
       const visitedProtos = (0, exports2.protoChain)(base);
       for (let prototype of ingredients) {
@@ -42331,8 +42331,8 @@ var require_mixin_tracking = __commonJS({
         frontier.forEach((item) => visited.add(item));
         const newFrontier = /* @__PURE__ */ new Set();
         frontier.forEach((item) => {
-          var _a;
-          const itemConstituents = (_a = mixins.get(item)) !== null && _a !== void 0 ? _a : (0, util_1.protoChain)(item.prototype).map((proto) => proto.constructor).filter((item2) => item2 !== null);
+          var _a3;
+          const itemConstituents = (_a3 = mixins.get(item)) !== null && _a3 !== void 0 ? _a3 : (0, util_1.protoChain)(item.prototype).map((proto) => proto.constructor).filter((item2) => item2 !== null);
           if (itemConstituents)
             itemConstituents.forEach((constituent) => {
               if (!visited.has(constituent) && !frontier.has(constituent))
@@ -42356,37 +42356,37 @@ var require_decorator = __commonJS({
     var util_1 = require_util9();
     var mixin_tracking_1 = require_mixin_tracking();
     var mergeObjectsOfDecorators = (o1, o2) => {
-      var _a, _b;
+      var _a3, _b;
       const allKeys = (0, util_1.unique)([...Object.getOwnPropertyNames(o1), ...Object.getOwnPropertyNames(o2)]);
       const mergedObject = {};
       for (let key of allKeys)
-        mergedObject[key] = (0, util_1.unique)([...(_a = o1 === null || o1 === void 0 ? void 0 : o1[key]) !== null && _a !== void 0 ? _a : [], ...(_b = o2 === null || o2 === void 0 ? void 0 : o2[key]) !== null && _b !== void 0 ? _b : []]);
+        mergedObject[key] = (0, util_1.unique)([...(_a3 = o1 === null || o1 === void 0 ? void 0 : o1[key]) !== null && _a3 !== void 0 ? _a3 : [], ...(_b = o2 === null || o2 === void 0 ? void 0 : o2[key]) !== null && _b !== void 0 ? _b : []]);
       return mergedObject;
     };
     var mergePropertyAndMethodDecorators = (d1, d2) => {
-      var _a, _b, _c, _d;
+      var _a3, _b, _c, _d;
       return {
-        property: mergeObjectsOfDecorators((_a = d1 === null || d1 === void 0 ? void 0 : d1.property) !== null && _a !== void 0 ? _a : {}, (_b = d2 === null || d2 === void 0 ? void 0 : d2.property) !== null && _b !== void 0 ? _b : {}),
+        property: mergeObjectsOfDecorators((_a3 = d1 === null || d1 === void 0 ? void 0 : d1.property) !== null && _a3 !== void 0 ? _a3 : {}, (_b = d2 === null || d2 === void 0 ? void 0 : d2.property) !== null && _b !== void 0 ? _b : {}),
         method: mergeObjectsOfDecorators((_c = d1 === null || d1 === void 0 ? void 0 : d1.method) !== null && _c !== void 0 ? _c : {}, (_d = d2 === null || d2 === void 0 ? void 0 : d2.method) !== null && _d !== void 0 ? _d : {})
       };
     };
     var mergeDecorators = (d1, d2) => {
-      var _a, _b, _c, _d, _e, _f;
+      var _a3, _b, _c, _d, _e, _f;
       return {
-        class: (0, util_1.unique)([...(_a = d1 === null || d1 === void 0 ? void 0 : d1.class) !== null && _a !== void 0 ? _a : [], ...(_b = d2 === null || d2 === void 0 ? void 0 : d2.class) !== null && _b !== void 0 ? _b : []]),
+        class: (0, util_1.unique)([...(_a3 = d1 === null || d1 === void 0 ? void 0 : d1.class) !== null && _a3 !== void 0 ? _a3 : [], ...(_b = d2 === null || d2 === void 0 ? void 0 : d2.class) !== null && _b !== void 0 ? _b : []]),
         static: mergePropertyAndMethodDecorators((_c = d1 === null || d1 === void 0 ? void 0 : d1.static) !== null && _c !== void 0 ? _c : {}, (_d = d2 === null || d2 === void 0 ? void 0 : d2.static) !== null && _d !== void 0 ? _d : {}),
         instance: mergePropertyAndMethodDecorators((_e = d1 === null || d1 === void 0 ? void 0 : d1.instance) !== null && _e !== void 0 ? _e : {}, (_f = d2 === null || d2 === void 0 ? void 0 : d2.instance) !== null && _f !== void 0 ? _f : {})
       };
     };
     var decorators = /* @__PURE__ */ new Map();
     var findAllConstituentClasses = (...classes) => {
-      var _a;
+      var _a3;
       const allClasses = /* @__PURE__ */ new Set();
       const frontier = /* @__PURE__ */ new Set([...classes]);
       while (frontier.size > 0) {
         for (let clazz of frontier) {
           const protoChainClasses = (0, util_1.protoChain)(clazz.prototype).map((proto) => proto.constructor);
-          const mixinClasses = (_a = (0, mixin_tracking_1.getMixinsForClass)(clazz)) !== null && _a !== void 0 ? _a : [];
+          const mixinClasses = (_a3 = (0, mixin_tracking_1.getMixinsForClass)(clazz)) !== null && _a3 !== void 0 ? _a3 : [];
           const potentiallyNewClasses = [...protoChainClasses, ...mixinClasses];
           const newClasses = potentiallyNewClasses.filter((c) => !allClasses.has(c));
           for (let newClass of newClasses)
@@ -42435,12 +42435,12 @@ var require_decorator = __commonJS({
       return decorator(clazz);
     });
     var decorateMember = (decorator) => ((object, key, ...otherArgs) => {
-      var _a, _b, _c;
+      var _a3, _b, _c;
       const decoratorTargetType = typeof object === "function" ? "static" : "instance";
       const decoratorType = typeof object[key] === "function" ? "method" : "property";
       const clazz = decoratorTargetType === "static" ? object : object.constructor;
       const decoratorsForClass = (0, exports2.getDecoratorsForClass)(clazz);
-      const decoratorsForTargetType = (_a = decoratorsForClass === null || decoratorsForClass === void 0 ? void 0 : decoratorsForClass[decoratorTargetType]) !== null && _a !== void 0 ? _a : {};
+      const decoratorsForTargetType = (_a3 = decoratorsForClass === null || decoratorsForClass === void 0 ? void 0 : decoratorsForClass[decoratorTargetType]) !== null && _a3 !== void 0 ? _a3 : {};
       decoratorsForClass[decoratorTargetType] = decoratorsForTargetType;
       let decoratorsForType = (_b = decoratorsForTargetType === null || decoratorsForTargetType === void 0 ? void 0 : decoratorsForTargetType[decoratorType]) !== null && _b !== void 0 ? _b : {};
       decoratorsForTargetType[decoratorType] = decoratorsForType;
@@ -42470,7 +42470,7 @@ var require_mixins = __commonJS({
     var decorator_1 = require_decorator();
     var mixin_tracking_1 = require_mixin_tracking();
     function Mixin(...constructors) {
-      var _a, _b, _c;
+      var _a3, _b, _c;
       const prototypes = constructors.map((constructor) => constructor.prototype);
       const initFunctionName = settings_1.settings.initFunction;
       if (initFunctionName !== null) {
@@ -42493,7 +42493,7 @@ var require_mixins = __commonJS({
       let DecoratedMixedClass = MixedClass;
       if (settings_1.settings.decoratorInheritance !== "none") {
         const classDecorators = settings_1.settings.decoratorInheritance === "deep" ? (0, decorator_1.deepDecoratorSearch)(...constructors) : (0, decorator_1.directDecoratorSearch)(...constructors);
-        for (let decorator of (_a = classDecorators === null || classDecorators === void 0 ? void 0 : classDecorators.class) !== null && _a !== void 0 ? _a : []) {
+        for (let decorator of (_a3 = classDecorators === null || classDecorators === void 0 ? void 0 : classDecorators.class) !== null && _a3 !== void 0 ? _a3 : []) {
           const result = decorator(DecoratedMixedClass);
           if (result) {
             DecoratedMixedClass = result;
@@ -48185,9 +48185,9 @@ var require_ReactionUserManager = __commonJS({
        * @param {FetchReactionUsersOptions} [options] Options for fetching the users
        * @returns {Promise<Collection<Snowflake, User>>}
        */
-      async fetch({ type = ReactionType.Normal, limit = 100, after } = {}) {
+      async fetch({ type = ReactionType.Normal, limit: limit2 = 100, after } = {}) {
         const message = this.reaction.message;
-        const query = makeURLSearchParams2({ limit, after, type });
+        const query = makeURLSearchParams2({ limit: limit2, after, type });
         const data = await this.client.rest.get(
           Routes3.channelMessageReaction(message.channelId, message.id, this.reaction.emoji.identifier),
           { query }
@@ -51819,9 +51819,9 @@ var require_MessageManager = __commonJS({
        * @param {FetchPollAnswerVotersOptions} options The options for fetching the poll answer voters
        * @returns {Promise<Collection<Snowflake, User>>}
        */
-      async fetchPollAnswerVoters({ messageId, answerId, after, limit }) {
+      async fetchPollAnswerVoters({ messageId, answerId, after, limit: limit2 }) {
         const voters = await this.client.rest.get(Routes3.pollAnswerVoters(this.channel.id, messageId, answerId), {
-          query: makeURLSearchParams2({ limit, after })
+          query: makeURLSearchParams2({ limit: limit2, after })
         });
         return voters.users.reduce((acc, user) => acc.set(user.id, this.client.users._add(user, false)), new Collection2());
       }
@@ -52901,9 +52901,9 @@ var require_PollAnswerVoterManager = __commonJS({
        * @param {BaseFetchPollAnswerVotersOptions} [options={}] Options for fetching the users
        * @returns {Promise<Collection<Snowflake, User>>}
        */
-      async fetch({ after, limit } = {}) {
+      async fetch({ after, limit: limit2 } = {}) {
         const poll = this.answer.poll;
-        const query = makeURLSearchParams2({ limit, after });
+        const query = makeURLSearchParams2({ limit: limit2, after });
         const data = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
           query
         });
@@ -52975,12 +52975,12 @@ var require_PollAnswer = __commonJS({
        * @returns {Promise<Collection<Snowflake, User>>}
        * @deprecated Use {@link PollAnswerVoterManager#fetch} instead
        */
-      fetchVoters({ after, limit } = {}) {
+      fetchVoters({ after, limit: limit2 } = {}) {
         if (!deprecationEmittedForFetchVoters) {
           process2.emitWarning("PollAnswer#fetchVoters is deprecated. Use PollAnswer#voters#fetch instead.");
           deprecationEmittedForFetchVoters = true;
         }
-        return this.voters.fetch({ after, limit });
+        return this.voters.fetch({ after, limit: limit2 });
       }
     };
     exports2.PollAnswer = PollAnswer;
@@ -54191,9 +54191,9 @@ var require_ThreadMemberManager = __commonJS({
         });
         return this._add(data, cache);
       }
-      async _fetchMany({ withMember, after, limit, cache } = {}) {
+      async _fetchMany({ withMember, after, limit: limit2, cache } = {}) {
         const data = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
-          query: makeURLSearchParams2({ with_member: withMember, after, limit })
+          query: makeURLSearchParams2({ with_member: withMember, after, limit: limit2 })
         });
         return data.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection2());
       }
@@ -54764,14 +54764,14 @@ var require_ThreadManager = __commonJS({
        * @param {boolean} [cache=true] Whether to cache the new thread objects if they aren't already
        * @returns {Promise<FetchedThreadsMore>}
        */
-      async fetchArchived({ type = "public", fetchAll = false, before, limit } = {}, cache = true) {
-        let path2 = Routes3.channelThreads(this.channel.id, type);
+      async fetchArchived({ type = "public", fetchAll = false, before, limit: limit2 } = {}, cache = true) {
+        let path3 = Routes3.channelThreads(this.channel.id, type);
         if (type === "private" && !fetchAll) {
-          path2 = Routes3.channelJoinedArchivedThreads(this.channel.id);
+          path3 = Routes3.channelJoinedArchivedThreads(this.channel.id);
         }
         let timestamp;
         let id;
-        const query = makeURLSearchParams2({ limit });
+        const query = makeURLSearchParams2({ limit: limit2 });
         if (before !== void 0) {
           if (before instanceof ThreadChannel || /^\d{17,19}$/.test(String(before))) {
             id = this.resolveId(before);
@@ -54791,7 +54791,7 @@ var require_ThreadManager = __commonJS({
             }
           }
         }
-        const raw = await this.client.rest.get(path2, { query });
+        const raw = await this.client.rest.get(path3, { query });
         return this.constructor._mapThreads(raw, this.client, { parent: this.channel, cache });
       }
       /**
@@ -63906,20 +63906,20 @@ var require_dist9 = __commonJS({
         }
       }
       resolveWorkerPath() {
-        const path2 = this.options.workerPath;
-        if (!path2) {
+        const path3 = this.options.workerPath;
+        if (!path3) {
           return (0, import_node_path.join)(__dirname, "defaultWorker.js");
         }
-        if ((0, import_node_path.isAbsolute)(path2)) {
-          return path2;
+        if ((0, import_node_path.isAbsolute)(path3)) {
+          return path3;
         }
-        if (/^\.\.?[/\\]/.test(path2)) {
-          return (0, import_node_path.resolve)(path2);
+        if (/^\.\.?[/\\]/.test(path3)) {
+          return (0, import_node_path.resolve)(path3);
         }
         try {
-          return require.resolve(path2);
+          return require.resolve(path3);
         } catch {
-          return (0, import_node_path.resolve)(path2);
+          return (0, import_node_path.resolve)(path3);
         }
       }
       async waitForWorkerReady(worker) {
@@ -67782,10 +67782,10 @@ var require_GuildBanManager = __commonJS({
        */
       async fetch(options) {
         if (!options) return this._fetchMany();
-        const { user, cache, force, limit, before, after } = options;
+        const { user, cache, force, limit: limit2, before, after } = options;
         const resolvedUser = this.client.users.resolveId(user ?? options);
         if (resolvedUser) return this._fetchSingle({ user: resolvedUser, cache, force });
-        if (!before && !after && !limit && cache === void 0) {
+        if (!before && !after && !limit2 && cache === void 0) {
           throw new DiscordjsError2(ErrorCodes2.FetchBanResolveId);
         }
         return this._fetchMany(options);
@@ -68909,9 +68909,9 @@ var require_GuildMemberManager = __commonJS({
        */
       fetch(options) {
         if (!options) return this._fetchMany();
-        const { user: users, limit, withPresences, cache, force } = options;
+        const { user: users, limit: limit2, withPresences, cache, force } = options;
         const resolvedUser = this.client.users.resolveId(users ?? options);
-        if (resolvedUser && !limit && !withPresences) return this._fetchSingle({ user: resolvedUser, cache, force });
+        if (resolvedUser && !limit2 && !withPresences) return this._fetchSingle({ user: resolvedUser, cache, force });
         const resolvedUsers = users?.map?.((user) => this.client.users.resolveId(user)) ?? resolvedUser ?? void 0;
         return this._fetchMany({ ...options, users: resolvedUsers });
       }
@@ -68924,7 +68924,7 @@ var require_GuildMemberManager = __commonJS({
         return this._add(data, cache);
       }
       async _fetchMany({
-        limit = 0,
+        limit: limit2 = 0,
         withPresences: presences,
         users,
         query,
@@ -68954,7 +68954,7 @@ var require_GuildMemberManager = __commonJS({
             for (const member of members.values()) {
               fetchedMembers.set(member.id, member);
             }
-            if (members.size < 1e3 || limit && fetchedMembers.size >= limit || i === chunk.count) {
+            if (members.size < 1e3 || limit2 && fetchedMembers.size >= limit2 || i === chunk.count) {
               cleanup();
               resolve(users && !Array.isArray(users) && fetchedMembers.size ? fetchedMembers.first() : fetchedMembers);
             }
@@ -68965,7 +68965,7 @@ var require_GuildMemberManager = __commonJS({
             user_ids: users,
             query,
             nonce,
-            limit
+            limit: limit2
           };
           const rateLimitHandler = (payload) => {
             if (payload.t === GatewayDispatchEvents.RateLimited && payload.d.meta.nonce === nonce) {
@@ -69003,9 +69003,9 @@ var require_GuildMemberManager = __commonJS({
        * @param {GuildSearchMembersOptions} options Options for searching members
        * @returns {Promise<Collection<Snowflake, GuildMember>>}
        */
-      async search({ query, limit, cache = true } = {}) {
+      async search({ query, limit: limit2, cache = true } = {}) {
         const data = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
-          query: makeURLSearchParams2({ query, limit })
+          query: makeURLSearchParams2({ query, limit: limit2 })
         });
         return data.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection2());
       }
@@ -69021,8 +69021,8 @@ var require_GuildMemberManager = __commonJS({
        * @param {GuildListMembersOptions} [options] Options for listing members
        * @returns {Promise<Collection<Snowflake, GuildMember>>}
        */
-      async list({ after, limit, cache = true } = {}) {
-        const query = makeURLSearchParams2({ limit, after });
+      async list({ after, limit: limit2, cache = true } = {}) {
+        const query = makeURLSearchParams2({ limit: limit2, after });
         const data = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
         return data.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection2());
       }
@@ -71363,11 +71363,11 @@ var require_Guild = __commonJS({
        *   .then(audit => console.log(audit.entries.first()))
        *   .catch(console.error);
        */
-      async fetchAuditLogs({ before, after, limit, user, type } = {}) {
+      async fetchAuditLogs({ before, after, limit: limit2, user, type } = {}) {
         const query = makeURLSearchParams2({
           before: before?.id ?? before,
           after: after?.id ?? after,
-          limit,
+          limit: limit2,
           action_type: type
         });
         if (user) {
@@ -73217,13 +73217,13 @@ var require_Client = __commonJS({
       constructor(options) {
         super(options);
         const data = require("node:worker_threads").workerData ?? process.env;
-        const defaults = Options.createDefault();
-        if (this.options.shards === defaults.shards) {
+        const defaults2 = Options.createDefault();
+        if (this.options.shards === defaults2.shards) {
           if ("SHARDS" in data) {
             this.options.shards = JSON.parse(data.SHARDS);
           }
         }
-        if (this.options.shardCount === defaults.shardCount) {
+        if (this.options.shardCount === defaults2.shardCount) {
           if ("SHARD_COUNT" in data) {
             this.options.shardCount = Number(data.SHARD_COUNT);
           } else if (Array.isArray(this.options.shards)) {
@@ -73660,10 +73660,10 @@ var require_Shard = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.3/node_modules/discord.js/src/sharding/Shard.js"(exports2, module2) {
     "use strict";
     var EventEmitter = require("node:events");
-    var path2 = require("node:path");
+    var path3 = require("node:path");
     var process2 = require("node:process");
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
-    var { setTimeout: sleep2 } = require("node:timers/promises");
+    var { setTimeout: sleep3 } = require("node:timers/promises");
     var { SHARE_ENV } = require("node:worker_threads");
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ShardEvents = require_ShardEvents();
@@ -73712,14 +73712,14 @@ var require_Shard = __commonJS({
         this._exitListener = this._handleExit.bind(this, void 0, timeout);
         switch (this.manager.mode) {
           case "process":
-            this.process = childProcess.fork(path2.resolve(this.manager.file), this.args, {
+            this.process = childProcess.fork(path3.resolve(this.manager.file), this.args, {
               env: this.env,
               execArgv: this.execArgv,
               silent: this.silent
             }).on("message", this._handleMessage.bind(this)).on("exit", this._exitListener);
             break;
           case "worker":
-            this.worker = new Worker(path2.resolve(this.manager.file), {
+            this.worker = new Worker(path3.resolve(this.manager.file), {
               workerData: this.env,
               env: SHARE_ENV,
               execArgv: this.execArgv,
@@ -73789,7 +73789,7 @@ var require_Shard = __commonJS({
        */
       async respawn({ delay = 500, timeout = 3e4 } = {}) {
         this.kill();
-        if (delay > 0) await sleep2(delay);
+        if (delay > 0) await sleep3(delay);
         return this.spawn(timeout);
       }
       /**
@@ -73981,9 +73981,9 @@ var require_ShardingManager = __commonJS({
     "use strict";
     var EventEmitter = require("node:events");
     var fs = require("node:fs");
-    var path2 = require("node:path");
+    var path3 = require("node:path");
     var process2 = require("node:process");
-    var { setTimeout: sleep2 } = require("node:timers/promises");
+    var { setTimeout: sleep3 } = require("node:timers/promises");
     var { Collection: Collection2 } = require_dist6();
     var Shard = require_Shard();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -74026,7 +74026,7 @@ var require_ShardingManager = __commonJS({
         };
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
-        if (!path2.isAbsolute(file)) this.file = path2.resolve(process2.cwd(), file);
+        if (!path3.isAbsolute(file)) this.file = path3.resolve(process2.cwd(), file);
         const stats = fs.statSync(this.file);
         if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
@@ -74125,7 +74125,7 @@ var require_ShardingManager = __commonJS({
           const promises = [];
           const shard = this.createShard(shardId);
           promises.push(shard.spawn(timeout));
-          if (delay > 0 && this.shards.size !== this.shardList.length) promises.push(sleep2(delay));
+          if (delay > 0 && this.shards.size !== this.shardList.length) promises.push(sleep3(delay));
           await Promise.all(promises);
         }
         return this.shards;
@@ -74210,7 +74210,7 @@ var require_ShardingManager = __commonJS({
         let s = 0;
         for (const shard of this.shards.values()) {
           const promises = [shard.respawn({ delay: respawnDelay, timeout })];
-          if (++s < this.shards.size && shardDelay > 0) promises.push(sleep2(shardDelay));
+          if (++s < this.shards.size && shardDelay > 0) promises.push(sleep3(shardDelay));
           await Promise.all(promises);
         }
         return this.shards;
@@ -76319,7 +76319,7 @@ async function handleGuess(interaction, index) {
   clearTimers(game);
   await endRound(interaction.channel, game);
 }
-async function transitionToReveal(_client, channel, game) {
+async function transitionToReveal(_client2, channel, game) {
   game.phase = "reveal";
   const revealEnd = Date.now() + REVEAL_SECONDS * 1e3;
   game.timers.revealEnd = revealEnd;
@@ -76396,7 +76396,7 @@ async function transitionToVoting(channel, game) {
     );
   }, seconds * 1e3);
 }
-async function transitionToGuessing(_client, channel, game) {
+async function transitionToGuessing(_client2, channel, game) {
   if (game.phase !== "voting") return;
   game.phase = "guessing";
   game.guessDeadline = Date.now() + GUESSING_SECONDS * 1e3;
@@ -79842,6 +79842,7205 @@ function guessTimeoutEmbed(word) {
   };
 }
 
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/tslib.mjs
+function __classPrivateFieldSet2(receiver, state, value, kind, f) {
+  if (kind === "m")
+    throw new TypeError("Private method is not writable");
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
+}
+function __classPrivateFieldGet2(receiver, state, kind, f) {
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/uuid.mjs
+var uuid4 = function() {
+  const { crypto: crypto2 } = globalThis;
+  if (crypto2?.randomUUID) {
+    uuid4 = crypto2.randomUUID.bind(crypto2);
+    return crypto2.randomUUID();
+  }
+  const u8 = new Uint8Array(1);
+  const randomByte = crypto2 ? () => crypto2.getRandomValues(u8)[0] : () => Math.random() * 255 & 255;
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => (+c ^ randomByte() & 15 >> +c / 4).toString(16));
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/errors.mjs
+function isAbortError(err) {
+  return typeof err === "object" && err !== null && // Spec-compliant fetch implementations
+  ("name" in err && err.name === "AbortError" || // Expo fetch
+  "message" in err && String(err.message).includes("FetchRequestCanceledException"));
+}
+var castToError = (err) => {
+  if (err instanceof Error)
+    return err;
+  if (typeof err === "object" && err !== null) {
+    try {
+      if (Object.prototype.toString.call(err) === "[object Error]") {
+        const error = new Error(err.message, err.cause ? { cause: err.cause } : {});
+        if (err.stack)
+          error.stack = err.stack;
+        if (err.cause && !error.cause)
+          error.cause = err.cause;
+        if (err.name)
+          error.name = err.name;
+        return error;
+      }
+    } catch {
+    }
+    try {
+      return new Error(JSON.stringify(err));
+    } catch {
+    }
+  }
+  return new Error(err);
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/core/error.mjs
+var OpenAIError = class extends Error {
+};
+var APIError = class _APIError extends OpenAIError {
+  constructor(status, error, message, headers) {
+    super(`${_APIError.makeMessage(status, error, message)}`);
+    this.status = status;
+    this.headers = headers;
+    this.requestID = headers?.get("x-request-id");
+    this.error = error;
+    const data = error;
+    this.code = data?.["code"];
+    this.param = data?.["param"];
+    this.type = data?.["type"];
+  }
+  static makeMessage(status, error, message) {
+    const msg = error?.message ? typeof error.message === "string" ? error.message : JSON.stringify(error.message) : error ? JSON.stringify(error) : message;
+    if (status && msg) {
+      return `${status} ${msg}`;
+    }
+    if (status) {
+      return `${status} status code (no body)`;
+    }
+    if (msg) {
+      return msg;
+    }
+    return "(no status code or body)";
+  }
+  static generate(status, errorResponse, message, headers) {
+    if (!status || !headers) {
+      return new APIConnectionError({ message, cause: castToError(errorResponse) });
+    }
+    const error = errorResponse?.["error"];
+    if (status === 400) {
+      return new BadRequestError(status, error, message, headers);
+    }
+    if (status === 401) {
+      return new AuthenticationError(status, error, message, headers);
+    }
+    if (status === 403) {
+      return new PermissionDeniedError(status, error, message, headers);
+    }
+    if (status === 404) {
+      return new NotFoundError(status, error, message, headers);
+    }
+    if (status === 409) {
+      return new ConflictError(status, error, message, headers);
+    }
+    if (status === 422) {
+      return new UnprocessableEntityError(status, error, message, headers);
+    }
+    if (status === 429) {
+      return new RateLimitError(status, error, message, headers);
+    }
+    if (status >= 500) {
+      return new InternalServerError(status, error, message, headers);
+    }
+    return new _APIError(status, error, message, headers);
+  }
+};
+var APIUserAbortError = class extends APIError {
+  constructor({ message } = {}) {
+    super(void 0, void 0, message || "Request was aborted.", void 0);
+  }
+};
+var APIConnectionError = class extends APIError {
+  constructor({ message, cause }) {
+    super(void 0, void 0, message || "Connection error.", void 0);
+    if (cause)
+      this.cause = cause;
+  }
+};
+var APIConnectionTimeoutError = class extends APIConnectionError {
+  constructor({ message } = {}) {
+    super({ message: message ?? "Request timed out." });
+  }
+};
+var BadRequestError = class extends APIError {
+};
+var AuthenticationError = class extends APIError {
+};
+var PermissionDeniedError = class extends APIError {
+};
+var NotFoundError = class extends APIError {
+};
+var ConflictError = class extends APIError {
+};
+var UnprocessableEntityError = class extends APIError {
+};
+var RateLimitError = class extends APIError {
+};
+var InternalServerError = class extends APIError {
+};
+var LengthFinishReasonError = class extends OpenAIError {
+  constructor() {
+    super(`Could not parse response content as the length limit was reached`);
+  }
+};
+var ContentFilterFinishReasonError = class extends OpenAIError {
+  constructor() {
+    super(`Could not parse response content as the request was rejected by the content filter`);
+  }
+};
+var InvalidWebhookSignatureError = class extends Error {
+  constructor(message) {
+    super(message);
+  }
+};
+var OAuthError = class extends APIError {
+  constructor(status, error, headers) {
+    let finalMessage = "OAuth2 authentication error";
+    let error_code = void 0;
+    if (error && typeof error === "object") {
+      const errorData = error;
+      error_code = errorData["error"];
+      const description = errorData["error_description"];
+      if (description && typeof description === "string") {
+        finalMessage = description;
+      } else if (error_code) {
+        finalMessage = error_code;
+      }
+    }
+    super(status, error, finalMessage, headers);
+    this.error_code = error_code;
+  }
+};
+var SubjectTokenProviderError = class extends OpenAIError {
+  constructor(message, provider, cause) {
+    super(message);
+    this.provider = provider;
+    this.cause = cause;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/values.mjs
+var startsWithSchemeRegexp = /^[a-z][a-z0-9+.-]*:/i;
+var isAbsoluteURL = (url) => {
+  return startsWithSchemeRegexp.test(url);
+};
+var isArray = (val) => (isArray = Array.isArray, isArray(val));
+var isReadonlyArray = isArray;
+function maybeObj(x) {
+  if (typeof x !== "object") {
+    return {};
+  }
+  return x ?? {};
+}
+function isEmptyObj(obj) {
+  if (!obj)
+    return true;
+  for (const _k in obj)
+    return false;
+  return true;
+}
+function hasOwn(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+function isObj(obj) {
+  return obj != null && typeof obj === "object" && !Array.isArray(obj);
+}
+var validatePositiveInteger = (name, n) => {
+  if (typeof n !== "number" || !Number.isInteger(n)) {
+    throw new OpenAIError(`${name} must be an integer`);
+  }
+  if (n < 0) {
+    throw new OpenAIError(`${name} must be a positive integer`);
+  }
+  return n;
+};
+var safeJSON = (text) => {
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    return void 0;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/sleep.mjs
+var sleep2 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/version.mjs
+var VERSION = "6.35.0";
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/detect-platform.mjs
+var isRunningInBrowser = () => {
+  return (
+    // @ts-ignore
+    typeof window !== "undefined" && // @ts-ignore
+    typeof window.document !== "undefined" && // @ts-ignore
+    typeof navigator !== "undefined"
+  );
+};
+function getDetectedPlatform() {
+  if (typeof Deno !== "undefined" && Deno.build != null) {
+    return "deno";
+  }
+  if (typeof EdgeRuntime !== "undefined") {
+    return "edge";
+  }
+  if (Object.prototype.toString.call(typeof globalThis.process !== "undefined" ? globalThis.process : 0) === "[object process]") {
+    return "node";
+  }
+  return "unknown";
+}
+var getPlatformProperties = () => {
+  const detectedPlatform = getDetectedPlatform();
+  if (detectedPlatform === "deno") {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": normalizePlatform(Deno.build.os),
+      "X-Stainless-Arch": normalizeArch(Deno.build.arch),
+      "X-Stainless-Runtime": "deno",
+      "X-Stainless-Runtime-Version": typeof Deno.version === "string" ? Deno.version : Deno.version?.deno ?? "unknown"
+    };
+  }
+  if (typeof EdgeRuntime !== "undefined") {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": "Unknown",
+      "X-Stainless-Arch": `other:${EdgeRuntime}`,
+      "X-Stainless-Runtime": "edge",
+      "X-Stainless-Runtime-Version": globalThis.process.version
+    };
+  }
+  if (detectedPlatform === "node") {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": normalizePlatform(globalThis.process.platform ?? "unknown"),
+      "X-Stainless-Arch": normalizeArch(globalThis.process.arch ?? "unknown"),
+      "X-Stainless-Runtime": "node",
+      "X-Stainless-Runtime-Version": globalThis.process.version ?? "unknown"
+    };
+  }
+  const browserInfo = getBrowserInfo();
+  if (browserInfo) {
+    return {
+      "X-Stainless-Lang": "js",
+      "X-Stainless-Package-Version": VERSION,
+      "X-Stainless-OS": "Unknown",
+      "X-Stainless-Arch": "unknown",
+      "X-Stainless-Runtime": `browser:${browserInfo.browser}`,
+      "X-Stainless-Runtime-Version": browserInfo.version
+    };
+  }
+  return {
+    "X-Stainless-Lang": "js",
+    "X-Stainless-Package-Version": VERSION,
+    "X-Stainless-OS": "Unknown",
+    "X-Stainless-Arch": "unknown",
+    "X-Stainless-Runtime": "unknown",
+    "X-Stainless-Runtime-Version": "unknown"
+  };
+};
+function getBrowserInfo() {
+  if (typeof navigator === "undefined" || !navigator) {
+    return null;
+  }
+  const browserPatterns = [
+    { key: "edge", pattern: /Edge(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "ie", pattern: /MSIE(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "ie", pattern: /Trident(?:.*rv\:(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "chrome", pattern: /Chrome(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "firefox", pattern: /Firefox(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+    { key: "safari", pattern: /(?:Version\W+(\d+)\.(\d+)(?:\.(\d+))?)?(?:\W+Mobile\S*)?\W+Safari/ }
+  ];
+  for (const { key, pattern } of browserPatterns) {
+    const match = pattern.exec(navigator.userAgent);
+    if (match) {
+      const major = match[1] || 0;
+      const minor = match[2] || 0;
+      const patch = match[3] || 0;
+      return { browser: key, version: `${major}.${minor}.${patch}` };
+    }
+  }
+  return null;
+}
+var normalizeArch = (arch) => {
+  if (arch === "x32")
+    return "x32";
+  if (arch === "x86_64" || arch === "x64")
+    return "x64";
+  if (arch === "arm")
+    return "arm";
+  if (arch === "aarch64" || arch === "arm64")
+    return "arm64";
+  if (arch)
+    return `other:${arch}`;
+  return "unknown";
+};
+var normalizePlatform = (platform) => {
+  platform = platform.toLowerCase();
+  if (platform.includes("ios"))
+    return "iOS";
+  if (platform === "android")
+    return "Android";
+  if (platform === "darwin")
+    return "MacOS";
+  if (platform === "win32")
+    return "Windows";
+  if (platform === "freebsd")
+    return "FreeBSD";
+  if (platform === "openbsd")
+    return "OpenBSD";
+  if (platform === "linux")
+    return "Linux";
+  if (platform)
+    return `Other:${platform}`;
+  return "Unknown";
+};
+var _platformHeaders;
+var getPlatformHeaders = () => {
+  return _platformHeaders ?? (_platformHeaders = getPlatformProperties());
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/shims.mjs
+function getDefaultFetch() {
+  if (typeof fetch !== "undefined") {
+    return fetch;
+  }
+  throw new Error("`fetch` is not defined as a global; Either pass `fetch` to the client, `new OpenAI({ fetch })` or polyfill the global, `globalThis.fetch = fetch`");
+}
+function makeReadableStream(...args) {
+  const ReadableStream2 = globalThis.ReadableStream;
+  if (typeof ReadableStream2 === "undefined") {
+    throw new Error("`ReadableStream` is not defined as a global; You will need to polyfill it, `globalThis.ReadableStream = ReadableStream`");
+  }
+  return new ReadableStream2(...args);
+}
+function ReadableStreamFrom(iterable) {
+  let iter = Symbol.asyncIterator in iterable ? iterable[Symbol.asyncIterator]() : iterable[Symbol.iterator]();
+  return makeReadableStream({
+    start() {
+    },
+    async pull(controller) {
+      const { done, value } = await iter.next();
+      if (done) {
+        controller.close();
+      } else {
+        controller.enqueue(value);
+      }
+    },
+    async cancel() {
+      await iter.return?.();
+    }
+  });
+}
+function ReadableStreamToAsyncIterable(stream) {
+  if (stream[Symbol.asyncIterator])
+    return stream;
+  const reader = stream.getReader();
+  return {
+    async next() {
+      try {
+        const result = await reader.read();
+        if (result?.done)
+          reader.releaseLock();
+        return result;
+      } catch (e) {
+        reader.releaseLock();
+        throw e;
+      }
+    },
+    async return() {
+      const cancelPromise = reader.cancel();
+      reader.releaseLock();
+      await cancelPromise;
+      return { done: true, value: void 0 };
+    },
+    [Symbol.asyncIterator]() {
+      return this;
+    }
+  };
+}
+async function CancelReadableStream(stream) {
+  if (stream === null || typeof stream !== "object")
+    return;
+  if (stream[Symbol.asyncIterator]) {
+    await stream[Symbol.asyncIterator]().return?.();
+    return;
+  }
+  const reader = stream.getReader();
+  const cancelPromise = reader.cancel();
+  reader.releaseLock();
+  await cancelPromise;
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/request-options.mjs
+var FallbackEncoder = ({ headers, body }) => {
+  return {
+    bodyHeaders: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(body)
+  };
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/qs/formats.mjs
+var default_format = "RFC3986";
+var default_formatter = (v) => String(v);
+var formatters = {
+  RFC1738: (v) => String(v).replace(/%20/g, "+"),
+  RFC3986: default_formatter
+};
+var RFC1738 = "RFC1738";
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/qs/utils.mjs
+var has = (obj, key) => (has = Object.hasOwn ?? Function.prototype.call.bind(Object.prototype.hasOwnProperty), has(obj, key));
+var hex_table = /* @__PURE__ */ (() => {
+  const array = [];
+  for (let i = 0; i < 256; ++i) {
+    array.push("%" + ((i < 16 ? "0" : "") + i.toString(16)).toUpperCase());
+  }
+  return array;
+})();
+var limit = 1024;
+var encode = (str2, _defaultEncoder, charset, _kind, format) => {
+  if (str2.length === 0) {
+    return str2;
+  }
+  let string = str2;
+  if (typeof str2 === "symbol") {
+    string = Symbol.prototype.toString.call(str2);
+  } else if (typeof str2 !== "string") {
+    string = String(str2);
+  }
+  if (charset === "iso-8859-1") {
+    return escape(string).replace(/%u[0-9a-f]{4}/gi, function($0) {
+      return "%26%23" + parseInt($0.slice(2), 16) + "%3B";
+    });
+  }
+  let out = "";
+  for (let j = 0; j < string.length; j += limit) {
+    const segment = string.length >= limit ? string.slice(j, j + limit) : string;
+    const arr = [];
+    for (let i = 0; i < segment.length; ++i) {
+      let c = segment.charCodeAt(i);
+      if (c === 45 || // -
+      c === 46 || // .
+      c === 95 || // _
+      c === 126 || // ~
+      c >= 48 && c <= 57 || // 0-9
+      c >= 65 && c <= 90 || // a-z
+      c >= 97 && c <= 122 || // A-Z
+      format === RFC1738 && (c === 40 || c === 41)) {
+        arr[arr.length] = segment.charAt(i);
+        continue;
+      }
+      if (c < 128) {
+        arr[arr.length] = hex_table[c];
+        continue;
+      }
+      if (c < 2048) {
+        arr[arr.length] = hex_table[192 | c >> 6] + hex_table[128 | c & 63];
+        continue;
+      }
+      if (c < 55296 || c >= 57344) {
+        arr[arr.length] = hex_table[224 | c >> 12] + hex_table[128 | c >> 6 & 63] + hex_table[128 | c & 63];
+        continue;
+      }
+      i += 1;
+      c = 65536 + ((c & 1023) << 10 | segment.charCodeAt(i) & 1023);
+      arr[arr.length] = hex_table[240 | c >> 18] + hex_table[128 | c >> 12 & 63] + hex_table[128 | c >> 6 & 63] + hex_table[128 | c & 63];
+    }
+    out += arr.join("");
+  }
+  return out;
+};
+function is_buffer(obj) {
+  if (!obj || typeof obj !== "object") {
+    return false;
+  }
+  return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+}
+function maybe_map(val, fn) {
+  if (isArray(val)) {
+    const mapped = [];
+    for (let i = 0; i < val.length; i += 1) {
+      mapped.push(fn(val[i]));
+    }
+    return mapped;
+  }
+  return fn(val);
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/qs/stringify.mjs
+var array_prefix_generators = {
+  brackets(prefix) {
+    return String(prefix) + "[]";
+  },
+  comma: "comma",
+  indices(prefix, key) {
+    return String(prefix) + "[" + key + "]";
+  },
+  repeat(prefix) {
+    return String(prefix);
+  }
+};
+var push_to_array = function(arr, value_or_array) {
+  Array.prototype.push.apply(arr, isArray(value_or_array) ? value_or_array : [value_or_array]);
+};
+var toISOString;
+var defaults = {
+  addQueryPrefix: false,
+  allowDots: false,
+  allowEmptyArrays: false,
+  arrayFormat: "indices",
+  charset: "utf-8",
+  charsetSentinel: false,
+  delimiter: "&",
+  encode: true,
+  encodeDotInKeys: false,
+  encoder: encode,
+  encodeValuesOnly: false,
+  format: default_format,
+  formatter: default_formatter,
+  /** @deprecated */
+  indices: false,
+  serializeDate(date) {
+    return (toISOString ?? (toISOString = Function.prototype.call.bind(Date.prototype.toISOString)))(date);
+  },
+  skipNulls: false,
+  strictNullHandling: false
+};
+function is_non_nullish_primitive(v) {
+  return typeof v === "string" || typeof v === "number" || typeof v === "boolean" || typeof v === "symbol" || typeof v === "bigint";
+}
+var sentinel = {};
+function inner_stringify(object, prefix, generateArrayPrefix, commaRoundTrip, allowEmptyArrays, strictNullHandling, skipNulls, encodeDotInKeys, encoder, filter, sort, allowDots, serializeDate, format, formatter, encodeValuesOnly, charset, sideChannel) {
+  let obj = object;
+  let tmp_sc = sideChannel;
+  let step = 0;
+  let find_flag = false;
+  while ((tmp_sc = tmp_sc.get(sentinel)) !== void 0 && !find_flag) {
+    const pos = tmp_sc.get(object);
+    step += 1;
+    if (typeof pos !== "undefined") {
+      if (pos === step) {
+        throw new RangeError("Cyclic object value");
+      } else {
+        find_flag = true;
+      }
+    }
+    if (typeof tmp_sc.get(sentinel) === "undefined") {
+      step = 0;
+    }
+  }
+  if (typeof filter === "function") {
+    obj = filter(prefix, obj);
+  } else if (obj instanceof Date) {
+    obj = serializeDate?.(obj);
+  } else if (generateArrayPrefix === "comma" && isArray(obj)) {
+    obj = maybe_map(obj, function(value) {
+      if (value instanceof Date) {
+        return serializeDate?.(value);
+      }
+      return value;
+    });
+  }
+  if (obj === null) {
+    if (strictNullHandling) {
+      return encoder && !encodeValuesOnly ? (
+        // @ts-expect-error
+        encoder(prefix, defaults.encoder, charset, "key", format)
+      ) : prefix;
+    }
+    obj = "";
+  }
+  if (is_non_nullish_primitive(obj) || is_buffer(obj)) {
+    if (encoder) {
+      const key_value = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder, charset, "key", format);
+      return [
+        formatter?.(key_value) + "=" + // @ts-expect-error
+        formatter?.(encoder(obj, defaults.encoder, charset, "value", format))
+      ];
+    }
+    return [formatter?.(prefix) + "=" + formatter?.(String(obj))];
+  }
+  const values = [];
+  if (typeof obj === "undefined") {
+    return values;
+  }
+  let obj_keys;
+  if (generateArrayPrefix === "comma" && isArray(obj)) {
+    if (encodeValuesOnly && encoder) {
+      obj = maybe_map(obj, encoder);
+    }
+    obj_keys = [{ value: obj.length > 0 ? obj.join(",") || null : void 0 }];
+  } else if (isArray(filter)) {
+    obj_keys = filter;
+  } else {
+    const keys = Object.keys(obj);
+    obj_keys = sort ? keys.sort(sort) : keys;
+  }
+  const encoded_prefix = encodeDotInKeys ? String(prefix).replace(/\./g, "%2E") : String(prefix);
+  const adjusted_prefix = commaRoundTrip && isArray(obj) && obj.length === 1 ? encoded_prefix + "[]" : encoded_prefix;
+  if (allowEmptyArrays && isArray(obj) && obj.length === 0) {
+    return adjusted_prefix + "[]";
+  }
+  for (let j = 0; j < obj_keys.length; ++j) {
+    const key = obj_keys[j];
+    const value = (
+      // @ts-ignore
+      typeof key === "object" && typeof key.value !== "undefined" ? key.value : obj[key]
+    );
+    if (skipNulls && value === null) {
+      continue;
+    }
+    const encoded_key = allowDots && encodeDotInKeys ? key.replace(/\./g, "%2E") : key;
+    const key_prefix = isArray(obj) ? typeof generateArrayPrefix === "function" ? generateArrayPrefix(adjusted_prefix, encoded_key) : adjusted_prefix : adjusted_prefix + (allowDots ? "." + encoded_key : "[" + encoded_key + "]");
+    sideChannel.set(object, step);
+    const valueSideChannel = /* @__PURE__ */ new WeakMap();
+    valueSideChannel.set(sentinel, sideChannel);
+    push_to_array(values, inner_stringify(
+      value,
+      key_prefix,
+      generateArrayPrefix,
+      commaRoundTrip,
+      allowEmptyArrays,
+      strictNullHandling,
+      skipNulls,
+      encodeDotInKeys,
+      // @ts-ignore
+      generateArrayPrefix === "comma" && encodeValuesOnly && isArray(obj) ? null : encoder,
+      filter,
+      sort,
+      allowDots,
+      serializeDate,
+      format,
+      formatter,
+      encodeValuesOnly,
+      charset,
+      valueSideChannel
+    ));
+  }
+  return values;
+}
+function normalize_stringify_options(opts = defaults) {
+  if (typeof opts.allowEmptyArrays !== "undefined" && typeof opts.allowEmptyArrays !== "boolean") {
+    throw new TypeError("`allowEmptyArrays` option can only be `true` or `false`, when provided");
+  }
+  if (typeof opts.encodeDotInKeys !== "undefined" && typeof opts.encodeDotInKeys !== "boolean") {
+    throw new TypeError("`encodeDotInKeys` option can only be `true` or `false`, when provided");
+  }
+  if (opts.encoder !== null && typeof opts.encoder !== "undefined" && typeof opts.encoder !== "function") {
+    throw new TypeError("Encoder has to be a function.");
+  }
+  const charset = opts.charset || defaults.charset;
+  if (typeof opts.charset !== "undefined" && opts.charset !== "utf-8" && opts.charset !== "iso-8859-1") {
+    throw new TypeError("The charset option must be either utf-8, iso-8859-1, or undefined");
+  }
+  let format = default_format;
+  if (typeof opts.format !== "undefined") {
+    if (!has(formatters, opts.format)) {
+      throw new TypeError("Unknown format option provided.");
+    }
+    format = opts.format;
+  }
+  const formatter = formatters[format];
+  let filter = defaults.filter;
+  if (typeof opts.filter === "function" || isArray(opts.filter)) {
+    filter = opts.filter;
+  }
+  let arrayFormat;
+  if (opts.arrayFormat && opts.arrayFormat in array_prefix_generators) {
+    arrayFormat = opts.arrayFormat;
+  } else if ("indices" in opts) {
+    arrayFormat = opts.indices ? "indices" : "repeat";
+  } else {
+    arrayFormat = defaults.arrayFormat;
+  }
+  if ("commaRoundTrip" in opts && typeof opts.commaRoundTrip !== "boolean") {
+    throw new TypeError("`commaRoundTrip` must be a boolean, or absent");
+  }
+  const allowDots = typeof opts.allowDots === "undefined" ? !!opts.encodeDotInKeys === true ? true : defaults.allowDots : !!opts.allowDots;
+  return {
+    addQueryPrefix: typeof opts.addQueryPrefix === "boolean" ? opts.addQueryPrefix : defaults.addQueryPrefix,
+    // @ts-ignore
+    allowDots,
+    allowEmptyArrays: typeof opts.allowEmptyArrays === "boolean" ? !!opts.allowEmptyArrays : defaults.allowEmptyArrays,
+    arrayFormat,
+    charset,
+    charsetSentinel: typeof opts.charsetSentinel === "boolean" ? opts.charsetSentinel : defaults.charsetSentinel,
+    commaRoundTrip: !!opts.commaRoundTrip,
+    delimiter: typeof opts.delimiter === "undefined" ? defaults.delimiter : opts.delimiter,
+    encode: typeof opts.encode === "boolean" ? opts.encode : defaults.encode,
+    encodeDotInKeys: typeof opts.encodeDotInKeys === "boolean" ? opts.encodeDotInKeys : defaults.encodeDotInKeys,
+    encoder: typeof opts.encoder === "function" ? opts.encoder : defaults.encoder,
+    encodeValuesOnly: typeof opts.encodeValuesOnly === "boolean" ? opts.encodeValuesOnly : defaults.encodeValuesOnly,
+    filter,
+    format,
+    formatter,
+    serializeDate: typeof opts.serializeDate === "function" ? opts.serializeDate : defaults.serializeDate,
+    skipNulls: typeof opts.skipNulls === "boolean" ? opts.skipNulls : defaults.skipNulls,
+    // @ts-ignore
+    sort: typeof opts.sort === "function" ? opts.sort : null,
+    strictNullHandling: typeof opts.strictNullHandling === "boolean" ? opts.strictNullHandling : defaults.strictNullHandling
+  };
+}
+function stringify(object, opts = {}) {
+  let obj = object;
+  const options = normalize_stringify_options(opts);
+  let obj_keys;
+  let filter;
+  if (typeof options.filter === "function") {
+    filter = options.filter;
+    obj = filter("", obj);
+  } else if (isArray(options.filter)) {
+    filter = options.filter;
+    obj_keys = filter;
+  }
+  const keys = [];
+  if (typeof obj !== "object" || obj === null) {
+    return "";
+  }
+  const generateArrayPrefix = array_prefix_generators[options.arrayFormat];
+  const commaRoundTrip = generateArrayPrefix === "comma" && options.commaRoundTrip;
+  if (!obj_keys) {
+    obj_keys = Object.keys(obj);
+  }
+  if (options.sort) {
+    obj_keys.sort(options.sort);
+  }
+  const sideChannel = /* @__PURE__ */ new WeakMap();
+  for (let i = 0; i < obj_keys.length; ++i) {
+    const key = obj_keys[i];
+    if (options.skipNulls && obj[key] === null) {
+      continue;
+    }
+    push_to_array(keys, inner_stringify(
+      obj[key],
+      key,
+      // @ts-expect-error
+      generateArrayPrefix,
+      commaRoundTrip,
+      options.allowEmptyArrays,
+      options.strictNullHandling,
+      options.skipNulls,
+      options.encodeDotInKeys,
+      options.encode ? options.encoder : null,
+      options.filter,
+      options.sort,
+      options.allowDots,
+      options.serializeDate,
+      options.format,
+      options.formatter,
+      options.encodeValuesOnly,
+      options.charset,
+      sideChannel
+    ));
+  }
+  const joined = keys.join(options.delimiter);
+  let prefix = options.addQueryPrefix === true ? "?" : "";
+  if (options.charsetSentinel) {
+    if (options.charset === "iso-8859-1") {
+      prefix += "utf8=%26%2310003%3B&";
+    } else {
+      prefix += "utf8=%E2%9C%93&";
+    }
+  }
+  return joined.length > 0 ? prefix + joined : "";
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/query.mjs
+function stringifyQuery(query) {
+  return stringify(query, { arrayFormat: "brackets" });
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/bytes.mjs
+function concatBytes(buffers) {
+  let length = 0;
+  for (const buffer of buffers) {
+    length += buffer.length;
+  }
+  const output = new Uint8Array(length);
+  let index = 0;
+  for (const buffer of buffers) {
+    output.set(buffer, index);
+    index += buffer.length;
+  }
+  return output;
+}
+var encodeUTF8_;
+function encodeUTF8(str2) {
+  let encoder;
+  return (encodeUTF8_ ?? (encoder = new globalThis.TextEncoder(), encodeUTF8_ = encoder.encode.bind(encoder)))(str2);
+}
+var decodeUTF8_;
+function decodeUTF8(bytes) {
+  let decoder;
+  return (decodeUTF8_ ?? (decoder = new globalThis.TextDecoder(), decodeUTF8_ = decoder.decode.bind(decoder)))(bytes);
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/decoders/line.mjs
+var _LineDecoder_buffer;
+var _LineDecoder_carriageReturnIndex;
+var LineDecoder = class {
+  constructor() {
+    _LineDecoder_buffer.set(this, void 0);
+    _LineDecoder_carriageReturnIndex.set(this, void 0);
+    __classPrivateFieldSet2(this, _LineDecoder_buffer, new Uint8Array(), "f");
+    __classPrivateFieldSet2(this, _LineDecoder_carriageReturnIndex, null, "f");
+  }
+  decode(chunk) {
+    if (chunk == null) {
+      return [];
+    }
+    const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk) : typeof chunk === "string" ? encodeUTF8(chunk) : chunk;
+    __classPrivateFieldSet2(this, _LineDecoder_buffer, concatBytes([__classPrivateFieldGet2(this, _LineDecoder_buffer, "f"), binaryChunk]), "f");
+    const lines = [];
+    let patternIndex;
+    while ((patternIndex = findNewlineIndex(__classPrivateFieldGet2(this, _LineDecoder_buffer, "f"), __classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f"))) != null) {
+      if (patternIndex.carriage && __classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f") == null) {
+        __classPrivateFieldSet2(this, _LineDecoder_carriageReturnIndex, patternIndex.index, "f");
+        continue;
+      }
+      if (__classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f") != null && (patternIndex.index !== __classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f") + 1 || patternIndex.carriage)) {
+        lines.push(decodeUTF8(__classPrivateFieldGet2(this, _LineDecoder_buffer, "f").subarray(0, __classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f") - 1)));
+        __classPrivateFieldSet2(this, _LineDecoder_buffer, __classPrivateFieldGet2(this, _LineDecoder_buffer, "f").subarray(__classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f")), "f");
+        __classPrivateFieldSet2(this, _LineDecoder_carriageReturnIndex, null, "f");
+        continue;
+      }
+      const endIndex = __classPrivateFieldGet2(this, _LineDecoder_carriageReturnIndex, "f") !== null ? patternIndex.preceding - 1 : patternIndex.preceding;
+      const line = decodeUTF8(__classPrivateFieldGet2(this, _LineDecoder_buffer, "f").subarray(0, endIndex));
+      lines.push(line);
+      __classPrivateFieldSet2(this, _LineDecoder_buffer, __classPrivateFieldGet2(this, _LineDecoder_buffer, "f").subarray(patternIndex.index), "f");
+      __classPrivateFieldSet2(this, _LineDecoder_carriageReturnIndex, null, "f");
+    }
+    return lines;
+  }
+  flush() {
+    if (!__classPrivateFieldGet2(this, _LineDecoder_buffer, "f").length) {
+      return [];
+    }
+    return this.decode("\n");
+  }
+};
+_LineDecoder_buffer = /* @__PURE__ */ new WeakMap(), _LineDecoder_carriageReturnIndex = /* @__PURE__ */ new WeakMap();
+LineDecoder.NEWLINE_CHARS = /* @__PURE__ */ new Set(["\n", "\r"]);
+LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r]/g;
+function findNewlineIndex(buffer, startIndex) {
+  const newline = 10;
+  const carriage = 13;
+  for (let i = startIndex ?? 0; i < buffer.length; i++) {
+    if (buffer[i] === newline) {
+      return { preceding: i, index: i + 1, carriage: false };
+    }
+    if (buffer[i] === carriage) {
+      return { preceding: i, index: i + 1, carriage: true };
+    }
+  }
+  return null;
+}
+function findDoubleNewlineIndex(buffer) {
+  const newline = 10;
+  const carriage = 13;
+  for (let i = 0; i < buffer.length - 1; i++) {
+    if (buffer[i] === newline && buffer[i + 1] === newline) {
+      return i + 2;
+    }
+    if (buffer[i] === carriage && buffer[i + 1] === carriage) {
+      return i + 2;
+    }
+    if (buffer[i] === carriage && buffer[i + 1] === newline && i + 3 < buffer.length && buffer[i + 2] === carriage && buffer[i + 3] === newline) {
+      return i + 4;
+    }
+  }
+  return -1;
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/log.mjs
+var levelNumbers = {
+  off: 0,
+  error: 200,
+  warn: 300,
+  info: 400,
+  debug: 500
+};
+var parseLogLevel = (maybeLevel, sourceName, client) => {
+  if (!maybeLevel) {
+    return void 0;
+  }
+  if (hasOwn(levelNumbers, maybeLevel)) {
+    return maybeLevel;
+  }
+  loggerFor(client).warn(`${sourceName} was set to ${JSON.stringify(maybeLevel)}, expected one of ${JSON.stringify(Object.keys(levelNumbers))}`);
+  return void 0;
+};
+function noop() {
+}
+function makeLogFn(fnLevel, logger2, logLevel) {
+  if (!logger2 || levelNumbers[fnLevel] > levelNumbers[logLevel]) {
+    return noop;
+  } else {
+    return logger2[fnLevel].bind(logger2);
+  }
+}
+var noopLogger = {
+  error: noop,
+  warn: noop,
+  info: noop,
+  debug: noop
+};
+var cachedLoggers = /* @__PURE__ */ new WeakMap();
+function loggerFor(client) {
+  const logger2 = client.logger;
+  const logLevel = client.logLevel ?? "off";
+  if (!logger2) {
+    return noopLogger;
+  }
+  const cachedLogger = cachedLoggers.get(logger2);
+  if (cachedLogger && cachedLogger[0] === logLevel) {
+    return cachedLogger[1];
+  }
+  const levelLogger = {
+    error: makeLogFn("error", logger2, logLevel),
+    warn: makeLogFn("warn", logger2, logLevel),
+    info: makeLogFn("info", logger2, logLevel),
+    debug: makeLogFn("debug", logger2, logLevel)
+  };
+  cachedLoggers.set(logger2, [logLevel, levelLogger]);
+  return levelLogger;
+}
+var formatRequestDetails = (details) => {
+  if (details.options) {
+    details.options = { ...details.options };
+    delete details.options["headers"];
+  }
+  if (details.headers) {
+    details.headers = Object.fromEntries((details.headers instanceof Headers ? [...details.headers] : Object.entries(details.headers)).map(([name, value]) => [
+      name,
+      name.toLowerCase() === "authorization" || name.toLowerCase() === "cookie" || name.toLowerCase() === "set-cookie" ? "***" : value
+    ]));
+  }
+  if ("retryOfRequestLogID" in details) {
+    if (details.retryOfRequestLogID) {
+      details.retryOf = details.retryOfRequestLogID;
+    }
+    delete details.retryOfRequestLogID;
+  }
+  return details;
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/core/streaming.mjs
+var _Stream_client;
+var Stream = class _Stream {
+  constructor(iterator, controller, client) {
+    this.iterator = iterator;
+    _Stream_client.set(this, void 0);
+    this.controller = controller;
+    __classPrivateFieldSet2(this, _Stream_client, client, "f");
+  }
+  static fromSSEResponse(response, controller, client, synthesizeEventData) {
+    let consumed = false;
+    const logger2 = client ? loggerFor(client) : console;
+    async function* iterator() {
+      if (consumed) {
+        throw new OpenAIError("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const sse of _iterSSEMessages(response, controller)) {
+          if (done)
+            continue;
+          if (sse.data.startsWith("[DONE]")) {
+            done = true;
+            continue;
+          }
+          if (sse.event === null || !sse.event.startsWith("thread.")) {
+            let data;
+            try {
+              data = JSON.parse(sse.data);
+            } catch (e) {
+              logger2.error(`Could not parse message into JSON:`, sse.data);
+              logger2.error(`From chunk:`, sse.raw);
+              throw e;
+            }
+            if (data && data.error) {
+              throw new APIError(void 0, data.error, void 0, response.headers);
+            }
+            yield synthesizeEventData ? { event: sse.event, data } : data;
+          } else {
+            let data;
+            try {
+              data = JSON.parse(sse.data);
+            } catch (e) {
+              console.error(`Could not parse message into JSON:`, sse.data);
+              console.error(`From chunk:`, sse.raw);
+              throw e;
+            }
+            if (sse.event == "error") {
+              throw new APIError(void 0, data.error, data.message, void 0);
+            }
+            yield { event: sse.event, data };
+          }
+        }
+        done = true;
+      } catch (e) {
+        if (isAbortError(e))
+          return;
+        throw e;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new _Stream(iterator, controller, client);
+  }
+  /**
+   * Generates a Stream from a newline-separated ReadableStream
+   * where each item is a JSON value.
+   */
+  static fromReadableStream(readableStream, controller, client) {
+    let consumed = false;
+    async function* iterLines() {
+      const lineDecoder = new LineDecoder();
+      const iter = ReadableStreamToAsyncIterable(readableStream);
+      for await (const chunk of iter) {
+        for (const line of lineDecoder.decode(chunk)) {
+          yield line;
+        }
+      }
+      for (const line of lineDecoder.flush()) {
+        yield line;
+      }
+    }
+    async function* iterator() {
+      if (consumed) {
+        throw new OpenAIError("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const line of iterLines()) {
+          if (done)
+            continue;
+          if (line)
+            yield JSON.parse(line);
+        }
+        done = true;
+      } catch (e) {
+        if (isAbortError(e))
+          return;
+        throw e;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new _Stream(iterator, controller, client);
+  }
+  [(_Stream_client = /* @__PURE__ */ new WeakMap(), Symbol.asyncIterator)]() {
+    return this.iterator();
+  }
+  /**
+   * Splits the stream into two streams which can be
+   * independently read from at different speeds.
+   */
+  tee() {
+    const left = [];
+    const right = [];
+    const iterator = this.iterator();
+    const teeIterator = (queue) => {
+      return {
+        next: () => {
+          if (queue.length === 0) {
+            const result = iterator.next();
+            left.push(result);
+            right.push(result);
+          }
+          return queue.shift();
+        }
+      };
+    };
+    return [
+      new _Stream(() => teeIterator(left), this.controller, __classPrivateFieldGet2(this, _Stream_client, "f")),
+      new _Stream(() => teeIterator(right), this.controller, __classPrivateFieldGet2(this, _Stream_client, "f"))
+    ];
+  }
+  /**
+   * Converts this stream to a newline-separated ReadableStream of
+   * JSON stringified values in the stream
+   * which can be turned back into a Stream with `Stream.fromReadableStream()`.
+   */
+  toReadableStream() {
+    const self2 = this;
+    let iter;
+    return makeReadableStream({
+      async start() {
+        iter = self2[Symbol.asyncIterator]();
+      },
+      async pull(ctrl) {
+        try {
+          const { value, done } = await iter.next();
+          if (done)
+            return ctrl.close();
+          const bytes = encodeUTF8(JSON.stringify(value) + "\n");
+          ctrl.enqueue(bytes);
+        } catch (err) {
+          ctrl.error(err);
+        }
+      },
+      async cancel() {
+        await iter.return?.();
+      }
+    });
+  }
+};
+async function* _iterSSEMessages(response, controller) {
+  if (!response.body) {
+    controller.abort();
+    if (typeof globalThis.navigator !== "undefined" && globalThis.navigator.product === "ReactNative") {
+      throw new OpenAIError(`The default react-native fetch implementation does not support streaming. Please use expo/fetch: https://docs.expo.dev/versions/latest/sdk/expo/#expofetch-api`);
+    }
+    throw new OpenAIError(`Attempted to iterate over a response with no body`);
+  }
+  const sseDecoder = new SSEDecoder();
+  const lineDecoder = new LineDecoder();
+  const iter = ReadableStreamToAsyncIterable(response.body);
+  for await (const sseChunk of iterSSEChunks(iter)) {
+    for (const line of lineDecoder.decode(sseChunk)) {
+      const sse = sseDecoder.decode(line);
+      if (sse)
+        yield sse;
+    }
+  }
+  for (const line of lineDecoder.flush()) {
+    const sse = sseDecoder.decode(line);
+    if (sse)
+      yield sse;
+  }
+}
+async function* iterSSEChunks(iterator) {
+  let data = new Uint8Array();
+  for await (const chunk of iterator) {
+    if (chunk == null) {
+      continue;
+    }
+    const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk) : typeof chunk === "string" ? encodeUTF8(chunk) : chunk;
+    let newData = new Uint8Array(data.length + binaryChunk.length);
+    newData.set(data);
+    newData.set(binaryChunk, data.length);
+    data = newData;
+    let patternIndex;
+    while ((patternIndex = findDoubleNewlineIndex(data)) !== -1) {
+      yield data.slice(0, patternIndex);
+      data = data.slice(patternIndex);
+    }
+  }
+  if (data.length > 0) {
+    yield data;
+  }
+}
+var SSEDecoder = class {
+  constructor() {
+    this.event = null;
+    this.data = [];
+    this.chunks = [];
+  }
+  decode(line) {
+    if (line.endsWith("\r")) {
+      line = line.substring(0, line.length - 1);
+    }
+    if (!line) {
+      if (!this.event && !this.data.length)
+        return null;
+      const sse = {
+        event: this.event,
+        data: this.data.join("\n"),
+        raw: this.chunks
+      };
+      this.event = null;
+      this.data = [];
+      this.chunks = [];
+      return sse;
+    }
+    this.chunks.push(line);
+    if (line.startsWith(":")) {
+      return null;
+    }
+    let [fieldname, _, value] = partition(line, ":");
+    if (value.startsWith(" ")) {
+      value = value.substring(1);
+    }
+    if (fieldname === "event") {
+      this.event = value;
+    } else if (fieldname === "data") {
+      this.data.push(value);
+    }
+    return null;
+  }
+};
+function partition(str2, delimiter) {
+  const index = str2.indexOf(delimiter);
+  if (index !== -1) {
+    return [str2.substring(0, index), delimiter, str2.substring(index + delimiter.length)];
+  }
+  return [str2, "", ""];
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/parse.mjs
+async function defaultParseResponse(client, props) {
+  const { response, requestLogID, retryOfRequestLogID, startTime } = props;
+  const body = await (async () => {
+    if (props.options.stream) {
+      loggerFor(client).debug("response", response.status, response.url, response.headers, response.body);
+      if (props.options.__streamClass) {
+        return props.options.__streamClass.fromSSEResponse(response, props.controller, client, props.options.__synthesizeEventData);
+      }
+      return Stream.fromSSEResponse(response, props.controller, client, props.options.__synthesizeEventData);
+    }
+    if (response.status === 204) {
+      return null;
+    }
+    if (props.options.__binaryResponse) {
+      return response;
+    }
+    const contentType = response.headers.get("content-type");
+    const mediaType = contentType?.split(";")[0]?.trim();
+    const isJSON = mediaType?.includes("application/json") || mediaType?.endsWith("+json");
+    if (isJSON) {
+      const contentLength = response.headers.get("content-length");
+      if (contentLength === "0") {
+        return void 0;
+      }
+      const json = await response.json();
+      return addRequestID(json, response);
+    }
+    const text = await response.text();
+    return text;
+  })();
+  loggerFor(client).debug(`[${requestLogID}] response parsed`, formatRequestDetails({
+    retryOfRequestLogID,
+    url: response.url,
+    status: response.status,
+    body,
+    durationMs: Date.now() - startTime
+  }));
+  return body;
+}
+function addRequestID(value, response) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return value;
+  }
+  return Object.defineProperty(value, "_request_id", {
+    value: response.headers.get("x-request-id"),
+    enumerable: false
+  });
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/core/api-promise.mjs
+var _APIPromise_client;
+var APIPromise = class _APIPromise extends Promise {
+  constructor(client, responsePromise, parseResponse2 = defaultParseResponse) {
+    super((resolve) => {
+      resolve(null);
+    });
+    this.responsePromise = responsePromise;
+    this.parseResponse = parseResponse2;
+    _APIPromise_client.set(this, void 0);
+    __classPrivateFieldSet2(this, _APIPromise_client, client, "f");
+  }
+  _thenUnwrap(transform) {
+    return new _APIPromise(__classPrivateFieldGet2(this, _APIPromise_client, "f"), this.responsePromise, async (client, props) => addRequestID(transform(await this.parseResponse(client, props), props), props.response));
+  }
+  /**
+   * Gets the raw `Response` instance instead of parsing the response
+   * data.
+   *
+   * If you want to parse the response body but still get the `Response`
+   * instance, you can use {@link withResponse()}.
+   *
+   * 👋 Getting the wrong TypeScript type for `Response`?
+   * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
+   * to your `tsconfig.json`.
+   */
+  asResponse() {
+    return this.responsePromise.then((p) => p.response);
+  }
+  /**
+   * Gets the parsed response data, the raw `Response` instance and the ID of the request,
+   * returned via the X-Request-ID header which is useful for debugging requests and reporting
+   * issues to OpenAI.
+   *
+   * If you just want to get the raw `Response` instance without parsing it,
+   * you can use {@link asResponse()}.
+   *
+   * 👋 Getting the wrong TypeScript type for `Response`?
+   * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
+   * to your `tsconfig.json`.
+   */
+  async withResponse() {
+    const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
+    return { data, response, request_id: response.headers.get("x-request-id") };
+  }
+  parse() {
+    if (!this.parsedPromise) {
+      this.parsedPromise = this.responsePromise.then((data) => this.parseResponse(__classPrivateFieldGet2(this, _APIPromise_client, "f"), data));
+    }
+    return this.parsedPromise;
+  }
+  then(onfulfilled, onrejected) {
+    return this.parse().then(onfulfilled, onrejected);
+  }
+  catch(onrejected) {
+    return this.parse().catch(onrejected);
+  }
+  finally(onfinally) {
+    return this.parse().finally(onfinally);
+  }
+};
+_APIPromise_client = /* @__PURE__ */ new WeakMap();
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/core/pagination.mjs
+var _AbstractPage_client;
+var AbstractPage = class {
+  constructor(client, response, body, options) {
+    _AbstractPage_client.set(this, void 0);
+    __classPrivateFieldSet2(this, _AbstractPage_client, client, "f");
+    this.options = options;
+    this.response = response;
+    this.body = body;
+  }
+  hasNextPage() {
+    const items = this.getPaginatedItems();
+    if (!items.length)
+      return false;
+    return this.nextPageRequestOptions() != null;
+  }
+  async getNextPage() {
+    const nextOptions = this.nextPageRequestOptions();
+    if (!nextOptions) {
+      throw new OpenAIError("No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.");
+    }
+    return await __classPrivateFieldGet2(this, _AbstractPage_client, "f").requestAPIList(this.constructor, nextOptions);
+  }
+  async *iterPages() {
+    let page = this;
+    yield page;
+    while (page.hasNextPage()) {
+      page = await page.getNextPage();
+      yield page;
+    }
+  }
+  async *[(_AbstractPage_client = /* @__PURE__ */ new WeakMap(), Symbol.asyncIterator)]() {
+    for await (const page of this.iterPages()) {
+      for (const item of page.getPaginatedItems()) {
+        yield item;
+      }
+    }
+  }
+};
+var PagePromise = class extends APIPromise {
+  constructor(client, request, Page2) {
+    super(client, request, async (client2, props) => new Page2(client2, props.response, await defaultParseResponse(client2, props), props.options));
+  }
+  /**
+   * Allow auto-paginating iteration on an unawaited list call, eg:
+   *
+   *    for await (const item of client.items.list()) {
+   *      console.log(item)
+   *    }
+   */
+  async *[Symbol.asyncIterator]() {
+    const page = await this;
+    for await (const item of page) {
+      yield item;
+    }
+  }
+};
+var Page = class extends AbstractPage {
+  constructor(client, response, body, options) {
+    super(client, response, body, options);
+    this.data = body.data || [];
+    this.object = body.object;
+  }
+  getPaginatedItems() {
+    return this.data ?? [];
+  }
+  nextPageRequestOptions() {
+    return null;
+  }
+};
+var CursorPage = class extends AbstractPage {
+  constructor(client, response, body, options) {
+    super(client, response, body, options);
+    this.data = body.data || [];
+    this.has_more = body.has_more || false;
+  }
+  getPaginatedItems() {
+    return this.data ?? [];
+  }
+  hasNextPage() {
+    if (this.has_more === false) {
+      return false;
+    }
+    return super.hasNextPage();
+  }
+  nextPageRequestOptions() {
+    const data = this.getPaginatedItems();
+    const id = data[data.length - 1]?.id;
+    if (!id) {
+      return null;
+    }
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        after: id
+      }
+    };
+  }
+};
+var ConversationCursorPage = class extends AbstractPage {
+  constructor(client, response, body, options) {
+    super(client, response, body, options);
+    this.data = body.data || [];
+    this.has_more = body.has_more || false;
+    this.last_id = body.last_id || "";
+  }
+  getPaginatedItems() {
+    return this.data ?? [];
+  }
+  hasNextPage() {
+    if (this.has_more === false) {
+      return false;
+    }
+    return super.hasNextPage();
+  }
+  nextPageRequestOptions() {
+    const cursor = this.last_id;
+    if (!cursor) {
+      return null;
+    }
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        after: cursor
+      }
+    };
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/auth/workload-identity-auth.mjs
+var SUBJECT_TOKEN_TYPES = {
+  jwt: "urn:ietf:params:oauth:token-type:jwt",
+  id: "urn:ietf:params:oauth:token-type:id_token"
+};
+var TOKEN_EXCHANGE_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchange";
+var WorkloadIdentityAuth = class {
+  constructor(config, fetch2) {
+    this.cachedToken = null;
+    this.refreshPromise = null;
+    this.tokenExchangeUrl = "https://auth.openai.com/oauth/token";
+    this.config = config;
+    this.fetch = fetch2 ?? getDefaultFetch();
+  }
+  async getToken() {
+    if (!this.cachedToken || this.isTokenExpired(this.cachedToken)) {
+      if (this.refreshPromise) {
+        return await this.refreshPromise;
+      }
+      this.refreshPromise = this.refreshToken();
+      try {
+        const token2 = await this.refreshPromise;
+        return token2;
+      } finally {
+        this.refreshPromise = null;
+      }
+    }
+    if (this.needsRefresh(this.cachedToken) && !this.refreshPromise) {
+      this.refreshPromise = this.refreshToken().finally(() => {
+        this.refreshPromise = null;
+      });
+    }
+    return this.cachedToken.token;
+  }
+  async refreshToken() {
+    const subjectToken = await this.config.provider.getToken();
+    const response = await this.fetch(this.tokenExchangeUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        grant_type: TOKEN_EXCHANGE_GRANT_TYPE,
+        client_id: this.config.clientId,
+        subject_token: subjectToken,
+        subject_token_type: SUBJECT_TOKEN_TYPES[this.config.provider.tokenType],
+        identity_provider_id: this.config.identityProviderId,
+        service_account_id: this.config.serviceAccountId
+      })
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      let body = void 0;
+      try {
+        body = JSON.parse(errorText);
+      } catch {
+      }
+      if (response.status === 400 || response.status === 401 || response.status === 403) {
+        throw new OAuthError(response.status, body, response.headers);
+      }
+      throw APIError.generate(response.status, body, `Token exchange failed with status ${response.status}`, response.headers);
+    }
+    const tokenResponse = await response.json();
+    const expiresIn = tokenResponse.expires_in || 3600;
+    const expiresAt = Date.now() + expiresIn * 1e3;
+    this.cachedToken = {
+      token: tokenResponse.access_token,
+      expiresAt
+    };
+    return tokenResponse.access_token;
+  }
+  isTokenExpired(cachedToken) {
+    return Date.now() >= cachedToken.expiresAt;
+  }
+  needsRefresh(cachedToken) {
+    const bufferSeconds = this.config.refreshBufferSeconds ?? 1200;
+    const bufferMs = bufferSeconds * 1e3;
+    return Date.now() >= cachedToken.expiresAt - bufferMs;
+  }
+  invalidateToken() {
+    this.cachedToken = null;
+    this.refreshPromise = null;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/uploads.mjs
+var checkFileSupport = () => {
+  if (typeof File === "undefined") {
+    const { process: process2 } = globalThis;
+    const isOldNode = typeof process2?.versions?.node === "string" && parseInt(process2.versions.node.split(".")) < 20;
+    throw new Error("`File` is not defined as a global, which is required for file uploads." + (isOldNode ? " Update to Node 20 LTS or newer, or set `globalThis.File` to `import('node:buffer').File`." : ""));
+  }
+};
+function makeFile(fileBits, fileName, options) {
+  checkFileSupport();
+  return new File(fileBits, fileName ?? "unknown_file", options);
+}
+function getName(value) {
+  return (typeof value === "object" && value !== null && ("name" in value && value.name && String(value.name) || "url" in value && value.url && String(value.url) || "filename" in value && value.filename && String(value.filename) || "path" in value && value.path && String(value.path)) || "").split(/[\\/]/).pop() || void 0;
+}
+var isAsyncIterable = (value) => value != null && typeof value === "object" && typeof value[Symbol.asyncIterator] === "function";
+var maybeMultipartFormRequestOptions = async (opts, fetch2) => {
+  if (!hasUploadableValue(opts.body))
+    return opts;
+  return { ...opts, body: await createForm(opts.body, fetch2) };
+};
+var multipartFormRequestOptions = async (opts, fetch2) => {
+  return { ...opts, body: await createForm(opts.body, fetch2) };
+};
+var supportsFormDataMap = /* @__PURE__ */ new WeakMap();
+function supportsFormData(fetchObject) {
+  const fetch2 = typeof fetchObject === "function" ? fetchObject : fetchObject.fetch;
+  const cached = supportsFormDataMap.get(fetch2);
+  if (cached)
+    return cached;
+  const promise = (async () => {
+    try {
+      const FetchResponse = "Response" in fetch2 ? fetch2.Response : (await fetch2("data:,")).constructor;
+      const data = new FormData();
+      if (data.toString() === await new FetchResponse(data).text()) {
+        return false;
+      }
+      return true;
+    } catch {
+      return true;
+    }
+  })();
+  supportsFormDataMap.set(fetch2, promise);
+  return promise;
+}
+var createForm = async (body, fetch2) => {
+  if (!await supportsFormData(fetch2)) {
+    throw new TypeError("The provided fetch function does not support file uploads with the current global FormData class.");
+  }
+  const form = new FormData();
+  await Promise.all(Object.entries(body || {}).map(([key, value]) => addFormValue(form, key, value)));
+  return form;
+};
+var isNamedBlob = (value) => value instanceof Blob && "name" in value;
+var isUploadable = (value) => typeof value === "object" && value !== null && (value instanceof Response || isAsyncIterable(value) || isNamedBlob(value));
+var hasUploadableValue = (value) => {
+  if (isUploadable(value))
+    return true;
+  if (Array.isArray(value))
+    return value.some(hasUploadableValue);
+  if (value && typeof value === "object") {
+    for (const k in value) {
+      if (hasUploadableValue(value[k]))
+        return true;
+    }
+  }
+  return false;
+};
+var addFormValue = async (form, key, value) => {
+  if (value === void 0)
+    return;
+  if (value == null) {
+    throw new TypeError(`Received null for "${key}"; to pass null in FormData, you must use the string 'null'`);
+  }
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    form.append(key, String(value));
+  } else if (value instanceof Response) {
+    form.append(key, makeFile([await value.blob()], getName(value)));
+  } else if (isAsyncIterable(value)) {
+    form.append(key, makeFile([await new Response(ReadableStreamFrom(value)).blob()], getName(value)));
+  } else if (isNamedBlob(value)) {
+    form.append(key, value, getName(value));
+  } else if (Array.isArray(value)) {
+    await Promise.all(value.map((entry) => addFormValue(form, key + "[]", entry)));
+  } else if (typeof value === "object") {
+    await Promise.all(Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop)));
+  } else {
+    throw new TypeError(`Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${value} instead`);
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/to-file.mjs
+var isBlobLike = (value) => value != null && typeof value === "object" && typeof value.size === "number" && typeof value.type === "string" && typeof value.text === "function" && typeof value.slice === "function" && typeof value.arrayBuffer === "function";
+var isFileLike = (value) => value != null && typeof value === "object" && typeof value.name === "string" && typeof value.lastModified === "number" && isBlobLike(value);
+var isResponseLike = (value) => value != null && typeof value === "object" && typeof value.url === "string" && typeof value.blob === "function";
+async function toFile(value, name, options) {
+  checkFileSupport();
+  value = await value;
+  if (isFileLike(value)) {
+    if (value instanceof File) {
+      return value;
+    }
+    return makeFile([await value.arrayBuffer()], value.name);
+  }
+  if (isResponseLike(value)) {
+    const blob = await value.blob();
+    name || (name = new URL(value.url).pathname.split(/[\\/]/).pop());
+    return makeFile(await getBytes(blob), name, options);
+  }
+  const parts = await getBytes(value);
+  name || (name = getName(value));
+  if (!options?.type) {
+    const type = parts.find((part) => typeof part === "object" && "type" in part && part.type);
+    if (typeof type === "string") {
+      options = { ...options, type };
+    }
+  }
+  return makeFile(parts, name, options);
+}
+async function getBytes(value) {
+  let parts = [];
+  if (typeof value === "string" || ArrayBuffer.isView(value) || // includes Uint8Array, Buffer, etc.
+  value instanceof ArrayBuffer) {
+    parts.push(value);
+  } else if (isBlobLike(value)) {
+    parts.push(value instanceof Blob ? value : await value.arrayBuffer());
+  } else if (isAsyncIterable(value)) {
+    for await (const chunk of value) {
+      parts.push(...await getBytes(chunk));
+    }
+  } else {
+    const constructor = value?.constructor?.name;
+    throw new Error(`Unexpected data type: ${typeof value}${constructor ? `; constructor: ${constructor}` : ""}${propsForError(value)}`);
+  }
+  return parts;
+}
+function propsForError(value) {
+  if (typeof value !== "object" || value === null)
+    return "";
+  const props = Object.getOwnPropertyNames(value);
+  return `; props: [${props.map((p) => `"${p}"`).join(", ")}]`;
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/core/resource.mjs
+var APIResource = class {
+  constructor(client) {
+    this._client = client;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/path.mjs
+function encodeURIPath(str2) {
+  return str2.replace(/[^A-Za-z0-9\-._~!$&'()*+,;=:@]+/g, encodeURIComponent);
+}
+var EMPTY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.create(null));
+var createPathTagFunction = (pathEncoder = encodeURIPath) => function path3(statics, ...params) {
+  if (statics.length === 1)
+    return statics[0];
+  let postPath = false;
+  const invalidSegments = [];
+  const path4 = statics.reduce((previousValue, currentValue, index) => {
+    if (/[?#]/.test(currentValue)) {
+      postPath = true;
+    }
+    const value = params[index];
+    let encoded = (postPath ? encodeURIComponent : pathEncoder)("" + value);
+    if (index !== params.length && (value == null || typeof value === "object" && // handle values from other realms
+    value.toString === Object.getPrototypeOf(Object.getPrototypeOf(value.hasOwnProperty ?? EMPTY) ?? EMPTY)?.toString)) {
+      encoded = value + "";
+      invalidSegments.push({
+        start: previousValue.length + currentValue.length,
+        length: encoded.length,
+        error: `Value of type ${Object.prototype.toString.call(value).slice(8, -1)} is not a valid path parameter`
+      });
+    }
+    return previousValue + currentValue + (index === params.length ? "" : encoded);
+  }, "");
+  const pathOnly = path4.split(/[?#]/, 1)[0];
+  const invalidSegmentPattern = /(?<=^|\/)(?:\.|%2e){1,2}(?=\/|$)/gi;
+  let match;
+  while ((match = invalidSegmentPattern.exec(pathOnly)) !== null) {
+    invalidSegments.push({
+      start: match.index,
+      length: match[0].length,
+      error: `Value "${match[0]}" can't be safely passed as a path parameter`
+    });
+  }
+  invalidSegments.sort((a, b) => a.start - b.start);
+  if (invalidSegments.length > 0) {
+    let lastEnd = 0;
+    const underline = invalidSegments.reduce((acc, segment) => {
+      const spaces = " ".repeat(segment.start - lastEnd);
+      const arrows = "^".repeat(segment.length);
+      lastEnd = segment.start + segment.length;
+      return acc + spaces + arrows;
+    }, "");
+    throw new OpenAIError(`Path parameters result in path with invalid segments:
+${invalidSegments.map((e) => e.error).join("\n")}
+${path4}
+${underline}`);
+  }
+  return path4;
+};
+var path2 = /* @__PURE__ */ createPathTagFunction(encodeURIPath);
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/chat/completions/messages.mjs
+var Messages = class extends APIResource {
+  /**
+   * Get the messages in a stored chat completion. Only Chat Completions that have
+   * been created with the `store` parameter set to `true` will be returned.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const chatCompletionStoreMessage of client.chat.completions.messages.list(
+   *   'completion_id',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(completionID, query = {}, options) {
+    return this._client.getAPIList(path2`/chat/completions/${completionID}/messages`, CursorPage, { query, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/parser.mjs
+function isChatCompletionFunctionTool(tool) {
+  return tool !== void 0 && "function" in tool && tool.function !== void 0;
+}
+function isAutoParsableResponseFormat(response_format) {
+  return response_format?.["$brand"] === "auto-parseable-response-format";
+}
+function isAutoParsableTool(tool) {
+  return tool?.["$brand"] === "auto-parseable-tool";
+}
+function maybeParseChatCompletion(completion, params) {
+  if (!params || !hasAutoParseableInput(params)) {
+    return {
+      ...completion,
+      choices: completion.choices.map((choice) => {
+        assertToolCallsAreChatCompletionFunctionToolCalls(choice.message.tool_calls);
+        return {
+          ...choice,
+          message: {
+            ...choice.message,
+            parsed: null,
+            ...choice.message.tool_calls ? {
+              tool_calls: choice.message.tool_calls
+            } : void 0
+          }
+        };
+      })
+    };
+  }
+  return parseChatCompletion(completion, params);
+}
+function parseChatCompletion(completion, params) {
+  const choices = completion.choices.map((choice) => {
+    if (choice.finish_reason === "length") {
+      throw new LengthFinishReasonError();
+    }
+    if (choice.finish_reason === "content_filter") {
+      throw new ContentFilterFinishReasonError();
+    }
+    assertToolCallsAreChatCompletionFunctionToolCalls(choice.message.tool_calls);
+    return {
+      ...choice,
+      message: {
+        ...choice.message,
+        ...choice.message.tool_calls ? {
+          tool_calls: choice.message.tool_calls?.map((toolCall) => parseToolCall(params, toolCall)) ?? void 0
+        } : void 0,
+        parsed: choice.message.content && !choice.message.refusal ? parseResponseFormat(params, choice.message.content) : null
+      }
+    };
+  });
+  return { ...completion, choices };
+}
+function parseResponseFormat(params, content) {
+  if (params.response_format?.type !== "json_schema") {
+    return null;
+  }
+  if (params.response_format?.type === "json_schema") {
+    if ("$parseRaw" in params.response_format) {
+      const response_format = params.response_format;
+      return response_format.$parseRaw(content);
+    }
+    return JSON.parse(content);
+  }
+  return null;
+}
+function parseToolCall(params, toolCall) {
+  const inputTool = params.tools?.find((inputTool2) => isChatCompletionFunctionTool(inputTool2) && inputTool2.function?.name === toolCall.function.name);
+  return {
+    ...toolCall,
+    function: {
+      ...toolCall.function,
+      parsed_arguments: isAutoParsableTool(inputTool) ? inputTool.$parseRaw(toolCall.function.arguments) : inputTool?.function.strict ? JSON.parse(toolCall.function.arguments) : null
+    }
+  };
+}
+function shouldParseToolCall(params, toolCall) {
+  if (!params || !("tools" in params) || !params.tools) {
+    return false;
+  }
+  const inputTool = params.tools?.find((inputTool2) => isChatCompletionFunctionTool(inputTool2) && inputTool2.function?.name === toolCall.function.name);
+  return isChatCompletionFunctionTool(inputTool) && (isAutoParsableTool(inputTool) || inputTool?.function.strict || false);
+}
+function hasAutoParseableInput(params) {
+  if (isAutoParsableResponseFormat(params.response_format)) {
+    return true;
+  }
+  return params.tools?.some((t) => isAutoParsableTool(t) || t.type === "function" && t.function.strict === true) ?? false;
+}
+function assertToolCallsAreChatCompletionFunctionToolCalls(toolCalls) {
+  for (const toolCall of toolCalls || []) {
+    if (toolCall.type !== "function") {
+      throw new OpenAIError(`Currently only \`function\` tool calls are supported; Received \`${toolCall.type}\``);
+    }
+  }
+}
+function validateInputTools(tools) {
+  for (const tool of tools ?? []) {
+    if (tool.type !== "function") {
+      throw new OpenAIError(`Currently only \`function\` tool types support auto-parsing; Received \`${tool.type}\``);
+    }
+    if (tool.function.strict !== true) {
+      throw new OpenAIError(`The \`${tool.function.name}\` tool is not marked with \`strict: true\`. Only strict function tools can be auto-parsed`);
+    }
+  }
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/chatCompletionUtils.mjs
+var isAssistantMessage = (message) => {
+  return message?.role === "assistant";
+};
+var isToolMessage = (message) => {
+  return message?.role === "tool";
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/EventStream.mjs
+var _EventStream_instances;
+var _EventStream_connectedPromise;
+var _EventStream_resolveConnectedPromise;
+var _EventStream_rejectConnectedPromise;
+var _EventStream_endPromise;
+var _EventStream_resolveEndPromise;
+var _EventStream_rejectEndPromise;
+var _EventStream_listeners;
+var _EventStream_ended;
+var _EventStream_errored;
+var _EventStream_aborted;
+var _EventStream_catchingPromiseCreated;
+var _EventStream_handleError;
+var EventStream = class {
+  constructor() {
+    _EventStream_instances.add(this);
+    this.controller = new AbortController();
+    _EventStream_connectedPromise.set(this, void 0);
+    _EventStream_resolveConnectedPromise.set(this, () => {
+    });
+    _EventStream_rejectConnectedPromise.set(this, () => {
+    });
+    _EventStream_endPromise.set(this, void 0);
+    _EventStream_resolveEndPromise.set(this, () => {
+    });
+    _EventStream_rejectEndPromise.set(this, () => {
+    });
+    _EventStream_listeners.set(this, {});
+    _EventStream_ended.set(this, false);
+    _EventStream_errored.set(this, false);
+    _EventStream_aborted.set(this, false);
+    _EventStream_catchingPromiseCreated.set(this, false);
+    __classPrivateFieldSet2(this, _EventStream_connectedPromise, new Promise((resolve, reject) => {
+      __classPrivateFieldSet2(this, _EventStream_resolveConnectedPromise, resolve, "f");
+      __classPrivateFieldSet2(this, _EventStream_rejectConnectedPromise, reject, "f");
+    }), "f");
+    __classPrivateFieldSet2(this, _EventStream_endPromise, new Promise((resolve, reject) => {
+      __classPrivateFieldSet2(this, _EventStream_resolveEndPromise, resolve, "f");
+      __classPrivateFieldSet2(this, _EventStream_rejectEndPromise, reject, "f");
+    }), "f");
+    __classPrivateFieldGet2(this, _EventStream_connectedPromise, "f").catch(() => {
+    });
+    __classPrivateFieldGet2(this, _EventStream_endPromise, "f").catch(() => {
+    });
+  }
+  _run(executor) {
+    setTimeout(() => {
+      executor().then(() => {
+        this._emitFinal();
+        this._emit("end");
+      }, __classPrivateFieldGet2(this, _EventStream_instances, "m", _EventStream_handleError).bind(this));
+    }, 0);
+  }
+  _connected() {
+    if (this.ended)
+      return;
+    __classPrivateFieldGet2(this, _EventStream_resolveConnectedPromise, "f").call(this);
+    this._emit("connect");
+  }
+  get ended() {
+    return __classPrivateFieldGet2(this, _EventStream_ended, "f");
+  }
+  get errored() {
+    return __classPrivateFieldGet2(this, _EventStream_errored, "f");
+  }
+  get aborted() {
+    return __classPrivateFieldGet2(this, _EventStream_aborted, "f");
+  }
+  abort() {
+    this.controller.abort();
+  }
+  /**
+   * Adds the listener function to the end of the listeners array for the event.
+   * No checks are made to see if the listener has already been added. Multiple calls passing
+   * the same combination of event and listener will result in the listener being added, and
+   * called, multiple times.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  on(event, listener) {
+    const listeners = __classPrivateFieldGet2(this, _EventStream_listeners, "f")[event] || (__classPrivateFieldGet2(this, _EventStream_listeners, "f")[event] = []);
+    listeners.push({ listener });
+    return this;
+  }
+  /**
+   * Removes the specified listener from the listener array for the event.
+   * off() will remove, at most, one instance of a listener from the listener array. If any single
+   * listener has been added multiple times to the listener array for the specified event, then
+   * off() must be called multiple times to remove each instance.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  off(event, listener) {
+    const listeners = __classPrivateFieldGet2(this, _EventStream_listeners, "f")[event];
+    if (!listeners)
+      return this;
+    const index = listeners.findIndex((l) => l.listener === listener);
+    if (index >= 0)
+      listeners.splice(index, 1);
+    return this;
+  }
+  /**
+   * Adds a one-time listener function for the event. The next time the event is triggered,
+   * this listener is removed and then invoked.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  once(event, listener) {
+    const listeners = __classPrivateFieldGet2(this, _EventStream_listeners, "f")[event] || (__classPrivateFieldGet2(this, _EventStream_listeners, "f")[event] = []);
+    listeners.push({ listener, once: true });
+    return this;
+  }
+  /**
+   * This is similar to `.once()`, but returns a Promise that resolves the next time
+   * the event is triggered, instead of calling a listener callback.
+   * @returns a Promise that resolves the next time given event is triggered,
+   * or rejects if an error is emitted.  (If you request the 'error' event,
+   * returns a promise that resolves with the error).
+   *
+   * Example:
+   *
+   *   const message = await stream.emitted('message') // rejects if the stream errors
+   */
+  emitted(event) {
+    return new Promise((resolve, reject) => {
+      __classPrivateFieldSet2(this, _EventStream_catchingPromiseCreated, true, "f");
+      if (event !== "error")
+        this.once("error", reject);
+      this.once(event, resolve);
+    });
+  }
+  async done() {
+    __classPrivateFieldSet2(this, _EventStream_catchingPromiseCreated, true, "f");
+    await __classPrivateFieldGet2(this, _EventStream_endPromise, "f");
+  }
+  _emit(event, ...args) {
+    if (__classPrivateFieldGet2(this, _EventStream_ended, "f")) {
+      return;
+    }
+    if (event === "end") {
+      __classPrivateFieldSet2(this, _EventStream_ended, true, "f");
+      __classPrivateFieldGet2(this, _EventStream_resolveEndPromise, "f").call(this);
+    }
+    const listeners = __classPrivateFieldGet2(this, _EventStream_listeners, "f")[event];
+    if (listeners) {
+      __classPrivateFieldGet2(this, _EventStream_listeners, "f")[event] = listeners.filter((l) => !l.once);
+      listeners.forEach(({ listener }) => listener(...args));
+    }
+    if (event === "abort") {
+      const error = args[0];
+      if (!__classPrivateFieldGet2(this, _EventStream_catchingPromiseCreated, "f") && !listeners?.length) {
+        Promise.reject(error);
+      }
+      __classPrivateFieldGet2(this, _EventStream_rejectConnectedPromise, "f").call(this, error);
+      __classPrivateFieldGet2(this, _EventStream_rejectEndPromise, "f").call(this, error);
+      this._emit("end");
+      return;
+    }
+    if (event === "error") {
+      const error = args[0];
+      if (!__classPrivateFieldGet2(this, _EventStream_catchingPromiseCreated, "f") && !listeners?.length) {
+        Promise.reject(error);
+      }
+      __classPrivateFieldGet2(this, _EventStream_rejectConnectedPromise, "f").call(this, error);
+      __classPrivateFieldGet2(this, _EventStream_rejectEndPromise, "f").call(this, error);
+      this._emit("end");
+    }
+  }
+  _emitFinal() {
+  }
+};
+_EventStream_connectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_resolveConnectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_rejectConnectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_endPromise = /* @__PURE__ */ new WeakMap(), _EventStream_resolveEndPromise = /* @__PURE__ */ new WeakMap(), _EventStream_rejectEndPromise = /* @__PURE__ */ new WeakMap(), _EventStream_listeners = /* @__PURE__ */ new WeakMap(), _EventStream_ended = /* @__PURE__ */ new WeakMap(), _EventStream_errored = /* @__PURE__ */ new WeakMap(), _EventStream_aborted = /* @__PURE__ */ new WeakMap(), _EventStream_catchingPromiseCreated = /* @__PURE__ */ new WeakMap(), _EventStream_instances = /* @__PURE__ */ new WeakSet(), _EventStream_handleError = function _EventStream_handleError2(error) {
+  __classPrivateFieldSet2(this, _EventStream_errored, true, "f");
+  if (error instanceof Error && error.name === "AbortError") {
+    error = new APIUserAbortError();
+  }
+  if (error instanceof APIUserAbortError) {
+    __classPrivateFieldSet2(this, _EventStream_aborted, true, "f");
+    return this._emit("abort", error);
+  }
+  if (error instanceof OpenAIError) {
+    return this._emit("error", error);
+  }
+  if (error instanceof Error) {
+    const openAIError = new OpenAIError(error.message);
+    openAIError.cause = error;
+    return this._emit("error", openAIError);
+  }
+  return this._emit("error", new OpenAIError(String(error)));
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/RunnableFunction.mjs
+function isRunnableFunctionWithParse(fn) {
+  return typeof fn.parse === "function";
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/AbstractChatCompletionRunner.mjs
+var _AbstractChatCompletionRunner_instances;
+var _AbstractChatCompletionRunner_getFinalContent;
+var _AbstractChatCompletionRunner_getFinalMessage;
+var _AbstractChatCompletionRunner_getFinalFunctionToolCall;
+var _AbstractChatCompletionRunner_getFinalFunctionToolCallResult;
+var _AbstractChatCompletionRunner_calculateTotalUsage;
+var _AbstractChatCompletionRunner_validateParams;
+var _AbstractChatCompletionRunner_stringifyFunctionCallResult;
+var DEFAULT_MAX_CHAT_COMPLETIONS = 10;
+var AbstractChatCompletionRunner = class extends EventStream {
+  constructor() {
+    super(...arguments);
+    _AbstractChatCompletionRunner_instances.add(this);
+    this._chatCompletions = [];
+    this.messages = [];
+  }
+  _addChatCompletion(chatCompletion) {
+    this._chatCompletions.push(chatCompletion);
+    this._emit("chatCompletion", chatCompletion);
+    const message = chatCompletion.choices[0]?.message;
+    if (message)
+      this._addMessage(message);
+    return chatCompletion;
+  }
+  _addMessage(message, emit = true) {
+    if (!("content" in message))
+      message.content = null;
+    this.messages.push(message);
+    if (emit) {
+      this._emit("message", message);
+      if (isToolMessage(message) && message.content) {
+        this._emit("functionToolCallResult", message.content);
+      } else if (isAssistantMessage(message) && message.tool_calls) {
+        for (const tool_call of message.tool_calls) {
+          if (tool_call.type === "function") {
+            this._emit("functionToolCall", tool_call.function);
+          }
+        }
+      }
+    }
+  }
+  /**
+   * @returns a promise that resolves with the final ChatCompletion, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletion.
+   */
+  async finalChatCompletion() {
+    await this.done();
+    const completion = this._chatCompletions[this._chatCompletions.length - 1];
+    if (!completion)
+      throw new OpenAIError("stream ended without producing a ChatCompletion");
+    return completion;
+  }
+  /**
+   * @returns a promise that resolves with the content of the final ChatCompletionMessage, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalContent() {
+    await this.done();
+    return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalContent).call(this);
+  }
+  /**
+   * @returns a promise that resolves with the the final assistant ChatCompletionMessage response,
+   * or rejects if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalMessage() {
+    await this.done();
+    return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this);
+  }
+  /**
+   * @returns a promise that resolves with the content of the final FunctionCall, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalFunctionToolCall() {
+    await this.done();
+    return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionToolCall).call(this);
+  }
+  async finalFunctionToolCallResult() {
+    await this.done();
+    return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionToolCallResult).call(this);
+  }
+  async totalUsage() {
+    await this.done();
+    return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_calculateTotalUsage).call(this);
+  }
+  allChatCompletions() {
+    return [...this._chatCompletions];
+  }
+  _emitFinal() {
+    const completion = this._chatCompletions[this._chatCompletions.length - 1];
+    if (completion)
+      this._emit("finalChatCompletion", completion);
+    const finalMessage = __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this);
+    if (finalMessage)
+      this._emit("finalMessage", finalMessage);
+    const finalContent = __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalContent).call(this);
+    if (finalContent)
+      this._emit("finalContent", finalContent);
+    const finalFunctionCall = __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionToolCall).call(this);
+    if (finalFunctionCall)
+      this._emit("finalFunctionToolCall", finalFunctionCall);
+    const finalFunctionCallResult = __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionToolCallResult).call(this);
+    if (finalFunctionCallResult != null)
+      this._emit("finalFunctionToolCallResult", finalFunctionCallResult);
+    if (this._chatCompletions.some((c) => c.usage)) {
+      this._emit("totalUsage", __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_calculateTotalUsage).call(this));
+    }
+  }
+  async _createChatCompletion(client, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_validateParams).call(this, params);
+    const chatCompletion = await client.chat.completions.create({ ...params, stream: false }, { ...options, signal: this.controller.signal });
+    this._connected();
+    return this._addChatCompletion(parseChatCompletion(chatCompletion, params));
+  }
+  async _runChatCompletion(client, params, options) {
+    for (const message of params.messages) {
+      this._addMessage(message, false);
+    }
+    return await this._createChatCompletion(client, params, options);
+  }
+  async _runTools(client, params, options) {
+    const role = "tool";
+    const { tool_choice = "auto", stream, ...restParams } = params;
+    const singleFunctionToCall = typeof tool_choice !== "string" && tool_choice.type === "function" && tool_choice?.function?.name;
+    const { maxChatCompletions = DEFAULT_MAX_CHAT_COMPLETIONS } = options || {};
+    const inputTools = params.tools.map((tool) => {
+      if (isAutoParsableTool(tool)) {
+        if (!tool.$callback) {
+          throw new OpenAIError("Tool given to `.runTools()` that does not have an associated function");
+        }
+        return {
+          type: "function",
+          function: {
+            function: tool.$callback,
+            name: tool.function.name,
+            description: tool.function.description || "",
+            parameters: tool.function.parameters,
+            parse: tool.$parseRaw,
+            strict: true
+          }
+        };
+      }
+      return tool;
+    });
+    const functionsByName = {};
+    for (const f of inputTools) {
+      if (f.type === "function") {
+        functionsByName[f.function.name || f.function.function.name] = f.function;
+      }
+    }
+    const tools = "tools" in params ? inputTools.map((t) => t.type === "function" ? {
+      type: "function",
+      function: {
+        name: t.function.name || t.function.function.name,
+        parameters: t.function.parameters,
+        description: t.function.description,
+        strict: t.function.strict
+      }
+    } : t) : void 0;
+    for (const message of params.messages) {
+      this._addMessage(message, false);
+    }
+    for (let i = 0; i < maxChatCompletions; ++i) {
+      const chatCompletion = await this._createChatCompletion(client, {
+        ...restParams,
+        tool_choice,
+        tools,
+        messages: [...this.messages]
+      }, options);
+      const message = chatCompletion.choices[0]?.message;
+      if (!message) {
+        throw new OpenAIError(`missing message in ChatCompletion response`);
+      }
+      if (!message.tool_calls?.length) {
+        return;
+      }
+      for (const tool_call of message.tool_calls) {
+        if (tool_call.type !== "function")
+          continue;
+        const tool_call_id = tool_call.id;
+        const { name, arguments: args } = tool_call.function;
+        const fn = functionsByName[name];
+        if (!fn) {
+          const content2 = `Invalid tool_call: ${JSON.stringify(name)}. Available options are: ${Object.keys(functionsByName).map((name2) => JSON.stringify(name2)).join(", ")}. Please try again`;
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        } else if (singleFunctionToCall && singleFunctionToCall !== name) {
+          const content2 = `Invalid tool_call: ${JSON.stringify(name)}. ${JSON.stringify(singleFunctionToCall)} requested. Please try again`;
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        }
+        let parsed;
+        try {
+          parsed = isRunnableFunctionWithParse(fn) ? await fn.parse(args) : args;
+        } catch (error) {
+          const content2 = error instanceof Error ? error.message : String(error);
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        }
+        const rawContent = await fn.function(parsed, this);
+        const content = __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_stringifyFunctionCallResult).call(this, rawContent);
+        this._addMessage({ role, tool_call_id, content });
+        if (singleFunctionToCall) {
+          return;
+        }
+      }
+    }
+    return;
+  }
+};
+_AbstractChatCompletionRunner_instances = /* @__PURE__ */ new WeakSet(), _AbstractChatCompletionRunner_getFinalContent = function _AbstractChatCompletionRunner_getFinalContent2() {
+  return __classPrivateFieldGet2(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this).content ?? null;
+}, _AbstractChatCompletionRunner_getFinalMessage = function _AbstractChatCompletionRunner_getFinalMessage2() {
+  let i = this.messages.length;
+  while (i-- > 0) {
+    const message = this.messages[i];
+    if (isAssistantMessage(message)) {
+      const ret = {
+        ...message,
+        content: message.content ?? null,
+        refusal: message.refusal ?? null
+      };
+      return ret;
+    }
+  }
+  throw new OpenAIError("stream ended without producing a ChatCompletionMessage with role=assistant");
+}, _AbstractChatCompletionRunner_getFinalFunctionToolCall = function _AbstractChatCompletionRunner_getFinalFunctionToolCall2() {
+  for (let i = this.messages.length - 1; i >= 0; i--) {
+    const message = this.messages[i];
+    if (isAssistantMessage(message) && message?.tool_calls?.length) {
+      return message.tool_calls.filter((x) => x.type === "function").at(-1)?.function;
+    }
+  }
+  return;
+}, _AbstractChatCompletionRunner_getFinalFunctionToolCallResult = function _AbstractChatCompletionRunner_getFinalFunctionToolCallResult2() {
+  for (let i = this.messages.length - 1; i >= 0; i--) {
+    const message = this.messages[i];
+    if (isToolMessage(message) && message.content != null && typeof message.content === "string" && this.messages.some((x) => x.role === "assistant" && x.tool_calls?.some((y) => y.type === "function" && y.id === message.tool_call_id))) {
+      return message.content;
+    }
+  }
+  return;
+}, _AbstractChatCompletionRunner_calculateTotalUsage = function _AbstractChatCompletionRunner_calculateTotalUsage2() {
+  const total = {
+    completion_tokens: 0,
+    prompt_tokens: 0,
+    total_tokens: 0
+  };
+  for (const { usage } of this._chatCompletions) {
+    if (usage) {
+      total.completion_tokens += usage.completion_tokens;
+      total.prompt_tokens += usage.prompt_tokens;
+      total.total_tokens += usage.total_tokens;
+    }
+  }
+  return total;
+}, _AbstractChatCompletionRunner_validateParams = function _AbstractChatCompletionRunner_validateParams2(params) {
+  if (params.n != null && params.n > 1) {
+    throw new OpenAIError("ChatCompletion convenience helpers only support n=1 at this time. To use n>1, please use chat.completions.create() directly.");
+  }
+}, _AbstractChatCompletionRunner_stringifyFunctionCallResult = function _AbstractChatCompletionRunner_stringifyFunctionCallResult2(rawContent) {
+  return typeof rawContent === "string" ? rawContent : rawContent === void 0 ? "undefined" : JSON.stringify(rawContent);
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/ChatCompletionRunner.mjs
+var ChatCompletionRunner = class _ChatCompletionRunner extends AbstractChatCompletionRunner {
+  static runTools(client, params, options) {
+    const runner = new _ChatCompletionRunner();
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runTools" }
+    };
+    runner._run(() => runner._runTools(client, params, opts));
+    return runner;
+  }
+  _addMessage(message, emit = true) {
+    super._addMessage(message, emit);
+    if (isAssistantMessage(message) && message.content) {
+      this._emit("content", message.content);
+    }
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/_vendor/partial-json-parser/parser.mjs
+var STR = 1;
+var NUM = 2;
+var ARR = 4;
+var OBJ = 8;
+var NULL = 16;
+var BOOL = 32;
+var NAN = 64;
+var INFINITY = 128;
+var MINUS_INFINITY = 256;
+var INF = INFINITY | MINUS_INFINITY;
+var SPECIAL = NULL | BOOL | INF | NAN;
+var ATOM = STR | NUM | SPECIAL;
+var COLLECTION = ARR | OBJ;
+var ALL = ATOM | COLLECTION;
+var Allow = {
+  STR,
+  NUM,
+  ARR,
+  OBJ,
+  NULL,
+  BOOL,
+  NAN,
+  INFINITY,
+  MINUS_INFINITY,
+  INF,
+  SPECIAL,
+  ATOM,
+  COLLECTION,
+  ALL
+};
+var PartialJSON = class extends Error {
+};
+var MalformedJSON = class extends Error {
+};
+function parseJSON(jsonString, allowPartial = Allow.ALL) {
+  if (typeof jsonString !== "string") {
+    throw new TypeError(`expecting str, got ${typeof jsonString}`);
+  }
+  if (!jsonString.trim()) {
+    throw new Error(`${jsonString} is empty`);
+  }
+  return _parseJSON(jsonString.trim(), allowPartial);
+}
+var _parseJSON = (jsonString, allow) => {
+  const length = jsonString.length;
+  let index = 0;
+  const markPartialJSON = (msg) => {
+    throw new PartialJSON(`${msg} at position ${index}`);
+  };
+  const throwMalformedError = (msg) => {
+    throw new MalformedJSON(`${msg} at position ${index}`);
+  };
+  const parseAny = () => {
+    skipBlank();
+    if (index >= length)
+      markPartialJSON("Unexpected end of input");
+    if (jsonString[index] === '"')
+      return parseStr();
+    if (jsonString[index] === "{")
+      return parseObj();
+    if (jsonString[index] === "[")
+      return parseArr();
+    if (jsonString.substring(index, index + 4) === "null" || Allow.NULL & allow && length - index < 4 && "null".startsWith(jsonString.substring(index))) {
+      index += 4;
+      return null;
+    }
+    if (jsonString.substring(index, index + 4) === "true" || Allow.BOOL & allow && length - index < 4 && "true".startsWith(jsonString.substring(index))) {
+      index += 4;
+      return true;
+    }
+    if (jsonString.substring(index, index + 5) === "false" || Allow.BOOL & allow && length - index < 5 && "false".startsWith(jsonString.substring(index))) {
+      index += 5;
+      return false;
+    }
+    if (jsonString.substring(index, index + 8) === "Infinity" || Allow.INFINITY & allow && length - index < 8 && "Infinity".startsWith(jsonString.substring(index))) {
+      index += 8;
+      return Infinity;
+    }
+    if (jsonString.substring(index, index + 9) === "-Infinity" || Allow.MINUS_INFINITY & allow && 1 < length - index && length - index < 9 && "-Infinity".startsWith(jsonString.substring(index))) {
+      index += 9;
+      return -Infinity;
+    }
+    if (jsonString.substring(index, index + 3) === "NaN" || Allow.NAN & allow && length - index < 3 && "NaN".startsWith(jsonString.substring(index))) {
+      index += 3;
+      return NaN;
+    }
+    return parseNum();
+  };
+  const parseStr = () => {
+    const start = index;
+    let escape2 = false;
+    index++;
+    while (index < length && (jsonString[index] !== '"' || escape2 && jsonString[index - 1] === "\\")) {
+      escape2 = jsonString[index] === "\\" ? !escape2 : false;
+      index++;
+    }
+    if (jsonString.charAt(index) == '"') {
+      try {
+        return JSON.parse(jsonString.substring(start, ++index - Number(escape2)));
+      } catch (e) {
+        throwMalformedError(String(e));
+      }
+    } else if (Allow.STR & allow) {
+      try {
+        return JSON.parse(jsonString.substring(start, index - Number(escape2)) + '"');
+      } catch (e) {
+        return JSON.parse(jsonString.substring(start, jsonString.lastIndexOf("\\")) + '"');
+      }
+    }
+    markPartialJSON("Unterminated string literal");
+  };
+  const parseObj = () => {
+    index++;
+    skipBlank();
+    const obj = {};
+    try {
+      while (jsonString[index] !== "}") {
+        skipBlank();
+        if (index >= length && Allow.OBJ & allow)
+          return obj;
+        const key = parseStr();
+        skipBlank();
+        index++;
+        try {
+          const value = parseAny();
+          Object.defineProperty(obj, key, { value, writable: true, enumerable: true, configurable: true });
+        } catch (e) {
+          if (Allow.OBJ & allow)
+            return obj;
+          else
+            throw e;
+        }
+        skipBlank();
+        if (jsonString[index] === ",")
+          index++;
+      }
+    } catch (e) {
+      if (Allow.OBJ & allow)
+        return obj;
+      else
+        markPartialJSON("Expected '}' at end of object");
+    }
+    index++;
+    return obj;
+  };
+  const parseArr = () => {
+    index++;
+    const arr = [];
+    try {
+      while (jsonString[index] !== "]") {
+        arr.push(parseAny());
+        skipBlank();
+        if (jsonString[index] === ",") {
+          index++;
+        }
+      }
+    } catch (e) {
+      if (Allow.ARR & allow) {
+        return arr;
+      }
+      markPartialJSON("Expected ']' at end of array");
+    }
+    index++;
+    return arr;
+  };
+  const parseNum = () => {
+    if (index === 0) {
+      if (jsonString === "-" && Allow.NUM & allow)
+        markPartialJSON("Not sure what '-' is");
+      try {
+        return JSON.parse(jsonString);
+      } catch (e) {
+        if (Allow.NUM & allow) {
+          try {
+            if ("." === jsonString[jsonString.length - 1])
+              return JSON.parse(jsonString.substring(0, jsonString.lastIndexOf(".")));
+            return JSON.parse(jsonString.substring(0, jsonString.lastIndexOf("e")));
+          } catch (e2) {
+          }
+        }
+        throwMalformedError(String(e));
+      }
+    }
+    const start = index;
+    if (jsonString[index] === "-")
+      index++;
+    while (jsonString[index] && !",]}".includes(jsonString[index]))
+      index++;
+    if (index == length && !(Allow.NUM & allow))
+      markPartialJSON("Unterminated number literal");
+    try {
+      return JSON.parse(jsonString.substring(start, index));
+    } catch (e) {
+      if (jsonString.substring(start, index) === "-" && Allow.NUM & allow)
+        markPartialJSON("Not sure what '-' is");
+      try {
+        return JSON.parse(jsonString.substring(start, jsonString.lastIndexOf("e")));
+      } catch (e2) {
+        throwMalformedError(String(e2));
+      }
+    }
+  };
+  const skipBlank = () => {
+    while (index < length && " \n\r	".includes(jsonString[index])) {
+      index++;
+    }
+  };
+  return parseAny();
+};
+var partialParse = (input) => parseJSON(input, Allow.ALL ^ Allow.NUM);
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/ChatCompletionStream.mjs
+var _ChatCompletionStream_instances;
+var _ChatCompletionStream_params;
+var _ChatCompletionStream_choiceEventStates;
+var _ChatCompletionStream_currentChatCompletionSnapshot;
+var _ChatCompletionStream_beginRequest;
+var _ChatCompletionStream_getChoiceEventState;
+var _ChatCompletionStream_addChunk;
+var _ChatCompletionStream_emitToolCallDoneEvent;
+var _ChatCompletionStream_emitContentDoneEvents;
+var _ChatCompletionStream_endRequest;
+var _ChatCompletionStream_getAutoParseableResponseFormat;
+var _ChatCompletionStream_accumulateChatCompletion;
+var ChatCompletionStream = class _ChatCompletionStream extends AbstractChatCompletionRunner {
+  constructor(params) {
+    super();
+    _ChatCompletionStream_instances.add(this);
+    _ChatCompletionStream_params.set(this, void 0);
+    _ChatCompletionStream_choiceEventStates.set(this, void 0);
+    _ChatCompletionStream_currentChatCompletionSnapshot.set(this, void 0);
+    __classPrivateFieldSet2(this, _ChatCompletionStream_params, params, "f");
+    __classPrivateFieldSet2(this, _ChatCompletionStream_choiceEventStates, [], "f");
+  }
+  get currentChatCompletionSnapshot() {
+    return __classPrivateFieldGet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+  }
+  /**
+   * Intended for use on the frontend, consuming a stream produced with
+   * `.toReadableStream()` on the backend.
+   *
+   * Note that messages sent to the model do not appear in `.on('message')`
+   * in this context.
+   */
+  static fromReadableStream(stream) {
+    const runner = new _ChatCompletionStream(null);
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  static createChatCompletion(client, params, options) {
+    const runner = new _ChatCompletionStream(params);
+    runner._run(() => runner._runChatCompletion(client, { ...params, stream: true }, { ...options, headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" } }));
+    return runner;
+  }
+  async _createChatCompletion(client, params, options) {
+    super._createChatCompletion;
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_beginRequest).call(this);
+    const stream = await client.chat.completions.create({ ...params, stream: true }, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const chunk of stream) {
+      __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_addChunk).call(this, chunk);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addChatCompletion(__classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+  }
+  async _fromReadableStream(readableStream, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_beginRequest).call(this);
+    this._connected();
+    const stream = Stream.fromReadableStream(readableStream, this.controller);
+    let chatId;
+    for await (const chunk of stream) {
+      if (chatId && chatId !== chunk.id) {
+        this._addChatCompletion(__classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+      }
+      __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_addChunk).call(this, chunk);
+      chatId = chunk.id;
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addChatCompletion(__classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+  }
+  [(_ChatCompletionStream_params = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_choiceEventStates = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_currentChatCompletionSnapshot = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_instances = /* @__PURE__ */ new WeakSet(), _ChatCompletionStream_beginRequest = function _ChatCompletionStream_beginRequest2() {
+    if (this.ended)
+      return;
+    __classPrivateFieldSet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, void 0, "f");
+  }, _ChatCompletionStream_getChoiceEventState = function _ChatCompletionStream_getChoiceEventState2(choice) {
+    let state = __classPrivateFieldGet2(this, _ChatCompletionStream_choiceEventStates, "f")[choice.index];
+    if (state) {
+      return state;
+    }
+    state = {
+      content_done: false,
+      refusal_done: false,
+      logprobs_content_done: false,
+      logprobs_refusal_done: false,
+      done_tool_calls: /* @__PURE__ */ new Set(),
+      current_tool_call_index: null
+    };
+    __classPrivateFieldGet2(this, _ChatCompletionStream_choiceEventStates, "f")[choice.index] = state;
+    return state;
+  }, _ChatCompletionStream_addChunk = function _ChatCompletionStream_addChunk2(chunk) {
+    if (this.ended)
+      return;
+    const completion = __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_accumulateChatCompletion).call(this, chunk);
+    this._emit("chunk", chunk, completion);
+    for (const choice of chunk.choices) {
+      const choiceSnapshot = completion.choices[choice.index];
+      if (choice.delta.content != null && choiceSnapshot.message?.role === "assistant" && choiceSnapshot.message?.content) {
+        this._emit("content", choice.delta.content, choiceSnapshot.message.content);
+        this._emit("content.delta", {
+          delta: choice.delta.content,
+          snapshot: choiceSnapshot.message.content,
+          parsed: choiceSnapshot.message.parsed
+        });
+      }
+      if (choice.delta.refusal != null && choiceSnapshot.message?.role === "assistant" && choiceSnapshot.message?.refusal) {
+        this._emit("refusal.delta", {
+          delta: choice.delta.refusal,
+          snapshot: choiceSnapshot.message.refusal
+        });
+      }
+      if (choice.logprobs?.content != null && choiceSnapshot.message?.role === "assistant") {
+        this._emit("logprobs.content.delta", {
+          content: choice.logprobs?.content,
+          snapshot: choiceSnapshot.logprobs?.content ?? []
+        });
+      }
+      if (choice.logprobs?.refusal != null && choiceSnapshot.message?.role === "assistant") {
+        this._emit("logprobs.refusal.delta", {
+          refusal: choice.logprobs?.refusal,
+          snapshot: choiceSnapshot.logprobs?.refusal ?? []
+        });
+      }
+      const state = __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+      if (choiceSnapshot.finish_reason) {
+        __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitContentDoneEvents).call(this, choiceSnapshot);
+        if (state.current_tool_call_index != null) {
+          __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitToolCallDoneEvent).call(this, choiceSnapshot, state.current_tool_call_index);
+        }
+      }
+      for (const toolCall of choice.delta.tool_calls ?? []) {
+        if (state.current_tool_call_index !== toolCall.index) {
+          __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitContentDoneEvents).call(this, choiceSnapshot);
+          if (state.current_tool_call_index != null) {
+            __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitToolCallDoneEvent).call(this, choiceSnapshot, state.current_tool_call_index);
+          }
+        }
+        state.current_tool_call_index = toolCall.index;
+      }
+      for (const toolCallDelta of choice.delta.tool_calls ?? []) {
+        const toolCallSnapshot = choiceSnapshot.message.tool_calls?.[toolCallDelta.index];
+        if (!toolCallSnapshot?.type) {
+          continue;
+        }
+        if (toolCallSnapshot?.type === "function") {
+          this._emit("tool_calls.function.arguments.delta", {
+            name: toolCallSnapshot.function?.name,
+            index: toolCallDelta.index,
+            arguments: toolCallSnapshot.function.arguments,
+            parsed_arguments: toolCallSnapshot.function.parsed_arguments,
+            arguments_delta: toolCallDelta.function?.arguments ?? ""
+          });
+        } else {
+          assertNever(toolCallSnapshot?.type);
+        }
+      }
+    }
+  }, _ChatCompletionStream_emitToolCallDoneEvent = function _ChatCompletionStream_emitToolCallDoneEvent2(choiceSnapshot, toolCallIndex) {
+    const state = __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+    if (state.done_tool_calls.has(toolCallIndex)) {
+      return;
+    }
+    const toolCallSnapshot = choiceSnapshot.message.tool_calls?.[toolCallIndex];
+    if (!toolCallSnapshot) {
+      throw new Error("no tool call snapshot");
+    }
+    if (!toolCallSnapshot.type) {
+      throw new Error("tool call snapshot missing `type`");
+    }
+    if (toolCallSnapshot.type === "function") {
+      const inputTool = __classPrivateFieldGet2(this, _ChatCompletionStream_params, "f")?.tools?.find((tool) => isChatCompletionFunctionTool(tool) && tool.function.name === toolCallSnapshot.function.name);
+      this._emit("tool_calls.function.arguments.done", {
+        name: toolCallSnapshot.function.name,
+        index: toolCallIndex,
+        arguments: toolCallSnapshot.function.arguments,
+        parsed_arguments: isAutoParsableTool(inputTool) ? inputTool.$parseRaw(toolCallSnapshot.function.arguments) : inputTool?.function.strict ? JSON.parse(toolCallSnapshot.function.arguments) : null
+      });
+    } else {
+      assertNever(toolCallSnapshot.type);
+    }
+  }, _ChatCompletionStream_emitContentDoneEvents = function _ChatCompletionStream_emitContentDoneEvents2(choiceSnapshot) {
+    const state = __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+    if (choiceSnapshot.message.content && !state.content_done) {
+      state.content_done = true;
+      const responseFormat = __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getAutoParseableResponseFormat).call(this);
+      this._emit("content.done", {
+        content: choiceSnapshot.message.content,
+        parsed: responseFormat ? responseFormat.$parseRaw(choiceSnapshot.message.content) : null
+      });
+    }
+    if (choiceSnapshot.message.refusal && !state.refusal_done) {
+      state.refusal_done = true;
+      this._emit("refusal.done", { refusal: choiceSnapshot.message.refusal });
+    }
+    if (choiceSnapshot.logprobs?.content && !state.logprobs_content_done) {
+      state.logprobs_content_done = true;
+      this._emit("logprobs.content.done", { content: choiceSnapshot.logprobs.content });
+    }
+    if (choiceSnapshot.logprobs?.refusal && !state.logprobs_refusal_done) {
+      state.logprobs_refusal_done = true;
+      this._emit("logprobs.refusal.done", { refusal: choiceSnapshot.logprobs.refusal });
+    }
+  }, _ChatCompletionStream_endRequest = function _ChatCompletionStream_endRequest2() {
+    if (this.ended) {
+      throw new OpenAIError(`stream has ended, this shouldn't happen`);
+    }
+    const snapshot = __classPrivateFieldGet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+    if (!snapshot) {
+      throw new OpenAIError(`request ended without sending any chunks`);
+    }
+    __classPrivateFieldSet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, void 0, "f");
+    __classPrivateFieldSet2(this, _ChatCompletionStream_choiceEventStates, [], "f");
+    return finalizeChatCompletion(snapshot, __classPrivateFieldGet2(this, _ChatCompletionStream_params, "f"));
+  }, _ChatCompletionStream_getAutoParseableResponseFormat = function _ChatCompletionStream_getAutoParseableResponseFormat2() {
+    const responseFormat = __classPrivateFieldGet2(this, _ChatCompletionStream_params, "f")?.response_format;
+    if (isAutoParsableResponseFormat(responseFormat)) {
+      return responseFormat;
+    }
+    return null;
+  }, _ChatCompletionStream_accumulateChatCompletion = function _ChatCompletionStream_accumulateChatCompletion2(chunk) {
+    var _a3, _b, _c, _d;
+    let snapshot = __classPrivateFieldGet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+    const { choices, ...rest } = chunk;
+    if (!snapshot) {
+      snapshot = __classPrivateFieldSet2(this, _ChatCompletionStream_currentChatCompletionSnapshot, {
+        ...rest,
+        choices: []
+      }, "f");
+    } else {
+      Object.assign(snapshot, rest);
+    }
+    for (const { delta, finish_reason, index, logprobs = null, ...other } of chunk.choices) {
+      let choice = snapshot.choices[index];
+      if (!choice) {
+        choice = snapshot.choices[index] = { finish_reason, index, message: {}, logprobs, ...other };
+      }
+      if (logprobs) {
+        if (!choice.logprobs) {
+          choice.logprobs = Object.assign({}, logprobs);
+        } else {
+          const { content: content2, refusal: refusal2, ...rest3 } = logprobs;
+          assertIsEmpty(rest3);
+          Object.assign(choice.logprobs, rest3);
+          if (content2) {
+            (_a3 = choice.logprobs).content ?? (_a3.content = []);
+            choice.logprobs.content.push(...content2);
+          }
+          if (refusal2) {
+            (_b = choice.logprobs).refusal ?? (_b.refusal = []);
+            choice.logprobs.refusal.push(...refusal2);
+          }
+        }
+      }
+      if (finish_reason) {
+        choice.finish_reason = finish_reason;
+        if (__classPrivateFieldGet2(this, _ChatCompletionStream_params, "f") && hasAutoParseableInput(__classPrivateFieldGet2(this, _ChatCompletionStream_params, "f"))) {
+          if (finish_reason === "length") {
+            throw new LengthFinishReasonError();
+          }
+          if (finish_reason === "content_filter") {
+            throw new ContentFilterFinishReasonError();
+          }
+        }
+      }
+      Object.assign(choice, other);
+      if (!delta)
+        continue;
+      const { content, refusal, function_call, role, tool_calls, ...rest2 } = delta;
+      assertIsEmpty(rest2);
+      Object.assign(choice.message, rest2);
+      if (refusal) {
+        choice.message.refusal = (choice.message.refusal || "") + refusal;
+      }
+      if (role)
+        choice.message.role = role;
+      if (function_call) {
+        if (!choice.message.function_call) {
+          choice.message.function_call = function_call;
+        } else {
+          if (function_call.name)
+            choice.message.function_call.name = function_call.name;
+          if (function_call.arguments) {
+            (_c = choice.message.function_call).arguments ?? (_c.arguments = "");
+            choice.message.function_call.arguments += function_call.arguments;
+          }
+        }
+      }
+      if (content) {
+        choice.message.content = (choice.message.content || "") + content;
+        if (!choice.message.refusal && __classPrivateFieldGet2(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getAutoParseableResponseFormat).call(this)) {
+          choice.message.parsed = partialParse(choice.message.content);
+        }
+      }
+      if (tool_calls) {
+        if (!choice.message.tool_calls)
+          choice.message.tool_calls = [];
+        for (const { index: index2, id, type, function: fn, ...rest3 } of tool_calls) {
+          const tool_call = (_d = choice.message.tool_calls)[index2] ?? (_d[index2] = {});
+          Object.assign(tool_call, rest3);
+          if (id)
+            tool_call.id = id;
+          if (type)
+            tool_call.type = type;
+          if (fn)
+            tool_call.function ?? (tool_call.function = { name: fn.name ?? "", arguments: "" });
+          if (fn?.name)
+            tool_call.function.name = fn.name;
+          if (fn?.arguments) {
+            tool_call.function.arguments += fn.arguments;
+            if (shouldParseToolCall(__classPrivateFieldGet2(this, _ChatCompletionStream_params, "f"), tool_call)) {
+              tool_call.function.parsed_arguments = partialParse(tool_call.function.arguments);
+            }
+          }
+        }
+      }
+    }
+    return snapshot;
+  }, Symbol.asyncIterator)]() {
+    const pushQueue = [];
+    const readQueue = [];
+    let done = false;
+    this.on("chunk", (chunk) => {
+      const reader = readQueue.shift();
+      if (reader) {
+        reader.resolve(chunk);
+      } else {
+        pushQueue.push(chunk);
+      }
+    });
+    this.on("end", () => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.resolve(void 0);
+      }
+      readQueue.length = 0;
+    });
+    this.on("abort", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    this.on("error", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    return {
+      next: async () => {
+        if (!pushQueue.length) {
+          if (done) {
+            return { value: void 0, done: true };
+          }
+          return new Promise((resolve, reject) => readQueue.push({ resolve, reject })).then((chunk2) => chunk2 ? { value: chunk2, done: false } : { value: void 0, done: true });
+        }
+        const chunk = pushQueue.shift();
+        return { value: chunk, done: false };
+      },
+      return: async () => {
+        this.abort();
+        return { value: void 0, done: true };
+      }
+    };
+  }
+  toReadableStream() {
+    const stream = new Stream(this[Symbol.asyncIterator].bind(this), this.controller);
+    return stream.toReadableStream();
+  }
+};
+function finalizeChatCompletion(snapshot, params) {
+  const { id, choices, created, model, system_fingerprint, ...rest } = snapshot;
+  const completion = {
+    ...rest,
+    id,
+    choices: choices.map(({ message, finish_reason, index, logprobs, ...choiceRest }) => {
+      if (!finish_reason) {
+        throw new OpenAIError(`missing finish_reason for choice ${index}`);
+      }
+      const { content = null, function_call, tool_calls, ...messageRest } = message;
+      const role = message.role;
+      if (!role) {
+        throw new OpenAIError(`missing role for choice ${index}`);
+      }
+      if (function_call) {
+        const { arguments: args, name } = function_call;
+        if (args == null) {
+          throw new OpenAIError(`missing function_call.arguments for choice ${index}`);
+        }
+        if (!name) {
+          throw new OpenAIError(`missing function_call.name for choice ${index}`);
+        }
+        return {
+          ...choiceRest,
+          message: {
+            content,
+            function_call: { arguments: args, name },
+            role,
+            refusal: message.refusal ?? null
+          },
+          finish_reason,
+          index,
+          logprobs
+        };
+      }
+      if (tool_calls) {
+        return {
+          ...choiceRest,
+          index,
+          finish_reason,
+          logprobs,
+          message: {
+            ...messageRest,
+            role,
+            content,
+            refusal: message.refusal ?? null,
+            tool_calls: tool_calls.map((tool_call, i) => {
+              const { function: fn, type, id: id2, ...toolRest } = tool_call;
+              const { arguments: args, name, ...fnRest } = fn || {};
+              if (id2 == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i}].id
+${str(snapshot)}`);
+              }
+              if (type == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i}].type
+${str(snapshot)}`);
+              }
+              if (name == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i}].function.name
+${str(snapshot)}`);
+              }
+              if (args == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i}].function.arguments
+${str(snapshot)}`);
+              }
+              return { ...toolRest, id: id2, type, function: { ...fnRest, name, arguments: args } };
+            })
+          }
+        };
+      }
+      return {
+        ...choiceRest,
+        message: { ...messageRest, content, role, refusal: message.refusal ?? null },
+        finish_reason,
+        index,
+        logprobs
+      };
+    }),
+    created,
+    model,
+    object: "chat.completion",
+    ...system_fingerprint ? { system_fingerprint } : {}
+  };
+  return maybeParseChatCompletion(completion, params);
+}
+function str(x) {
+  return JSON.stringify(x);
+}
+function assertIsEmpty(obj) {
+  return;
+}
+function assertNever(_x) {
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/ChatCompletionStreamingRunner.mjs
+var ChatCompletionStreamingRunner = class _ChatCompletionStreamingRunner extends ChatCompletionStream {
+  static fromReadableStream(stream) {
+    const runner = new _ChatCompletionStreamingRunner(null);
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  static runTools(client, params, options) {
+    const runner = new _ChatCompletionStreamingRunner(
+      // @ts-expect-error TODO these types are incompatible
+      params
+    );
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runTools" }
+    };
+    runner._run(() => runner._runTools(client, params, opts));
+    return runner;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/chat/completions/completions.mjs
+var Completions = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.messages = new Messages(this._client);
+  }
+  create(body, options) {
+    return this._client.post("/chat/completions", { body, ...options, stream: body.stream ?? false });
+  }
+  /**
+   * Get a stored chat completion. Only Chat Completions that have been created with
+   * the `store` parameter set to `true` will be returned.
+   *
+   * @example
+   * ```ts
+   * const chatCompletion =
+   *   await client.chat.completions.retrieve('completion_id');
+   * ```
+   */
+  retrieve(completionID, options) {
+    return this._client.get(path2`/chat/completions/${completionID}`, options);
+  }
+  /**
+   * Modify a stored chat completion. Only Chat Completions that have been created
+   * with the `store` parameter set to `true` can be modified. Currently, the only
+   * supported modification is to update the `metadata` field.
+   *
+   * @example
+   * ```ts
+   * const chatCompletion = await client.chat.completions.update(
+   *   'completion_id',
+   *   { metadata: { foo: 'string' } },
+   * );
+   * ```
+   */
+  update(completionID, body, options) {
+    return this._client.post(path2`/chat/completions/${completionID}`, { body, ...options });
+  }
+  /**
+   * List stored Chat Completions. Only Chat Completions that have been stored with
+   * the `store` parameter set to `true` will be returned.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const chatCompletion of client.chat.completions.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/chat/completions", CursorPage, { query, ...options });
+  }
+  /**
+   * Delete a stored chat completion. Only Chat Completions that have been created
+   * with the `store` parameter set to `true` can be deleted.
+   *
+   * @example
+   * ```ts
+   * const chatCompletionDeleted =
+   *   await client.chat.completions.delete('completion_id');
+   * ```
+   */
+  delete(completionID, options) {
+    return this._client.delete(path2`/chat/completions/${completionID}`, options);
+  }
+  parse(body, options) {
+    validateInputTools(body.tools);
+    return this._client.chat.completions.create(body, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        "X-Stainless-Helper-Method": "chat.completions.parse"
+      }
+    })._thenUnwrap((completion) => parseChatCompletion(completion, body));
+  }
+  runTools(body, options) {
+    if (body.stream) {
+      return ChatCompletionStreamingRunner.runTools(this._client, body, options);
+    }
+    return ChatCompletionRunner.runTools(this._client, body, options);
+  }
+  /**
+   * Creates a chat completion stream
+   */
+  stream(body, options) {
+    return ChatCompletionStream.createChatCompletion(this._client, body, options);
+  }
+};
+Completions.Messages = Messages;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/chat/chat.mjs
+var Chat = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.completions = new Completions(this._client);
+  }
+};
+Chat.Completions = Completions;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/headers.mjs
+var brand_privateNullableHeaders = /* @__PURE__ */ Symbol("brand.privateNullableHeaders");
+function* iterateHeaders(headers) {
+  if (!headers)
+    return;
+  if (brand_privateNullableHeaders in headers) {
+    const { values, nulls } = headers;
+    yield* values.entries();
+    for (const name of nulls) {
+      yield [name, null];
+    }
+    return;
+  }
+  let shouldClear = false;
+  let iter;
+  if (headers instanceof Headers) {
+    iter = headers.entries();
+  } else if (isReadonlyArray(headers)) {
+    iter = headers;
+  } else {
+    shouldClear = true;
+    iter = Object.entries(headers ?? {});
+  }
+  for (let row of iter) {
+    const name = row[0];
+    if (typeof name !== "string")
+      throw new TypeError("expected header name to be a string");
+    const values = isReadonlyArray(row[1]) ? row[1] : [row[1]];
+    let didClear = false;
+    for (const value of values) {
+      if (value === void 0)
+        continue;
+      if (shouldClear && !didClear) {
+        didClear = true;
+        yield [name, null];
+      }
+      yield [name, value];
+    }
+  }
+}
+var buildHeaders = (newHeaders) => {
+  const targetHeaders = new Headers();
+  const nullHeaders = /* @__PURE__ */ new Set();
+  for (const headers of newHeaders) {
+    const seenHeaders = /* @__PURE__ */ new Set();
+    for (const [name, value] of iterateHeaders(headers)) {
+      const lowerName = name.toLowerCase();
+      if (!seenHeaders.has(lowerName)) {
+        targetHeaders.delete(name);
+        seenHeaders.add(lowerName);
+      }
+      if (value === null) {
+        targetHeaders.delete(name);
+        nullHeaders.add(lowerName);
+      } else {
+        targetHeaders.append(name, value);
+        nullHeaders.delete(lowerName);
+      }
+    }
+  }
+  return { [brand_privateNullableHeaders]: true, values: targetHeaders, nulls: nullHeaders };
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/audio/speech.mjs
+var Speech = class extends APIResource {
+  /**
+   * Generates audio from the input text.
+   *
+   * Returns the audio file content, or a stream of audio events.
+   *
+   * @example
+   * ```ts
+   * const speech = await client.audio.speech.create({
+   *   input: 'input',
+   *   model: 'tts-1',
+   *   voice: 'alloy',
+   * });
+   *
+   * const content = await speech.blob();
+   * console.log(content);
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/audio/speech", {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: "application/octet-stream" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/audio/transcriptions.mjs
+var Transcriptions = class extends APIResource {
+  create(body, options) {
+    return this._client.post("/audio/transcriptions", multipartFormRequestOptions({
+      body,
+      ...options,
+      stream: body.stream ?? false,
+      __metadata: { model: body.model }
+    }, this._client));
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/audio/translations.mjs
+var Translations = class extends APIResource {
+  create(body, options) {
+    return this._client.post("/audio/translations", multipartFormRequestOptions({ body, ...options, __metadata: { model: body.model } }, this._client));
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/audio/audio.mjs
+var Audio = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.transcriptions = new Transcriptions(this._client);
+    this.translations = new Translations(this._client);
+    this.speech = new Speech(this._client);
+  }
+};
+Audio.Transcriptions = Transcriptions;
+Audio.Translations = Translations;
+Audio.Speech = Speech;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/batches.mjs
+var Batches = class extends APIResource {
+  /**
+   * Creates and executes a batch from an uploaded file of requests
+   */
+  create(body, options) {
+    return this._client.post("/batches", { body, ...options });
+  }
+  /**
+   * Retrieves a batch.
+   */
+  retrieve(batchID, options) {
+    return this._client.get(path2`/batches/${batchID}`, options);
+  }
+  /**
+   * List your organization's batches.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/batches", CursorPage, { query, ...options });
+  }
+  /**
+   * Cancels an in-progress batch. The batch will be in status `cancelling` for up to
+   * 10 minutes, before changing to `cancelled`, where it will have partial results
+   * (if any) available in the output file.
+   */
+  cancel(batchID, options) {
+    return this._client.post(path2`/batches/${batchID}/cancel`, options);
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/assistants.mjs
+var Assistants = class extends APIResource {
+  /**
+   * Create an assistant with a model and instructions.
+   *
+   * @deprecated
+   */
+  create(body, options) {
+    return this._client.post("/assistants", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieves an assistant.
+   *
+   * @deprecated
+   */
+  retrieve(assistantID, options) {
+    return this._client.get(path2`/assistants/${assistantID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Modifies an assistant.
+   *
+   * @deprecated
+   */
+  update(assistantID, body, options) {
+    return this._client.post(path2`/assistants/${assistantID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of assistants.
+   *
+   * @deprecated
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/assistants", CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Delete an assistant.
+   *
+   * @deprecated
+   */
+  delete(assistantID, options) {
+    return this._client.delete(path2`/assistants/${assistantID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/realtime/sessions.mjs
+var Sessions = class extends APIResource {
+  /**
+   * Create an ephemeral API token for use in client-side applications with the
+   * Realtime API. Can be configured with the same session parameters as the
+   * `session.update` client event.
+   *
+   * It responds with a session object, plus a `client_secret` key which contains a
+   * usable ephemeral API token that can be used to authenticate browser clients for
+   * the Realtime API.
+   *
+   * @example
+   * ```ts
+   * const session =
+   *   await client.beta.realtime.sessions.create();
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/realtime/sessions", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/realtime/transcription-sessions.mjs
+var TranscriptionSessions = class extends APIResource {
+  /**
+   * Create an ephemeral API token for use in client-side applications with the
+   * Realtime API specifically for realtime transcriptions. Can be configured with
+   * the same session parameters as the `transcription_session.update` client event.
+   *
+   * It responds with a session object, plus a `client_secret` key which contains a
+   * usable ephemeral API token that can be used to authenticate browser clients for
+   * the Realtime API.
+   *
+   * @example
+   * ```ts
+   * const transcriptionSession =
+   *   await client.beta.realtime.transcriptionSessions.create();
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/realtime/transcription_sessions", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/realtime/realtime.mjs
+var Realtime = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.sessions = new Sessions(this._client);
+    this.transcriptionSessions = new TranscriptionSessions(this._client);
+  }
+};
+Realtime.Sessions = Sessions;
+Realtime.TranscriptionSessions = TranscriptionSessions;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/chatkit/sessions.mjs
+var Sessions2 = class extends APIResource {
+  /**
+   * Create a ChatKit session.
+   *
+   * @example
+   * ```ts
+   * const chatSession =
+   *   await client.beta.chatkit.sessions.create({
+   *     user: 'x',
+   *     workflow: { id: 'id' },
+   *   });
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/chatkit/sessions", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers])
+    });
+  }
+  /**
+   * Cancel an active ChatKit session and return its most recent metadata.
+   *
+   * Cancelling prevents new requests from using the issued client secret.
+   *
+   * @example
+   * ```ts
+   * const chatSession =
+   *   await client.beta.chatkit.sessions.cancel('cksess_123');
+   * ```
+   */
+  cancel(sessionID, options) {
+    return this._client.post(path2`/chatkit/sessions/${sessionID}/cancel`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/chatkit/threads.mjs
+var Threads = class extends APIResource {
+  /**
+   * Retrieve a ChatKit thread by its identifier.
+   *
+   * @example
+   * ```ts
+   * const chatkitThread =
+   *   await client.beta.chatkit.threads.retrieve('cthr_123');
+   * ```
+   */
+  retrieve(threadID, options) {
+    return this._client.get(path2`/chatkit/threads/${threadID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers])
+    });
+  }
+  /**
+   * List ChatKit threads with optional pagination and user filters.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const chatkitThread of client.beta.chatkit.threads.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/chatkit/threads", ConversationCursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers])
+    });
+  }
+  /**
+   * Delete a ChatKit thread along with its items and stored attachments.
+   *
+   * @example
+   * ```ts
+   * const thread = await client.beta.chatkit.threads.delete(
+   *   'cthr_123',
+   * );
+   * ```
+   */
+  delete(threadID, options) {
+    return this._client.delete(path2`/chatkit/threads/${threadID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers])
+    });
+  }
+  /**
+   * List items that belong to a ChatKit thread.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const thread of client.beta.chatkit.threads.listItems(
+   *   'cthr_123',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  listItems(threadID, query = {}, options) {
+    return this._client.getAPIList(path2`/chatkit/threads/${threadID}/items`, ConversationCursorPage, { query, ...options, headers: buildHeaders([{ "OpenAI-Beta": "chatkit_beta=v1" }, options?.headers]) });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/chatkit/chatkit.mjs
+var ChatKit = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.sessions = new Sessions2(this._client);
+    this.threads = new Threads(this._client);
+  }
+};
+ChatKit.Sessions = Sessions2;
+ChatKit.Threads = Threads;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/threads/messages.mjs
+var Messages2 = class extends APIResource {
+  /**
+   * Create a message.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  create(threadID, body, options) {
+    return this._client.post(path2`/threads/${threadID}/messages`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieve a message.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  retrieve(messageID, params, options) {
+    const { thread_id } = params;
+    return this._client.get(path2`/threads/${thread_id}/messages/${messageID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Modifies a message.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  update(messageID, params, options) {
+    const { thread_id, ...body } = params;
+    return this._client.post(path2`/threads/${thread_id}/messages/${messageID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of messages for a given thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  list(threadID, query = {}, options) {
+    return this._client.getAPIList(path2`/threads/${threadID}/messages`, CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Deletes a message.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  delete(messageID, params, options) {
+    const { thread_id } = params;
+    return this._client.delete(path2`/threads/${thread_id}/messages/${messageID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/threads/runs/steps.mjs
+var Steps = class extends APIResource {
+  /**
+   * Retrieves a run step.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  retrieve(stepID, params, options) {
+    const { thread_id, run_id, ...query } = params;
+    return this._client.get(path2`/threads/${thread_id}/runs/${run_id}/steps/${stepID}`, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of run steps belonging to a run.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  list(runID, params, options) {
+    const { thread_id, ...query } = params;
+    return this._client.getAPIList(path2`/threads/${thread_id}/runs/${runID}/steps`, CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/base64.mjs
+var toFloat32Array = (base64Str) => {
+  if (typeof Buffer !== "undefined") {
+    const buf = Buffer.from(base64Str, "base64");
+    return Array.from(new Float32Array(buf.buffer, buf.byteOffset, buf.length / Float32Array.BYTES_PER_ELEMENT));
+  } else {
+    const binaryStr = atob(base64Str);
+    const len = binaryStr.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+    return Array.from(new Float32Array(bytes.buffer));
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/internal/utils/env.mjs
+var readEnv = (env) => {
+  if (typeof globalThis.process !== "undefined") {
+    return globalThis.process.env?.[env]?.trim() || void 0;
+  }
+  if (typeof globalThis.Deno !== "undefined") {
+    return globalThis.Deno.env?.get?.(env)?.trim() || void 0;
+  }
+  return void 0;
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/AssistantStream.mjs
+var _AssistantStream_instances;
+var _a;
+var _AssistantStream_events;
+var _AssistantStream_runStepSnapshots;
+var _AssistantStream_messageSnapshots;
+var _AssistantStream_messageSnapshot;
+var _AssistantStream_finalRun;
+var _AssistantStream_currentContentIndex;
+var _AssistantStream_currentContent;
+var _AssistantStream_currentToolCallIndex;
+var _AssistantStream_currentToolCall;
+var _AssistantStream_currentEvent;
+var _AssistantStream_currentRunSnapshot;
+var _AssistantStream_currentRunStepSnapshot;
+var _AssistantStream_addEvent;
+var _AssistantStream_endRequest;
+var _AssistantStream_handleMessage;
+var _AssistantStream_handleRunStep;
+var _AssistantStream_handleEvent;
+var _AssistantStream_accumulateRunStep;
+var _AssistantStream_accumulateMessage;
+var _AssistantStream_accumulateContent;
+var _AssistantStream_handleRun;
+var AssistantStream = class extends EventStream {
+  constructor() {
+    super(...arguments);
+    _AssistantStream_instances.add(this);
+    _AssistantStream_events.set(this, []);
+    _AssistantStream_runStepSnapshots.set(this, {});
+    _AssistantStream_messageSnapshots.set(this, {});
+    _AssistantStream_messageSnapshot.set(this, void 0);
+    _AssistantStream_finalRun.set(this, void 0);
+    _AssistantStream_currentContentIndex.set(this, void 0);
+    _AssistantStream_currentContent.set(this, void 0);
+    _AssistantStream_currentToolCallIndex.set(this, void 0);
+    _AssistantStream_currentToolCall.set(this, void 0);
+    _AssistantStream_currentEvent.set(this, void 0);
+    _AssistantStream_currentRunSnapshot.set(this, void 0);
+    _AssistantStream_currentRunStepSnapshot.set(this, void 0);
+  }
+  [(_AssistantStream_events = /* @__PURE__ */ new WeakMap(), _AssistantStream_runStepSnapshots = /* @__PURE__ */ new WeakMap(), _AssistantStream_messageSnapshots = /* @__PURE__ */ new WeakMap(), _AssistantStream_messageSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_finalRun = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentContentIndex = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentContent = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentToolCallIndex = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentToolCall = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentEvent = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentRunSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentRunStepSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_instances = /* @__PURE__ */ new WeakSet(), Symbol.asyncIterator)]() {
+    const pushQueue = [];
+    const readQueue = [];
+    let done = false;
+    this.on("event", (event) => {
+      const reader = readQueue.shift();
+      if (reader) {
+        reader.resolve(event);
+      } else {
+        pushQueue.push(event);
+      }
+    });
+    this.on("end", () => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.resolve(void 0);
+      }
+      readQueue.length = 0;
+    });
+    this.on("abort", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    this.on("error", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    return {
+      next: async () => {
+        if (!pushQueue.length) {
+          if (done) {
+            return { value: void 0, done: true };
+          }
+          return new Promise((resolve, reject) => readQueue.push({ resolve, reject })).then((chunk2) => chunk2 ? { value: chunk2, done: false } : { value: void 0, done: true });
+        }
+        const chunk = pushQueue.shift();
+        return { value: chunk, done: false };
+      },
+      return: async () => {
+        this.abort();
+        return { value: void 0, done: true };
+      }
+    };
+  }
+  static fromReadableStream(stream) {
+    const runner = new _a();
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  async _fromReadableStream(readableStream, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    this._connected();
+    const stream = Stream.fromReadableStream(readableStream, this.controller);
+    for await (const event of stream) {
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  toReadableStream() {
+    const stream = new Stream(this[Symbol.asyncIterator].bind(this), this.controller);
+    return stream.toReadableStream();
+  }
+  static createToolAssistantStream(runId, runs, params, options) {
+    const runner = new _a();
+    runner._run(() => runner._runToolAssistantStream(runId, runs, params, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  async _createToolAssistantStream(run, runId, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await run.submitToolOutputs(runId, body, {
+      ...options,
+      signal: this.controller.signal
+    });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  static createThreadAssistantStream(params, thread, options) {
+    const runner = new _a();
+    runner._run(() => runner._threadAssistantStream(params, thread, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  static createAssistantStream(threadId, runs, params, options) {
+    const runner = new _a();
+    runner._run(() => runner._runAssistantStream(threadId, runs, params, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  currentEvent() {
+    return __classPrivateFieldGet2(this, _AssistantStream_currentEvent, "f");
+  }
+  currentRun() {
+    return __classPrivateFieldGet2(this, _AssistantStream_currentRunSnapshot, "f");
+  }
+  currentMessageSnapshot() {
+    return __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f");
+  }
+  currentRunStepSnapshot() {
+    return __classPrivateFieldGet2(this, _AssistantStream_currentRunStepSnapshot, "f");
+  }
+  async finalRunSteps() {
+    await this.done();
+    return Object.values(__classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f"));
+  }
+  async finalMessages() {
+    await this.done();
+    return Object.values(__classPrivateFieldGet2(this, _AssistantStream_messageSnapshots, "f"));
+  }
+  async finalRun() {
+    await this.done();
+    if (!__classPrivateFieldGet2(this, _AssistantStream_finalRun, "f"))
+      throw Error("Final run was not received.");
+    return __classPrivateFieldGet2(this, _AssistantStream_finalRun, "f");
+  }
+  async _createThreadAssistantStream(thread, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await thread.createAndRun(body, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  async _createAssistantStream(run, threadId, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await run.create(threadId, body, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  static accumulateDelta(acc, delta) {
+    for (const [key, deltaValue] of Object.entries(delta)) {
+      if (!acc.hasOwnProperty(key)) {
+        acc[key] = deltaValue;
+        continue;
+      }
+      let accValue = acc[key];
+      if (accValue === null || accValue === void 0) {
+        acc[key] = deltaValue;
+        continue;
+      }
+      if (key === "index" || key === "type") {
+        acc[key] = deltaValue;
+        continue;
+      }
+      if (typeof accValue === "string" && typeof deltaValue === "string") {
+        accValue += deltaValue;
+      } else if (typeof accValue === "number" && typeof deltaValue === "number") {
+        accValue += deltaValue;
+      } else if (isObj(accValue) && isObj(deltaValue)) {
+        accValue = this.accumulateDelta(accValue, deltaValue);
+      } else if (Array.isArray(accValue) && Array.isArray(deltaValue)) {
+        if (accValue.every((x) => typeof x === "string" || typeof x === "number")) {
+          accValue.push(...deltaValue);
+          continue;
+        }
+        for (const deltaEntry of deltaValue) {
+          if (!isObj(deltaEntry)) {
+            throw new Error(`Expected array delta entry to be an object but got: ${deltaEntry}`);
+          }
+          const index = deltaEntry["index"];
+          if (index == null) {
+            console.error(deltaEntry);
+            throw new Error("Expected array delta entry to have an `index` property");
+          }
+          if (typeof index !== "number") {
+            throw new Error(`Expected array delta entry \`index\` property to be a number but got ${index}`);
+          }
+          const accEntry = accValue[index];
+          if (accEntry == null) {
+            accValue.push(deltaEntry);
+          } else {
+            accValue[index] = this.accumulateDelta(accEntry, deltaEntry);
+          }
+        }
+        continue;
+      } else {
+        throw Error(`Unhandled record type: ${key}, deltaValue: ${deltaValue}, accValue: ${accValue}`);
+      }
+      acc[key] = accValue;
+    }
+    return acc;
+  }
+  _addRun(run) {
+    return run;
+  }
+  async _threadAssistantStream(params, thread, options) {
+    return await this._createThreadAssistantStream(thread, params, options);
+  }
+  async _runAssistantStream(threadId, runs, params, options) {
+    return await this._createAssistantStream(runs, threadId, params, options);
+  }
+  async _runToolAssistantStream(runId, runs, params, options) {
+    return await this._createToolAssistantStream(runs, runId, params, options);
+  }
+};
+_a = AssistantStream, _AssistantStream_addEvent = function _AssistantStream_addEvent2(event) {
+  if (this.ended)
+    return;
+  __classPrivateFieldSet2(this, _AssistantStream_currentEvent, event, "f");
+  __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_handleEvent).call(this, event);
+  switch (event.event) {
+    case "thread.created":
+      break;
+    case "thread.run.created":
+    case "thread.run.queued":
+    case "thread.run.in_progress":
+    case "thread.run.requires_action":
+    case "thread.run.completed":
+    case "thread.run.incomplete":
+    case "thread.run.failed":
+    case "thread.run.cancelling":
+    case "thread.run.cancelled":
+    case "thread.run.expired":
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_handleRun).call(this, event);
+      break;
+    case "thread.run.step.created":
+    case "thread.run.step.in_progress":
+    case "thread.run.step.delta":
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_handleRunStep).call(this, event);
+      break;
+    case "thread.message.created":
+    case "thread.message.in_progress":
+    case "thread.message.delta":
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_handleMessage).call(this, event);
+      break;
+    case "error":
+      throw new Error("Encountered an error event in event processing - errors should be processed earlier");
+    default:
+      assertNever2(event);
+  }
+}, _AssistantStream_endRequest = function _AssistantStream_endRequest2() {
+  if (this.ended) {
+    throw new OpenAIError(`stream has ended, this shouldn't happen`);
+  }
+  if (!__classPrivateFieldGet2(this, _AssistantStream_finalRun, "f"))
+    throw Error("Final run has not been received");
+  return __classPrivateFieldGet2(this, _AssistantStream_finalRun, "f");
+}, _AssistantStream_handleMessage = function _AssistantStream_handleMessage2(event) {
+  const [accumulatedMessage, newContent] = __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_accumulateMessage).call(this, event, __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f"));
+  __classPrivateFieldSet2(this, _AssistantStream_messageSnapshot, accumulatedMessage, "f");
+  __classPrivateFieldGet2(this, _AssistantStream_messageSnapshots, "f")[accumulatedMessage.id] = accumulatedMessage;
+  for (const content of newContent) {
+    const snapshotContent = accumulatedMessage.content[content.index];
+    if (snapshotContent?.type == "text") {
+      this._emit("textCreated", snapshotContent.text);
+    }
+  }
+  switch (event.event) {
+    case "thread.message.created":
+      this._emit("messageCreated", event.data);
+      break;
+    case "thread.message.in_progress":
+      break;
+    case "thread.message.delta":
+      this._emit("messageDelta", event.data.delta, accumulatedMessage);
+      if (event.data.delta.content) {
+        for (const content of event.data.delta.content) {
+          if (content.type == "text" && content.text) {
+            let textDelta = content.text;
+            let snapshot = accumulatedMessage.content[content.index];
+            if (snapshot && snapshot.type == "text") {
+              this._emit("textDelta", textDelta, snapshot.text);
+            } else {
+              throw Error("The snapshot associated with this text delta is not text or missing");
+            }
+          }
+          if (content.index != __classPrivateFieldGet2(this, _AssistantStream_currentContentIndex, "f")) {
+            if (__classPrivateFieldGet2(this, _AssistantStream_currentContent, "f")) {
+              switch (__classPrivateFieldGet2(this, _AssistantStream_currentContent, "f").type) {
+                case "text":
+                  this._emit("textDone", __classPrivateFieldGet2(this, _AssistantStream_currentContent, "f").text, __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f"));
+                  break;
+                case "image_file":
+                  this._emit("imageFileDone", __classPrivateFieldGet2(this, _AssistantStream_currentContent, "f").image_file, __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f"));
+                  break;
+              }
+            }
+            __classPrivateFieldSet2(this, _AssistantStream_currentContentIndex, content.index, "f");
+          }
+          __classPrivateFieldSet2(this, _AssistantStream_currentContent, accumulatedMessage.content[content.index], "f");
+        }
+      }
+      break;
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      if (__classPrivateFieldGet2(this, _AssistantStream_currentContentIndex, "f") !== void 0) {
+        const currentContent = event.data.content[__classPrivateFieldGet2(this, _AssistantStream_currentContentIndex, "f")];
+        if (currentContent) {
+          switch (currentContent.type) {
+            case "image_file":
+              this._emit("imageFileDone", currentContent.image_file, __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f"));
+              break;
+            case "text":
+              this._emit("textDone", currentContent.text, __classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f"));
+              break;
+          }
+        }
+      }
+      if (__classPrivateFieldGet2(this, _AssistantStream_messageSnapshot, "f")) {
+        this._emit("messageDone", event.data);
+      }
+      __classPrivateFieldSet2(this, _AssistantStream_messageSnapshot, void 0, "f");
+  }
+}, _AssistantStream_handleRunStep = function _AssistantStream_handleRunStep2(event) {
+  const accumulatedRunStep = __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_accumulateRunStep).call(this, event);
+  __classPrivateFieldSet2(this, _AssistantStream_currentRunStepSnapshot, accumulatedRunStep, "f");
+  switch (event.event) {
+    case "thread.run.step.created":
+      this._emit("runStepCreated", event.data);
+      break;
+    case "thread.run.step.delta":
+      const delta = event.data.delta;
+      if (delta.step_details && delta.step_details.type == "tool_calls" && delta.step_details.tool_calls && accumulatedRunStep.step_details.type == "tool_calls") {
+        for (const toolCall of delta.step_details.tool_calls) {
+          if (toolCall.index == __classPrivateFieldGet2(this, _AssistantStream_currentToolCallIndex, "f")) {
+            this._emit("toolCallDelta", toolCall, accumulatedRunStep.step_details.tool_calls[toolCall.index]);
+          } else {
+            if (__classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f")) {
+              this._emit("toolCallDone", __classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f"));
+            }
+            __classPrivateFieldSet2(this, _AssistantStream_currentToolCallIndex, toolCall.index, "f");
+            __classPrivateFieldSet2(this, _AssistantStream_currentToolCall, accumulatedRunStep.step_details.tool_calls[toolCall.index], "f");
+            if (__classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f"))
+              this._emit("toolCallCreated", __classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f"));
+          }
+        }
+      }
+      this._emit("runStepDelta", event.data.delta, accumulatedRunStep);
+      break;
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+      __classPrivateFieldSet2(this, _AssistantStream_currentRunStepSnapshot, void 0, "f");
+      const details = event.data.step_details;
+      if (details.type == "tool_calls") {
+        if (__classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f")) {
+          this._emit("toolCallDone", __classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f"));
+          __classPrivateFieldSet2(this, _AssistantStream_currentToolCall, void 0, "f");
+        }
+      }
+      this._emit("runStepDone", event.data, accumulatedRunStep);
+      break;
+    case "thread.run.step.in_progress":
+      break;
+  }
+}, _AssistantStream_handleEvent = function _AssistantStream_handleEvent2(event) {
+  __classPrivateFieldGet2(this, _AssistantStream_events, "f").push(event);
+  this._emit("event", event);
+}, _AssistantStream_accumulateRunStep = function _AssistantStream_accumulateRunStep2(event) {
+  switch (event.event) {
+    case "thread.run.step.created":
+      __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = event.data;
+      return event.data;
+    case "thread.run.step.delta":
+      let snapshot = __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+      if (!snapshot) {
+        throw Error("Received a RunStepDelta before creation of a snapshot");
+      }
+      let data = event.data;
+      if (data.delta) {
+        const accumulated = _a.accumulateDelta(snapshot, data.delta);
+        __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = accumulated;
+      }
+      return __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+    case "thread.run.step.in_progress":
+      __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = event.data;
+      break;
+  }
+  if (__classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id])
+    return __classPrivateFieldGet2(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+  throw new Error("No snapshot available");
+}, _AssistantStream_accumulateMessage = function _AssistantStream_accumulateMessage2(event, snapshot) {
+  let newContent = [];
+  switch (event.event) {
+    case "thread.message.created":
+      return [event.data, newContent];
+    case "thread.message.delta":
+      if (!snapshot) {
+        throw Error("Received a delta with no existing snapshot (there should be one from message creation)");
+      }
+      let data = event.data;
+      if (data.delta.content) {
+        for (const contentElement of data.delta.content) {
+          if (contentElement.index in snapshot.content) {
+            let currentContent = snapshot.content[contentElement.index];
+            snapshot.content[contentElement.index] = __classPrivateFieldGet2(this, _AssistantStream_instances, "m", _AssistantStream_accumulateContent).call(this, contentElement, currentContent);
+          } else {
+            snapshot.content[contentElement.index] = contentElement;
+            newContent.push(contentElement);
+          }
+        }
+      }
+      return [snapshot, newContent];
+    case "thread.message.in_progress":
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      if (snapshot) {
+        return [snapshot, newContent];
+      } else {
+        throw Error("Received thread message event with no existing snapshot");
+      }
+  }
+  throw Error("Tried to accumulate a non-message event");
+}, _AssistantStream_accumulateContent = function _AssistantStream_accumulateContent2(contentElement, currentContent) {
+  return _a.accumulateDelta(currentContent, contentElement);
+}, _AssistantStream_handleRun = function _AssistantStream_handleRun2(event) {
+  __classPrivateFieldSet2(this, _AssistantStream_currentRunSnapshot, event.data, "f");
+  switch (event.event) {
+    case "thread.run.created":
+      break;
+    case "thread.run.queued":
+      break;
+    case "thread.run.in_progress":
+      break;
+    case "thread.run.requires_action":
+    case "thread.run.cancelled":
+    case "thread.run.failed":
+    case "thread.run.completed":
+    case "thread.run.expired":
+    case "thread.run.incomplete":
+      __classPrivateFieldSet2(this, _AssistantStream_finalRun, event.data, "f");
+      if (__classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f")) {
+        this._emit("toolCallDone", __classPrivateFieldGet2(this, _AssistantStream_currentToolCall, "f"));
+        __classPrivateFieldSet2(this, _AssistantStream_currentToolCall, void 0, "f");
+      }
+      break;
+    case "thread.run.cancelling":
+      break;
+  }
+};
+function assertNever2(_x) {
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/threads/runs/runs.mjs
+var Runs = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.steps = new Steps(this._client);
+  }
+  create(threadID, params, options) {
+    const { include, ...body } = params;
+    return this._client.post(path2`/threads/${threadID}/runs`, {
+      query: { include },
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers]),
+      stream: params.stream ?? false,
+      __synthesizeEventData: true
+    });
+  }
+  /**
+   * Retrieves a run.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  retrieve(runID, params, options) {
+    const { thread_id } = params;
+    return this._client.get(path2`/threads/${thread_id}/runs/${runID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Modifies a run.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  update(runID, params, options) {
+    const { thread_id, ...body } = params;
+    return this._client.post(path2`/threads/${thread_id}/runs/${runID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of runs belonging to a thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  list(threadID, query = {}, options) {
+    return this._client.getAPIList(path2`/threads/${threadID}/runs`, CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Cancels a run that is `in_progress`.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  cancel(runID, params, options) {
+    const { thread_id } = params;
+    return this._client.post(path2`/threads/${thread_id}/runs/${runID}/cancel`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * A helper to create a run an poll for a terminal state. More information on Run
+   * lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async createAndPoll(threadId, body, options) {
+    const run = await this.create(threadId, body, options);
+    return await this.poll(run.id, { thread_id: threadId }, options);
+  }
+  /**
+   * Create a Run stream
+   *
+   * @deprecated use `stream` instead
+   */
+  createAndStream(threadId, body, options) {
+    return AssistantStream.createAssistantStream(threadId, this._client.beta.threads.runs, body, options);
+  }
+  /**
+   * A helper to poll a run status until it reaches a terminal state. More
+   * information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async poll(runId, params, options) {
+    const headers = buildHeaders([
+      options?.headers,
+      {
+        "X-Stainless-Poll-Helper": "true",
+        "X-Stainless-Custom-Poll-Interval": options?.pollIntervalMs?.toString() ?? void 0
+      }
+    ]);
+    while (true) {
+      const { data: run, response } = await this.retrieve(runId, params, {
+        ...options,
+        headers: { ...options?.headers, ...headers }
+      }).withResponse();
+      switch (run.status) {
+        //If we are in any sort of intermediate state we poll
+        case "queued":
+        case "in_progress":
+        case "cancelling":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep2(sleepInterval);
+          break;
+        //We return the run in any terminal state.
+        case "requires_action":
+        case "incomplete":
+        case "cancelled":
+        case "completed":
+        case "failed":
+        case "expired":
+          return run;
+      }
+    }
+  }
+  /**
+   * Create a Run stream
+   */
+  stream(threadId, body, options) {
+    return AssistantStream.createAssistantStream(threadId, this._client.beta.threads.runs, body, options);
+  }
+  submitToolOutputs(runID, params, options) {
+    const { thread_id, ...body } = params;
+    return this._client.post(path2`/threads/${thread_id}/runs/${runID}/submit_tool_outputs`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers]),
+      stream: params.stream ?? false,
+      __synthesizeEventData: true
+    });
+  }
+  /**
+   * A helper to submit a tool output to a run and poll for a terminal run state.
+   * More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async submitToolOutputsAndPoll(runId, params, options) {
+    const run = await this.submitToolOutputs(runId, params, options);
+    return await this.poll(run.id, params, options);
+  }
+  /**
+   * Submit the tool outputs from a previous run and stream the run to a terminal
+   * state. More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  submitToolOutputsStream(runId, params, options) {
+    return AssistantStream.createToolAssistantStream(runId, this._client.beta.threads.runs, params, options);
+  }
+};
+Runs.Steps = Steps;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/threads/threads.mjs
+var Threads2 = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.runs = new Runs(this._client);
+    this.messages = new Messages2(this._client);
+  }
+  /**
+   * Create a thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  create(body = {}, options) {
+    return this._client.post("/threads", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieves a thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  retrieve(threadID, options) {
+    return this._client.get(path2`/threads/${threadID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Modifies a thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  update(threadID, body, options) {
+    return this._client.post(path2`/threads/${threadID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Delete a thread.
+   *
+   * @deprecated The Assistants API is deprecated in favor of the Responses API
+   */
+  delete(threadID, options) {
+    return this._client.delete(path2`/threads/${threadID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  createAndRun(body, options) {
+    return this._client.post("/threads/runs", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers]),
+      stream: body.stream ?? false,
+      __synthesizeEventData: true
+    });
+  }
+  /**
+   * A helper to create a thread, start a run and then poll for a terminal state.
+   * More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async createAndRunPoll(body, options) {
+    const run = await this.createAndRun(body, options);
+    return await this.runs.poll(run.id, { thread_id: run.thread_id }, options);
+  }
+  /**
+   * Create a thread and stream the run back
+   */
+  createAndRunStream(body, options) {
+    return AssistantStream.createThreadAssistantStream(body, this._client.beta.threads, options);
+  }
+};
+Threads2.Runs = Runs;
+Threads2.Messages = Messages2;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/beta/beta.mjs
+var Beta = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.realtime = new Realtime(this._client);
+    this.chatkit = new ChatKit(this._client);
+    this.assistants = new Assistants(this._client);
+    this.threads = new Threads2(this._client);
+  }
+};
+Beta.Realtime = Realtime;
+Beta.ChatKit = ChatKit;
+Beta.Assistants = Assistants;
+Beta.Threads = Threads2;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/completions.mjs
+var Completions2 = class extends APIResource {
+  create(body, options) {
+    return this._client.post("/completions", { body, ...options, stream: body.stream ?? false });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/containers/files/content.mjs
+var Content = class extends APIResource {
+  /**
+   * Retrieve Container File Content
+   */
+  retrieve(fileID, params, options) {
+    const { container_id } = params;
+    return this._client.get(path2`/containers/${container_id}/files/${fileID}/content`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/containers/files/files.mjs
+var Files = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.content = new Content(this._client);
+  }
+  /**
+   * Create a Container File
+   *
+   * You can send either a multipart/form-data request with the raw file content, or
+   * a JSON request with a file ID.
+   */
+  create(containerID, body, options) {
+    return this._client.post(path2`/containers/${containerID}/files`, maybeMultipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Retrieve Container File
+   */
+  retrieve(fileID, params, options) {
+    const { container_id } = params;
+    return this._client.get(path2`/containers/${container_id}/files/${fileID}`, options);
+  }
+  /**
+   * List Container files
+   */
+  list(containerID, query = {}, options) {
+    return this._client.getAPIList(path2`/containers/${containerID}/files`, CursorPage, {
+      query,
+      ...options
+    });
+  }
+  /**
+   * Delete Container File
+   */
+  delete(fileID, params, options) {
+    const { container_id } = params;
+    return this._client.delete(path2`/containers/${container_id}/files/${fileID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+};
+Files.Content = Content;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/containers/containers.mjs
+var Containers = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.files = new Files(this._client);
+  }
+  /**
+   * Create Container
+   */
+  create(body, options) {
+    return this._client.post("/containers", { body, ...options });
+  }
+  /**
+   * Retrieve Container
+   */
+  retrieve(containerID, options) {
+    return this._client.get(path2`/containers/${containerID}`, options);
+  }
+  /**
+   * List Containers
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/containers", CursorPage, { query, ...options });
+  }
+  /**
+   * Delete Container
+   */
+  delete(containerID, options) {
+    return this._client.delete(path2`/containers/${containerID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+};
+Containers.Files = Files;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/conversations/items.mjs
+var Items = class extends APIResource {
+  /**
+   * Create items in a conversation with the given ID.
+   */
+  create(conversationID, params, options) {
+    const { include, ...body } = params;
+    return this._client.post(path2`/conversations/${conversationID}/items`, {
+      query: { include },
+      body,
+      ...options
+    });
+  }
+  /**
+   * Get a single item from a conversation with the given IDs.
+   */
+  retrieve(itemID, params, options) {
+    const { conversation_id, ...query } = params;
+    return this._client.get(path2`/conversations/${conversation_id}/items/${itemID}`, { query, ...options });
+  }
+  /**
+   * List all items for a conversation with the given ID.
+   */
+  list(conversationID, query = {}, options) {
+    return this._client.getAPIList(path2`/conversations/${conversationID}/items`, ConversationCursorPage, { query, ...options });
+  }
+  /**
+   * Delete an item from a conversation with the given IDs.
+   */
+  delete(itemID, params, options) {
+    const { conversation_id } = params;
+    return this._client.delete(path2`/conversations/${conversation_id}/items/${itemID}`, options);
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/conversations/conversations.mjs
+var Conversations = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.items = new Items(this._client);
+  }
+  /**
+   * Create a conversation.
+   */
+  create(body = {}, options) {
+    return this._client.post("/conversations", { body, ...options });
+  }
+  /**
+   * Get a conversation
+   */
+  retrieve(conversationID, options) {
+    return this._client.get(path2`/conversations/${conversationID}`, options);
+  }
+  /**
+   * Update a conversation
+   */
+  update(conversationID, body, options) {
+    return this._client.post(path2`/conversations/${conversationID}`, { body, ...options });
+  }
+  /**
+   * Delete a conversation. Items in the conversation will not be deleted.
+   */
+  delete(conversationID, options) {
+    return this._client.delete(path2`/conversations/${conversationID}`, options);
+  }
+};
+Conversations.Items = Items;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/embeddings.mjs
+var Embeddings = class extends APIResource {
+  /**
+   * Creates an embedding vector representing the input text.
+   *
+   * @example
+   * ```ts
+   * const createEmbeddingResponse =
+   *   await client.embeddings.create({
+   *     input: 'The quick brown fox jumped over the lazy dog',
+   *     model: 'text-embedding-3-small',
+   *   });
+   * ```
+   */
+  create(body, options) {
+    const hasUserProvidedEncodingFormat = !!body.encoding_format;
+    let encoding_format = hasUserProvidedEncodingFormat ? body.encoding_format : "base64";
+    if (hasUserProvidedEncodingFormat) {
+      loggerFor(this._client).debug("embeddings/user defined encoding_format:", body.encoding_format);
+    }
+    const response = this._client.post("/embeddings", {
+      body: {
+        ...body,
+        encoding_format
+      },
+      ...options
+    });
+    if (hasUserProvidedEncodingFormat) {
+      return response;
+    }
+    loggerFor(this._client).debug("embeddings/decoding base64 embeddings from base64");
+    return response._thenUnwrap((response2) => {
+      if (response2 && response2.data) {
+        response2.data.forEach((embeddingBase64Obj) => {
+          const embeddingBase64Str = embeddingBase64Obj.embedding;
+          embeddingBase64Obj.embedding = toFloat32Array(embeddingBase64Str);
+        });
+      }
+      return response2;
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/evals/runs/output-items.mjs
+var OutputItems = class extends APIResource {
+  /**
+   * Get an evaluation run output item by ID.
+   */
+  retrieve(outputItemID, params, options) {
+    const { eval_id, run_id } = params;
+    return this._client.get(path2`/evals/${eval_id}/runs/${run_id}/output_items/${outputItemID}`, options);
+  }
+  /**
+   * Get a list of output items for an evaluation run.
+   */
+  list(runID, params, options) {
+    const { eval_id, ...query } = params;
+    return this._client.getAPIList(path2`/evals/${eval_id}/runs/${runID}/output_items`, CursorPage, { query, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/evals/runs/runs.mjs
+var Runs2 = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.outputItems = new OutputItems(this._client);
+  }
+  /**
+   * Kicks off a new run for a given evaluation, specifying the data source, and what
+   * model configuration to use to test. The datasource will be validated against the
+   * schema specified in the config of the evaluation.
+   */
+  create(evalID, body, options) {
+    return this._client.post(path2`/evals/${evalID}/runs`, { body, ...options });
+  }
+  /**
+   * Get an evaluation run by ID.
+   */
+  retrieve(runID, params, options) {
+    const { eval_id } = params;
+    return this._client.get(path2`/evals/${eval_id}/runs/${runID}`, options);
+  }
+  /**
+   * Get a list of runs for an evaluation.
+   */
+  list(evalID, query = {}, options) {
+    return this._client.getAPIList(path2`/evals/${evalID}/runs`, CursorPage, {
+      query,
+      ...options
+    });
+  }
+  /**
+   * Delete an eval run.
+   */
+  delete(runID, params, options) {
+    const { eval_id } = params;
+    return this._client.delete(path2`/evals/${eval_id}/runs/${runID}`, options);
+  }
+  /**
+   * Cancel an ongoing evaluation run.
+   */
+  cancel(runID, params, options) {
+    const { eval_id } = params;
+    return this._client.post(path2`/evals/${eval_id}/runs/${runID}`, options);
+  }
+};
+Runs2.OutputItems = OutputItems;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/evals/evals.mjs
+var Evals = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.runs = new Runs2(this._client);
+  }
+  /**
+   * Create the structure of an evaluation that can be used to test a model's
+   * performance. An evaluation is a set of testing criteria and the config for a
+   * data source, which dictates the schema of the data used in the evaluation. After
+   * creating an evaluation, you can run it on different models and model parameters.
+   * We support several types of graders and datasources. For more information, see
+   * the [Evals guide](https://platform.openai.com/docs/guides/evals).
+   */
+  create(body, options) {
+    return this._client.post("/evals", { body, ...options });
+  }
+  /**
+   * Get an evaluation by ID.
+   */
+  retrieve(evalID, options) {
+    return this._client.get(path2`/evals/${evalID}`, options);
+  }
+  /**
+   * Update certain properties of an evaluation.
+   */
+  update(evalID, body, options) {
+    return this._client.post(path2`/evals/${evalID}`, { body, ...options });
+  }
+  /**
+   * List evaluations for a project.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/evals", CursorPage, { query, ...options });
+  }
+  /**
+   * Delete an evaluation.
+   */
+  delete(evalID, options) {
+    return this._client.delete(path2`/evals/${evalID}`, options);
+  }
+};
+Evals.Runs = Runs2;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/files.mjs
+var Files2 = class extends APIResource {
+  /**
+   * Upload a file that can be used across various endpoints. Individual files can be
+   * up to 512 MB, and each project can store up to 2.5 TB of files in total. There
+   * is no organization-wide storage limit.
+   *
+   * - The Assistants API supports files up to 2 million tokens and of specific file
+   *   types. See the
+   *   [Assistants Tools guide](https://platform.openai.com/docs/assistants/tools)
+   *   for details.
+   * - The Fine-tuning API only supports `.jsonl` files. The input also has certain
+   *   required formats for fine-tuning
+   *   [chat](https://platform.openai.com/docs/api-reference/fine-tuning/chat-input)
+   *   or
+   *   [completions](https://platform.openai.com/docs/api-reference/fine-tuning/completions-input)
+   *   models.
+   * - The Batch API only supports `.jsonl` files up to 200 MB in size. The input
+   *   also has a specific required
+   *   [format](https://platform.openai.com/docs/api-reference/batch/request-input).
+   *
+   * Please [contact us](https://help.openai.com/) if you need to increase these
+   * storage limits.
+   */
+  create(body, options) {
+    return this._client.post("/files", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Returns information about a specific file.
+   */
+  retrieve(fileID, options) {
+    return this._client.get(path2`/files/${fileID}`, options);
+  }
+  /**
+   * Returns a list of files.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/files", CursorPage, { query, ...options });
+  }
+  /**
+   * Delete a file and remove it from all vector stores.
+   */
+  delete(fileID, options) {
+    return this._client.delete(path2`/files/${fileID}`, options);
+  }
+  /**
+   * Returns the contents of the specified file.
+   */
+  content(fileID, options) {
+    return this._client.get(path2`/files/${fileID}/content`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+  /**
+   * Waits for the given file to be processed, default timeout is 30 mins.
+   */
+  async waitForProcessing(id, { pollInterval = 5e3, maxWait = 30 * 60 * 1e3 } = {}) {
+    const TERMINAL_STATES = /* @__PURE__ */ new Set(["processed", "error", "deleted"]);
+    const start = Date.now();
+    let file = await this.retrieve(id);
+    while (!file.status || !TERMINAL_STATES.has(file.status)) {
+      await sleep2(pollInterval);
+      file = await this.retrieve(id);
+      if (Date.now() - start > maxWait) {
+        throw new APIConnectionTimeoutError({
+          message: `Giving up on waiting for file ${id} to finish processing after ${maxWait} milliseconds.`
+        });
+      }
+    }
+    return file;
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/methods.mjs
+var Methods = class extends APIResource {
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/alpha/graders.mjs
+var Graders = class extends APIResource {
+  /**
+   * Run a grader.
+   *
+   * @example
+   * ```ts
+   * const response = await client.fineTuning.alpha.graders.run({
+   *   grader: {
+   *     input: 'input',
+   *     name: 'name',
+   *     operation: 'eq',
+   *     reference: 'reference',
+   *     type: 'string_check',
+   *   },
+   *   model_sample: 'model_sample',
+   * });
+   * ```
+   */
+  run(body, options) {
+    return this._client.post("/fine_tuning/alpha/graders/run", { body, ...options });
+  }
+  /**
+   * Validate a grader.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.fineTuning.alpha.graders.validate({
+   *     grader: {
+   *       input: 'input',
+   *       name: 'name',
+   *       operation: 'eq',
+   *       reference: 'reference',
+   *       type: 'string_check',
+   *     },
+   *   });
+   * ```
+   */
+  validate(body, options) {
+    return this._client.post("/fine_tuning/alpha/graders/validate", { body, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/alpha/alpha.mjs
+var Alpha = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.graders = new Graders(this._client);
+  }
+};
+Alpha.Graders = Graders;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/checkpoints/permissions.mjs
+var Permissions = class extends APIResource {
+  /**
+   * **NOTE:** Calling this endpoint requires an [admin API key](../admin-api-keys).
+   *
+   * This enables organization owners to share fine-tuned models with other projects
+   * in their organization.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const permissionCreateResponse of client.fineTuning.checkpoints.permissions.create(
+   *   'ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd',
+   *   { project_ids: ['string'] },
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  create(fineTunedModelCheckpoint, body, options) {
+    return this._client.getAPIList(path2`/fine_tuning/checkpoints/${fineTunedModelCheckpoint}/permissions`, Page, { body, method: "post", ...options });
+  }
+  /**
+   * **NOTE:** This endpoint requires an [admin API key](../admin-api-keys).
+   *
+   * Organization owners can use this endpoint to view all permissions for a
+   * fine-tuned model checkpoint.
+   *
+   * @deprecated Retrieve is deprecated. Please swap to the paginated list method instead.
+   */
+  retrieve(fineTunedModelCheckpoint, query = {}, options) {
+    return this._client.get(path2`/fine_tuning/checkpoints/${fineTunedModelCheckpoint}/permissions`, {
+      query,
+      ...options
+    });
+  }
+  /**
+   * **NOTE:** This endpoint requires an [admin API key](../admin-api-keys).
+   *
+   * Organization owners can use this endpoint to view all permissions for a
+   * fine-tuned model checkpoint.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const permissionListResponse of client.fineTuning.checkpoints.permissions.list(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(fineTunedModelCheckpoint, query = {}, options) {
+    return this._client.getAPIList(path2`/fine_tuning/checkpoints/${fineTunedModelCheckpoint}/permissions`, ConversationCursorPage, { query, ...options });
+  }
+  /**
+   * **NOTE:** This endpoint requires an [admin API key](../admin-api-keys).
+   *
+   * Organization owners can use this endpoint to delete a permission for a
+   * fine-tuned model checkpoint.
+   *
+   * @example
+   * ```ts
+   * const permission =
+   *   await client.fineTuning.checkpoints.permissions.delete(
+   *     'cp_zc4Q7MP6XxulcVzj4MZdwsAB',
+   *     {
+   *       fine_tuned_model_checkpoint:
+   *         'ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd',
+   *     },
+   *   );
+   * ```
+   */
+  delete(permissionID, params, options) {
+    const { fine_tuned_model_checkpoint } = params;
+    return this._client.delete(path2`/fine_tuning/checkpoints/${fine_tuned_model_checkpoint}/permissions/${permissionID}`, options);
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/checkpoints/checkpoints.mjs
+var Checkpoints = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.permissions = new Permissions(this._client);
+  }
+};
+Checkpoints.Permissions = Permissions;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/jobs/checkpoints.mjs
+var Checkpoints2 = class extends APIResource {
+  /**
+   * List checkpoints for a fine-tuning job.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const fineTuningJobCheckpoint of client.fineTuning.jobs.checkpoints.list(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(fineTuningJobID, query = {}, options) {
+    return this._client.getAPIList(path2`/fine_tuning/jobs/${fineTuningJobID}/checkpoints`, CursorPage, { query, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/jobs/jobs.mjs
+var Jobs = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.checkpoints = new Checkpoints2(this._client);
+  }
+  /**
+   * Creates a fine-tuning job which begins the process of creating a new model from
+   * a given dataset.
+   *
+   * Response includes details of the enqueued job including job status and the name
+   * of the fine-tuned models once complete.
+   *
+   * [Learn more about fine-tuning](https://platform.openai.com/docs/guides/model-optimization)
+   *
+   * @example
+   * ```ts
+   * const fineTuningJob = await client.fineTuning.jobs.create({
+   *   model: 'gpt-4o-mini',
+   *   training_file: 'file-abc123',
+   * });
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/fine_tuning/jobs", { body, ...options });
+  }
+  /**
+   * Get info about a fine-tuning job.
+   *
+   * [Learn more about fine-tuning](https://platform.openai.com/docs/guides/model-optimization)
+   *
+   * @example
+   * ```ts
+   * const fineTuningJob = await client.fineTuning.jobs.retrieve(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * );
+   * ```
+   */
+  retrieve(fineTuningJobID, options) {
+    return this._client.get(path2`/fine_tuning/jobs/${fineTuningJobID}`, options);
+  }
+  /**
+   * List your organization's fine-tuning jobs
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const fineTuningJob of client.fineTuning.jobs.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/fine_tuning/jobs", CursorPage, { query, ...options });
+  }
+  /**
+   * Immediately cancel a fine-tune job.
+   *
+   * @example
+   * ```ts
+   * const fineTuningJob = await client.fineTuning.jobs.cancel(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * );
+   * ```
+   */
+  cancel(fineTuningJobID, options) {
+    return this._client.post(path2`/fine_tuning/jobs/${fineTuningJobID}/cancel`, options);
+  }
+  /**
+   * Get status updates for a fine-tuning job.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const fineTuningJobEvent of client.fineTuning.jobs.listEvents(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  listEvents(fineTuningJobID, query = {}, options) {
+    return this._client.getAPIList(path2`/fine_tuning/jobs/${fineTuningJobID}/events`, CursorPage, { query, ...options });
+  }
+  /**
+   * Pause a fine-tune job.
+   *
+   * @example
+   * ```ts
+   * const fineTuningJob = await client.fineTuning.jobs.pause(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * );
+   * ```
+   */
+  pause(fineTuningJobID, options) {
+    return this._client.post(path2`/fine_tuning/jobs/${fineTuningJobID}/pause`, options);
+  }
+  /**
+   * Resume a fine-tune job.
+   *
+   * @example
+   * ```ts
+   * const fineTuningJob = await client.fineTuning.jobs.resume(
+   *   'ft-AF1WoRqd3aJAHsqc9NY7iL8F',
+   * );
+   * ```
+   */
+  resume(fineTuningJobID, options) {
+    return this._client.post(path2`/fine_tuning/jobs/${fineTuningJobID}/resume`, options);
+  }
+};
+Jobs.Checkpoints = Checkpoints2;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/fine-tuning/fine-tuning.mjs
+var FineTuning = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.methods = new Methods(this._client);
+    this.jobs = new Jobs(this._client);
+    this.checkpoints = new Checkpoints(this._client);
+    this.alpha = new Alpha(this._client);
+  }
+};
+FineTuning.Methods = Methods;
+FineTuning.Jobs = Jobs;
+FineTuning.Checkpoints = Checkpoints;
+FineTuning.Alpha = Alpha;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/graders/grader-models.mjs
+var GraderModels = class extends APIResource {
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/graders/graders.mjs
+var Graders2 = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.graderModels = new GraderModels(this._client);
+  }
+};
+Graders2.GraderModels = GraderModels;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/images.mjs
+var Images = class extends APIResource {
+  /**
+   * Creates a variation of a given image. This endpoint only supports `dall-e-2`.
+   *
+   * @example
+   * ```ts
+   * const imagesResponse = await client.images.createVariation({
+   *   image: fs.createReadStream('otter.png'),
+   * });
+   * ```
+   */
+  createVariation(body, options) {
+    return this._client.post("/images/variations", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  edit(body, options) {
+    return this._client.post("/images/edits", multipartFormRequestOptions({ body, ...options, stream: body.stream ?? false }, this._client));
+  }
+  generate(body, options) {
+    return this._client.post("/images/generations", { body, ...options, stream: body.stream ?? false });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/models.mjs
+var Models = class extends APIResource {
+  /**
+   * Retrieves a model instance, providing basic information about the model such as
+   * the owner and permissioning.
+   */
+  retrieve(model, options) {
+    return this._client.get(path2`/models/${model}`, options);
+  }
+  /**
+   * Lists the currently available models, and provides basic information about each
+   * one such as the owner and availability.
+   */
+  list(options) {
+    return this._client.getAPIList("/models", Page, options);
+  }
+  /**
+   * Delete a fine-tuned model. You must have the Owner role in your organization to
+   * delete a model.
+   */
+  delete(model, options) {
+    return this._client.delete(path2`/models/${model}`, options);
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/moderations.mjs
+var Moderations = class extends APIResource {
+  /**
+   * Classifies if text and/or image inputs are potentially harmful. Learn more in
+   * the [moderation guide](https://platform.openai.com/docs/guides/moderation).
+   */
+  create(body, options) {
+    return this._client.post("/moderations", { body, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/realtime/calls.mjs
+var Calls = class extends APIResource {
+  /**
+   * Accept an incoming SIP call and configure the realtime session that will handle
+   * it.
+   *
+   * @example
+   * ```ts
+   * await client.realtime.calls.accept('call_id', {
+   *   type: 'realtime',
+   * });
+   * ```
+   */
+  accept(callID, body, options) {
+    return this._client.post(path2`/realtime/calls/${callID}/accept`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+  /**
+   * End an active Realtime API call, whether it was initiated over SIP or WebRTC.
+   *
+   * @example
+   * ```ts
+   * await client.realtime.calls.hangup('call_id');
+   * ```
+   */
+  hangup(callID, options) {
+    return this._client.post(path2`/realtime/calls/${callID}/hangup`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+  /**
+   * Transfer an active SIP call to a new destination using the SIP REFER verb.
+   *
+   * @example
+   * ```ts
+   * await client.realtime.calls.refer('call_id', {
+   *   target_uri: 'tel:+14155550123',
+   * });
+   * ```
+   */
+  refer(callID, body, options) {
+    return this._client.post(path2`/realtime/calls/${callID}/refer`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+  /**
+   * Decline an incoming SIP call by returning a SIP status code to the caller.
+   *
+   * @example
+   * ```ts
+   * await client.realtime.calls.reject('call_id');
+   * ```
+   */
+  reject(callID, body = {}, options) {
+    return this._client.post(path2`/realtime/calls/${callID}/reject`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/realtime/client-secrets.mjs
+var ClientSecrets = class extends APIResource {
+  /**
+   * Create a Realtime client secret with an associated session configuration.
+   *
+   * Client secrets are short-lived tokens that can be passed to a client app, such
+   * as a web frontend or mobile client, which grants access to the Realtime API
+   * without leaking your main API key. You can configure a custom TTL for each
+   * client secret.
+   *
+   * You can also attach session configuration options to the client secret, which
+   * will be applied to any sessions created using that client secret, but these can
+   * also be overridden by the client connection.
+   *
+   * [Learn more about authentication with client secrets over WebRTC](https://platform.openai.com/docs/guides/realtime-webrtc).
+   *
+   * Returns the created client secret and the effective session object. The client
+   * secret is a string that looks like `ek_1234`.
+   *
+   * @example
+   * ```ts
+   * const clientSecret =
+   *   await client.realtime.clientSecrets.create();
+   * ```
+   */
+  create(body, options) {
+    return this._client.post("/realtime/client_secrets", { body, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/realtime/realtime.mjs
+var Realtime2 = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.clientSecrets = new ClientSecrets(this._client);
+    this.calls = new Calls(this._client);
+  }
+};
+Realtime2.ClientSecrets = ClientSecrets;
+Realtime2.Calls = Calls;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/ResponsesParser.mjs
+function maybeParseResponse(response, params) {
+  if (!params || !hasAutoParseableInput2(params)) {
+    return {
+      ...response,
+      output_parsed: null,
+      output: response.output.map((item) => {
+        if (item.type === "function_call") {
+          return {
+            ...item,
+            parsed_arguments: null
+          };
+        }
+        if (item.type === "message") {
+          return {
+            ...item,
+            content: item.content.map((content) => ({
+              ...content,
+              parsed: null
+            }))
+          };
+        } else {
+          return item;
+        }
+      })
+    };
+  }
+  return parseResponse(response, params);
+}
+function parseResponse(response, params) {
+  const output = response.output.map((item) => {
+    if (item.type === "function_call") {
+      return {
+        ...item,
+        parsed_arguments: parseToolCall2(params, item)
+      };
+    }
+    if (item.type === "message") {
+      const content = item.content.map((content2) => {
+        if (content2.type === "output_text") {
+          return {
+            ...content2,
+            parsed: parseTextFormat(params, content2.text)
+          };
+        }
+        return content2;
+      });
+      return {
+        ...item,
+        content
+      };
+    }
+    return item;
+  });
+  const parsed = Object.assign({}, response, { output });
+  if (!Object.getOwnPropertyDescriptor(response, "output_text")) {
+    addOutputText(parsed);
+  }
+  Object.defineProperty(parsed, "output_parsed", {
+    enumerable: true,
+    get() {
+      for (const output2 of parsed.output) {
+        if (output2.type !== "message") {
+          continue;
+        }
+        for (const content of output2.content) {
+          if (content.type === "output_text" && content.parsed !== null) {
+            return content.parsed;
+          }
+        }
+      }
+      return null;
+    }
+  });
+  return parsed;
+}
+function parseTextFormat(params, content) {
+  if (params.text?.format?.type !== "json_schema") {
+    return null;
+  }
+  if ("$parseRaw" in params.text?.format) {
+    const text_format = params.text?.format;
+    return text_format.$parseRaw(content);
+  }
+  return JSON.parse(content);
+}
+function hasAutoParseableInput2(params) {
+  if (isAutoParsableResponseFormat(params.text?.format)) {
+    return true;
+  }
+  return false;
+}
+function isAutoParsableTool2(tool) {
+  return tool?.["$brand"] === "auto-parseable-tool";
+}
+function getInputToolByName(input_tools, name) {
+  return input_tools.find((tool) => tool.type === "function" && tool.name === name);
+}
+function parseToolCall2(params, toolCall) {
+  const inputTool = getInputToolByName(params.tools ?? [], toolCall.name);
+  return {
+    ...toolCall,
+    ...toolCall,
+    parsed_arguments: isAutoParsableTool2(inputTool) ? inputTool.$parseRaw(toolCall.arguments) : inputTool?.strict ? JSON.parse(toolCall.arguments) : null
+  };
+}
+function addOutputText(rsp) {
+  const texts = [];
+  for (const output of rsp.output) {
+    if (output.type !== "message") {
+      continue;
+    }
+    for (const content of output.content) {
+      if (content.type === "output_text") {
+        texts.push(content.text);
+      }
+    }
+  }
+  rsp.output_text = texts.join("");
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/responses/ResponseStream.mjs
+var _ResponseStream_instances;
+var _ResponseStream_params;
+var _ResponseStream_currentResponseSnapshot;
+var _ResponseStream_finalResponse;
+var _ResponseStream_beginRequest;
+var _ResponseStream_addEvent;
+var _ResponseStream_endRequest;
+var _ResponseStream_accumulateResponse;
+var ResponseStream = class _ResponseStream extends EventStream {
+  constructor(params) {
+    super();
+    _ResponseStream_instances.add(this);
+    _ResponseStream_params.set(this, void 0);
+    _ResponseStream_currentResponseSnapshot.set(this, void 0);
+    _ResponseStream_finalResponse.set(this, void 0);
+    __classPrivateFieldSet2(this, _ResponseStream_params, params, "f");
+  }
+  static createResponse(client, params, options) {
+    const runner = new _ResponseStream(params);
+    runner._run(() => runner._createOrRetrieveResponse(client, params, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  async _createOrRetrieveResponse(client, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet2(this, _ResponseStream_instances, "m", _ResponseStream_beginRequest).call(this);
+    let stream;
+    let starting_after = null;
+    if ("response_id" in params) {
+      stream = await client.responses.retrieve(params.response_id, { stream: true }, { ...options, signal: this.controller.signal, stream: true });
+      starting_after = params.starting_after ?? null;
+    } else {
+      stream = await client.responses.create({ ...params, stream: true }, { ...options, signal: this.controller.signal });
+    }
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet2(this, _ResponseStream_instances, "m", _ResponseStream_addEvent).call(this, event, starting_after);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return __classPrivateFieldGet2(this, _ResponseStream_instances, "m", _ResponseStream_endRequest).call(this);
+  }
+  [(_ResponseStream_params = /* @__PURE__ */ new WeakMap(), _ResponseStream_currentResponseSnapshot = /* @__PURE__ */ new WeakMap(), _ResponseStream_finalResponse = /* @__PURE__ */ new WeakMap(), _ResponseStream_instances = /* @__PURE__ */ new WeakSet(), _ResponseStream_beginRequest = function _ResponseStream_beginRequest2() {
+    if (this.ended)
+      return;
+    __classPrivateFieldSet2(this, _ResponseStream_currentResponseSnapshot, void 0, "f");
+  }, _ResponseStream_addEvent = function _ResponseStream_addEvent2(event, starting_after) {
+    if (this.ended)
+      return;
+    const maybeEmit = (name, event2) => {
+      if (starting_after == null || event2.sequence_number > starting_after) {
+        this._emit(name, event2);
+      }
+    };
+    const response = __classPrivateFieldGet2(this, _ResponseStream_instances, "m", _ResponseStream_accumulateResponse).call(this, event);
+    maybeEmit("event", event);
+    switch (event.type) {
+      case "response.output_text.delta": {
+        const output = response.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        if (output.type === "message") {
+          const content = output.content[event.content_index];
+          if (!content) {
+            throw new OpenAIError(`missing content at index ${event.content_index}`);
+          }
+          if (content.type !== "output_text") {
+            throw new OpenAIError(`expected content to be 'output_text', got ${content.type}`);
+          }
+          maybeEmit("response.output_text.delta", {
+            ...event,
+            snapshot: content.text
+          });
+        }
+        break;
+      }
+      case "response.function_call_arguments.delta": {
+        const output = response.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        if (output.type === "function_call") {
+          maybeEmit("response.function_call_arguments.delta", {
+            ...event,
+            snapshot: output.arguments
+          });
+        }
+        break;
+      }
+      default:
+        maybeEmit(event.type, event);
+        break;
+    }
+  }, _ResponseStream_endRequest = function _ResponseStream_endRequest2() {
+    if (this.ended) {
+      throw new OpenAIError(`stream has ended, this shouldn't happen`);
+    }
+    const snapshot = __classPrivateFieldGet2(this, _ResponseStream_currentResponseSnapshot, "f");
+    if (!snapshot) {
+      throw new OpenAIError(`request ended without sending any events`);
+    }
+    __classPrivateFieldSet2(this, _ResponseStream_currentResponseSnapshot, void 0, "f");
+    const parsedResponse = finalizeResponse(snapshot, __classPrivateFieldGet2(this, _ResponseStream_params, "f"));
+    __classPrivateFieldSet2(this, _ResponseStream_finalResponse, parsedResponse, "f");
+    return parsedResponse;
+  }, _ResponseStream_accumulateResponse = function _ResponseStream_accumulateResponse2(event) {
+    let snapshot = __classPrivateFieldGet2(this, _ResponseStream_currentResponseSnapshot, "f");
+    if (!snapshot) {
+      if (event.type !== "response.created") {
+        throw new OpenAIError(`When snapshot hasn't been set yet, expected 'response.created' event, got ${event.type}`);
+      }
+      snapshot = __classPrivateFieldSet2(this, _ResponseStream_currentResponseSnapshot, event.response, "f");
+      return snapshot;
+    }
+    switch (event.type) {
+      case "response.output_item.added": {
+        snapshot.output.push(event.item);
+        break;
+      }
+      case "response.content_part.added": {
+        const output = snapshot.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        const type = output.type;
+        const part = event.part;
+        if (type === "message" && part.type !== "reasoning_text") {
+          output.content.push(part);
+        } else if (type === "reasoning" && part.type === "reasoning_text") {
+          if (!output.content) {
+            output.content = [];
+          }
+          output.content.push(part);
+        }
+        break;
+      }
+      case "response.output_text.delta": {
+        const output = snapshot.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        if (output.type === "message") {
+          const content = output.content[event.content_index];
+          if (!content) {
+            throw new OpenAIError(`missing content at index ${event.content_index}`);
+          }
+          if (content.type !== "output_text") {
+            throw new OpenAIError(`expected content to be 'output_text', got ${content.type}`);
+          }
+          content.text += event.delta;
+        }
+        break;
+      }
+      case "response.function_call_arguments.delta": {
+        const output = snapshot.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        if (output.type === "function_call") {
+          output.arguments += event.delta;
+        }
+        break;
+      }
+      case "response.reasoning_text.delta": {
+        const output = snapshot.output[event.output_index];
+        if (!output) {
+          throw new OpenAIError(`missing output at index ${event.output_index}`);
+        }
+        if (output.type === "reasoning") {
+          const content = output.content?.[event.content_index];
+          if (!content) {
+            throw new OpenAIError(`missing content at index ${event.content_index}`);
+          }
+          if (content.type !== "reasoning_text") {
+            throw new OpenAIError(`expected content to be 'reasoning_text', got ${content.type}`);
+          }
+          content.text += event.delta;
+        }
+        break;
+      }
+      case "response.completed": {
+        __classPrivateFieldSet2(this, _ResponseStream_currentResponseSnapshot, event.response, "f");
+        break;
+      }
+    }
+    return snapshot;
+  }, Symbol.asyncIterator)]() {
+    const pushQueue = [];
+    const readQueue = [];
+    let done = false;
+    this.on("event", (event) => {
+      const reader = readQueue.shift();
+      if (reader) {
+        reader.resolve(event);
+      } else {
+        pushQueue.push(event);
+      }
+    });
+    this.on("end", () => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.resolve(void 0);
+      }
+      readQueue.length = 0;
+    });
+    this.on("abort", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    this.on("error", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    return {
+      next: async () => {
+        if (!pushQueue.length) {
+          if (done) {
+            return { value: void 0, done: true };
+          }
+          return new Promise((resolve, reject) => readQueue.push({ resolve, reject })).then((event2) => event2 ? { value: event2, done: false } : { value: void 0, done: true });
+        }
+        const event = pushQueue.shift();
+        return { value: event, done: false };
+      },
+      return: async () => {
+        this.abort();
+        return { value: void 0, done: true };
+      }
+    };
+  }
+  /**
+   * @returns a promise that resolves with the final Response, or rejects
+   * if an error occurred or the stream ended prematurely without producing a REsponse.
+   */
+  async finalResponse() {
+    await this.done();
+    const response = __classPrivateFieldGet2(this, _ResponseStream_finalResponse, "f");
+    if (!response)
+      throw new OpenAIError("stream ended without producing a ChatCompletion");
+    return response;
+  }
+};
+function finalizeResponse(snapshot, params) {
+  return maybeParseResponse(snapshot, params);
+}
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/responses/input-items.mjs
+var InputItems = class extends APIResource {
+  /**
+   * Returns a list of input items for a given response.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const responseItem of client.responses.inputItems.list(
+   *   'response_id',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(responseID, query = {}, options) {
+    return this._client.getAPIList(path2`/responses/${responseID}/input_items`, CursorPage, { query, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/responses/input-tokens.mjs
+var InputTokens = class extends APIResource {
+  /**
+   * Returns input token counts of the request.
+   *
+   * Returns an object with `object` set to `response.input_tokens` and an
+   * `input_tokens` count.
+   *
+   * @example
+   * ```ts
+   * const response = await client.responses.inputTokens.count();
+   * ```
+   */
+  count(body = {}, options) {
+    return this._client.post("/responses/input_tokens", { body, ...options });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/responses/responses.mjs
+var Responses = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.inputItems = new InputItems(this._client);
+    this.inputTokens = new InputTokens(this._client);
+  }
+  create(body, options) {
+    return this._client.post("/responses", { body, ...options, stream: body.stream ?? false })._thenUnwrap((rsp) => {
+      if ("object" in rsp && rsp.object === "response") {
+        addOutputText(rsp);
+      }
+      return rsp;
+    });
+  }
+  retrieve(responseID, query = {}, options) {
+    return this._client.get(path2`/responses/${responseID}`, {
+      query,
+      ...options,
+      stream: query?.stream ?? false
+    })._thenUnwrap((rsp) => {
+      if ("object" in rsp && rsp.object === "response") {
+        addOutputText(rsp);
+      }
+      return rsp;
+    });
+  }
+  /**
+   * Deletes a model response with the given ID.
+   *
+   * @example
+   * ```ts
+   * await client.responses.delete(
+   *   'resp_677efb5139a88190b512bc3fef8e535d',
+   * );
+   * ```
+   */
+  delete(responseID, options) {
+    return this._client.delete(path2`/responses/${responseID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "*/*" }, options?.headers])
+    });
+  }
+  parse(body, options) {
+    return this._client.responses.create(body, options)._thenUnwrap((response) => parseResponse(response, body));
+  }
+  /**
+   * Creates a model response stream
+   */
+  stream(body, options) {
+    return ResponseStream.createResponse(this._client, body, options);
+  }
+  /**
+   * Cancels a model response with the given ID. Only responses created with the
+   * `background` parameter set to `true` can be cancelled.
+   * [Learn more](https://platform.openai.com/docs/guides/background).
+   *
+   * @example
+   * ```ts
+   * const response = await client.responses.cancel(
+   *   'resp_677efb5139a88190b512bc3fef8e535d',
+   * );
+   * ```
+   */
+  cancel(responseID, options) {
+    return this._client.post(path2`/responses/${responseID}/cancel`, options);
+  }
+  /**
+   * Compact a conversation. Returns a compacted response object.
+   *
+   * Learn when and how to compact long-running conversations in the
+   * [conversation state guide](https://platform.openai.com/docs/guides/conversation-state#managing-the-context-window).
+   * For ZDR-compatible compaction details, see
+   * [Compaction (advanced)](https://platform.openai.com/docs/guides/conversation-state#compaction-advanced).
+   *
+   * @example
+   * ```ts
+   * const compactedResponse = await client.responses.compact({
+   *   model: 'gpt-5.4',
+   * });
+   * ```
+   */
+  compact(body, options) {
+    return this._client.post("/responses/compact", { body, ...options });
+  }
+};
+Responses.InputItems = InputItems;
+Responses.InputTokens = InputTokens;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/skills/content.mjs
+var Content2 = class extends APIResource {
+  /**
+   * Download a skill zip bundle by its ID.
+   */
+  retrieve(skillID, options) {
+    return this._client.get(path2`/skills/${skillID}/content`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/skills/versions/content.mjs
+var Content3 = class extends APIResource {
+  /**
+   * Download a skill version zip bundle.
+   */
+  retrieve(version, params, options) {
+    const { skill_id } = params;
+    return this._client.get(path2`/skills/${skill_id}/versions/${version}/content`, {
+      ...options,
+      headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/skills/versions/versions.mjs
+var Versions = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.content = new Content3(this._client);
+  }
+  /**
+   * Create a new immutable skill version.
+   */
+  create(skillID, body = {}, options) {
+    return this._client.post(path2`/skills/${skillID}/versions`, maybeMultipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Get a specific skill version.
+   */
+  retrieve(version, params, options) {
+    const { skill_id } = params;
+    return this._client.get(path2`/skills/${skill_id}/versions/${version}`, options);
+  }
+  /**
+   * List skill versions for a skill.
+   */
+  list(skillID, query = {}, options) {
+    return this._client.getAPIList(path2`/skills/${skillID}/versions`, CursorPage, {
+      query,
+      ...options
+    });
+  }
+  /**
+   * Delete a skill version.
+   */
+  delete(version, params, options) {
+    const { skill_id } = params;
+    return this._client.delete(path2`/skills/${skill_id}/versions/${version}`, options);
+  }
+};
+Versions.Content = Content3;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/skills/skills.mjs
+var Skills = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.content = new Content2(this._client);
+    this.versions = new Versions(this._client);
+  }
+  /**
+   * Create a new skill.
+   */
+  create(body = {}, options) {
+    return this._client.post("/skills", maybeMultipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Get a skill by its ID.
+   */
+  retrieve(skillID, options) {
+    return this._client.get(path2`/skills/${skillID}`, options);
+  }
+  /**
+   * Update the default version pointer for a skill.
+   */
+  update(skillID, body, options) {
+    return this._client.post(path2`/skills/${skillID}`, { body, ...options });
+  }
+  /**
+   * List all skills for the current project.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/skills", CursorPage, { query, ...options });
+  }
+  /**
+   * Delete a skill by its ID.
+   */
+  delete(skillID, options) {
+    return this._client.delete(path2`/skills/${skillID}`, options);
+  }
+};
+Skills.Content = Content2;
+Skills.Versions = Versions;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/uploads/parts.mjs
+var Parts = class extends APIResource {
+  /**
+   * Adds a
+   * [Part](https://platform.openai.com/docs/api-reference/uploads/part-object) to an
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object) object.
+   * A Part represents a chunk of bytes from the file you are trying to upload.
+   *
+   * Each Part can be at most 64 MB, and you can add Parts until you hit the Upload
+   * maximum of 8 GB.
+   *
+   * It is possible to add multiple Parts in parallel. You can decide the intended
+   * order of the Parts when you
+   * [complete the Upload](https://platform.openai.com/docs/api-reference/uploads/complete).
+   */
+  create(uploadID, body, options) {
+    return this._client.post(path2`/uploads/${uploadID}/parts`, multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/uploads/uploads.mjs
+var Uploads = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.parts = new Parts(this._client);
+  }
+  /**
+   * Creates an intermediate
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object) object
+   * that you can add
+   * [Parts](https://platform.openai.com/docs/api-reference/uploads/part-object) to.
+   * Currently, an Upload can accept at most 8 GB in total and expires after an hour
+   * after you create it.
+   *
+   * Once you complete the Upload, we will create a
+   * [File](https://platform.openai.com/docs/api-reference/files/object) object that
+   * contains all the parts you uploaded. This File is usable in the rest of our
+   * platform as a regular File object.
+   *
+   * For certain `purpose` values, the correct `mime_type` must be specified. Please
+   * refer to documentation for the
+   * [supported MIME types for your use case](https://platform.openai.com/docs/assistants/tools/file-search#supported-files).
+   *
+   * For guidance on the proper filename extensions for each purpose, please follow
+   * the documentation on
+   * [creating a File](https://platform.openai.com/docs/api-reference/files/create).
+   *
+   * Returns the Upload object with status `pending`.
+   */
+  create(body, options) {
+    return this._client.post("/uploads", { body, ...options });
+  }
+  /**
+   * Cancels the Upload. No Parts may be added after an Upload is cancelled.
+   *
+   * Returns the Upload object with status `cancelled`.
+   */
+  cancel(uploadID, options) {
+    return this._client.post(path2`/uploads/${uploadID}/cancel`, options);
+  }
+  /**
+   * Completes the
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object).
+   *
+   * Within the returned Upload object, there is a nested
+   * [File](https://platform.openai.com/docs/api-reference/files/object) object that
+   * is ready to use in the rest of the platform.
+   *
+   * You can specify the order of the Parts by passing in an ordered list of the Part
+   * IDs.
+   *
+   * The number of bytes uploaded upon completion must match the number of bytes
+   * initially specified when creating the Upload object. No Parts may be added after
+   * an Upload is completed. Returns the Upload object with status `completed`,
+   * including an additional `file` property containing the created usable File
+   * object.
+   */
+  complete(uploadID, body, options) {
+    return this._client.post(path2`/uploads/${uploadID}/complete`, { body, ...options });
+  }
+};
+Uploads.Parts = Parts;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/lib/Util.mjs
+var allSettledWithThrow = async (promises) => {
+  const results = await Promise.allSettled(promises);
+  const rejected = results.filter((result) => result.status === "rejected");
+  if (rejected.length) {
+    for (const result of rejected) {
+      console.error(result.reason);
+    }
+    throw new Error(`${rejected.length} promise(s) failed - see the above errors`);
+  }
+  const values = [];
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      values.push(result.value);
+    }
+  }
+  return values;
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/vector-stores/file-batches.mjs
+var FileBatches = class extends APIResource {
+  /**
+   * Create a vector store file batch.
+   */
+  create(vectorStoreID, body, options) {
+    return this._client.post(path2`/vector_stores/${vectorStoreID}/file_batches`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieves a vector store file batch.
+   */
+  retrieve(batchID, params, options) {
+    const { vector_store_id } = params;
+    return this._client.get(path2`/vector_stores/${vector_store_id}/file_batches/${batchID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Cancel a vector store file batch. This attempts to cancel the processing of
+   * files in this batch as soon as possible.
+   */
+  cancel(batchID, params, options) {
+    const { vector_store_id } = params;
+    return this._client.post(path2`/vector_stores/${vector_store_id}/file_batches/${batchID}/cancel`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Create a vector store batch and poll until all files have been processed.
+   */
+  async createAndPoll(vectorStoreId, body, options) {
+    const batch = await this.create(vectorStoreId, body);
+    return await this.poll(vectorStoreId, batch.id, options);
+  }
+  /**
+   * Returns a list of vector store files in a batch.
+   */
+  listFiles(batchID, params, options) {
+    const { vector_store_id, ...query } = params;
+    return this._client.getAPIList(path2`/vector_stores/${vector_store_id}/file_batches/${batchID}/files`, CursorPage, { query, ...options, headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers]) });
+  }
+  /**
+   * Wait for the given file batch to be processed.
+   *
+   * Note: this will return even if one of the files failed to process, you need to
+   * check batch.file_counts.failed_count to handle this case.
+   */
+  async poll(vectorStoreID, batchID, options) {
+    const headers = buildHeaders([
+      options?.headers,
+      {
+        "X-Stainless-Poll-Helper": "true",
+        "X-Stainless-Custom-Poll-Interval": options?.pollIntervalMs?.toString() ?? void 0
+      }
+    ]);
+    while (true) {
+      const { data: batch, response } = await this.retrieve(batchID, { vector_store_id: vectorStoreID }, {
+        ...options,
+        headers
+      }).withResponse();
+      switch (batch.status) {
+        case "in_progress":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep2(sleepInterval);
+          break;
+        case "failed":
+        case "cancelled":
+        case "completed":
+          return batch;
+      }
+    }
+  }
+  /**
+   * Uploads the given files concurrently and then creates a vector store file batch.
+   *
+   * The concurrency limit is configurable using the `maxConcurrency` parameter.
+   */
+  async uploadAndPoll(vectorStoreId, { files, fileIds = [] }, options) {
+    if (files == null || files.length == 0) {
+      throw new Error(`No \`files\` provided to process. If you've already uploaded files you should use \`.createAndPoll()\` instead`);
+    }
+    const configuredConcurrency = options?.maxConcurrency ?? 5;
+    const concurrencyLimit = Math.min(configuredConcurrency, files.length);
+    const client = this._client;
+    const fileIterator = files.values();
+    const allFileIds = [...fileIds];
+    async function processFiles(iterator) {
+      for (let item of iterator) {
+        const fileObj = await client.files.create({ file: item, purpose: "assistants" }, options);
+        allFileIds.push(fileObj.id);
+      }
+    }
+    const workers = Array(concurrencyLimit).fill(fileIterator).map(processFiles);
+    await allSettledWithThrow(workers);
+    return await this.createAndPoll(vectorStoreId, {
+      file_ids: allFileIds
+    });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/vector-stores/files.mjs
+var Files3 = class extends APIResource {
+  /**
+   * Create a vector store file by attaching a
+   * [File](https://platform.openai.com/docs/api-reference/files) to a
+   * [vector store](https://platform.openai.com/docs/api-reference/vector-stores/object).
+   */
+  create(vectorStoreID, body, options) {
+    return this._client.post(path2`/vector_stores/${vectorStoreID}/files`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieves a vector store file.
+   */
+  retrieve(fileID, params, options) {
+    const { vector_store_id } = params;
+    return this._client.get(path2`/vector_stores/${vector_store_id}/files/${fileID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Update attributes on a vector store file.
+   */
+  update(fileID, params, options) {
+    const { vector_store_id, ...body } = params;
+    return this._client.post(path2`/vector_stores/${vector_store_id}/files/${fileID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of vector store files.
+   */
+  list(vectorStoreID, query = {}, options) {
+    return this._client.getAPIList(path2`/vector_stores/${vectorStoreID}/files`, CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Delete a vector store file. This will remove the file from the vector store but
+   * the file itself will not be deleted. To delete the file, use the
+   * [delete file](https://platform.openai.com/docs/api-reference/files/delete)
+   * endpoint.
+   */
+  delete(fileID, params, options) {
+    const { vector_store_id } = params;
+    return this._client.delete(path2`/vector_stores/${vector_store_id}/files/${fileID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Attach a file to the given vector store and wait for it to be processed.
+   */
+  async createAndPoll(vectorStoreId, body, options) {
+    const file = await this.create(vectorStoreId, body, options);
+    return await this.poll(vectorStoreId, file.id, options);
+  }
+  /**
+   * Wait for the vector store file to finish processing.
+   *
+   * Note: this will return even if the file failed to process, you need to check
+   * file.last_error and file.status to handle these cases
+   */
+  async poll(vectorStoreID, fileID, options) {
+    const headers = buildHeaders([
+      options?.headers,
+      {
+        "X-Stainless-Poll-Helper": "true",
+        "X-Stainless-Custom-Poll-Interval": options?.pollIntervalMs?.toString() ?? void 0
+      }
+    ]);
+    while (true) {
+      const fileResponse = await this.retrieve(fileID, {
+        vector_store_id: vectorStoreID
+      }, { ...options, headers }).withResponse();
+      const file = fileResponse.data;
+      switch (file.status) {
+        case "in_progress":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = fileResponse.response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep2(sleepInterval);
+          break;
+        case "failed":
+        case "completed":
+          return file;
+      }
+    }
+  }
+  /**
+   * Upload a file to the `files` API and then attach it to the given vector store.
+   *
+   * Note the file will be asynchronously processed (you can use the alternative
+   * polling helper method to wait for processing to complete).
+   */
+  async upload(vectorStoreId, file, options) {
+    const fileInfo = await this._client.files.create({ file, purpose: "assistants" }, options);
+    return this.create(vectorStoreId, { file_id: fileInfo.id }, options);
+  }
+  /**
+   * Add a file to a vector store and poll until processing is complete.
+   */
+  async uploadAndPoll(vectorStoreId, file, options) {
+    const fileInfo = await this.upload(vectorStoreId, file, options);
+    return await this.poll(vectorStoreId, fileInfo.id, options);
+  }
+  /**
+   * Retrieve the parsed contents of a vector store file.
+   */
+  content(fileID, params, options) {
+    const { vector_store_id } = params;
+    return this._client.getAPIList(path2`/vector_stores/${vector_store_id}/files/${fileID}/content`, Page, { ...options, headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers]) });
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/vector-stores/vector-stores.mjs
+var VectorStores = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.files = new Files3(this._client);
+    this.fileBatches = new FileBatches(this._client);
+  }
+  /**
+   * Create a vector store.
+   */
+  create(body, options) {
+    return this._client.post("/vector_stores", {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Retrieves a vector store.
+   */
+  retrieve(vectorStoreID, options) {
+    return this._client.get(path2`/vector_stores/${vectorStoreID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Modifies a vector store.
+   */
+  update(vectorStoreID, body, options) {
+    return this._client.post(path2`/vector_stores/${vectorStoreID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Returns a list of vector stores.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/vector_stores", CursorPage, {
+      query,
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Delete a vector store.
+   */
+  delete(vectorStoreID, options) {
+    return this._client.delete(path2`/vector_stores/${vectorStoreID}`, {
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+  /**
+   * Search a vector store for relevant chunks based on a query and file attributes
+   * filter.
+   */
+  search(vectorStoreID, body, options) {
+    return this._client.getAPIList(path2`/vector_stores/${vectorStoreID}/search`, Page, {
+      body,
+      method: "post",
+      ...options,
+      headers: buildHeaders([{ "OpenAI-Beta": "assistants=v2" }, options?.headers])
+    });
+  }
+};
+VectorStores.Files = Files3;
+VectorStores.FileBatches = FileBatches;
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/videos.mjs
+var Videos = class extends APIResource {
+  /**
+   * Create a new video generation job from a prompt and optional reference assets.
+   */
+  create(body, options) {
+    return this._client.post("/videos", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Fetch the latest metadata for a generated video.
+   */
+  retrieve(videoID, options) {
+    return this._client.get(path2`/videos/${videoID}`, options);
+  }
+  /**
+   * List recently generated videos for the current project.
+   */
+  list(query = {}, options) {
+    return this._client.getAPIList("/videos", ConversationCursorPage, { query, ...options });
+  }
+  /**
+   * Permanently delete a completed or failed video and its stored assets.
+   */
+  delete(videoID, options) {
+    return this._client.delete(path2`/videos/${videoID}`, options);
+  }
+  /**
+   * Create a character from an uploaded video.
+   */
+  createCharacter(body, options) {
+    return this._client.post("/videos/characters", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Download the generated video bytes or a derived preview asset.
+   *
+   * Streams the rendered video content for the specified video job.
+   */
+  downloadContent(videoID, query = {}, options) {
+    return this._client.get(path2`/videos/${videoID}/content`, {
+      query,
+      ...options,
+      headers: buildHeaders([{ Accept: "application/binary" }, options?.headers]),
+      __binaryResponse: true
+    });
+  }
+  /**
+   * Create a new video generation job by editing a source video or existing
+   * generated video.
+   */
+  edit(body, options) {
+    return this._client.post("/videos/edits", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Create an extension of a completed video.
+   */
+  extend(body, options) {
+    return this._client.post("/videos/extensions", multipartFormRequestOptions({ body, ...options }, this._client));
+  }
+  /**
+   * Fetch a character.
+   */
+  getCharacter(characterID, options) {
+    return this._client.get(path2`/videos/characters/${characterID}`, options);
+  }
+  /**
+   * Create a remix of a completed video using a refreshed prompt.
+   */
+  remix(videoID, body, options) {
+    return this._client.post(path2`/videos/${videoID}/remix`, maybeMultipartFormRequestOptions({ body, ...options }, this._client));
+  }
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/resources/webhooks/webhooks.mjs
+var _Webhooks_instances;
+var _Webhooks_validateSecret;
+var _Webhooks_getRequiredHeader;
+var Webhooks = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    _Webhooks_instances.add(this);
+  }
+  /**
+   * Validates that the given payload was sent by OpenAI and parses the payload.
+   */
+  async unwrap(payload, headers, secret = this._client.webhookSecret, tolerance = 300) {
+    await this.verifySignature(payload, headers, secret, tolerance);
+    return JSON.parse(payload);
+  }
+  /**
+   * Validates whether or not the webhook payload was sent by OpenAI.
+   *
+   * An error will be raised if the webhook payload was not sent by OpenAI.
+   *
+   * @param payload - The webhook payload
+   * @param headers - The webhook headers
+   * @param secret - The webhook secret (optional, will use client secret if not provided)
+   * @param tolerance - Maximum age of the webhook in seconds (default: 300 = 5 minutes)
+   */
+  async verifySignature(payload, headers, secret = this._client.webhookSecret, tolerance = 300) {
+    if (typeof crypto === "undefined" || typeof crypto.subtle.importKey !== "function" || typeof crypto.subtle.verify !== "function") {
+      throw new Error("Webhook signature verification is only supported when the `crypto` global is defined");
+    }
+    __classPrivateFieldGet2(this, _Webhooks_instances, "m", _Webhooks_validateSecret).call(this, secret);
+    const headersObj = buildHeaders([headers]).values;
+    const signatureHeader = __classPrivateFieldGet2(this, _Webhooks_instances, "m", _Webhooks_getRequiredHeader).call(this, headersObj, "webhook-signature");
+    const timestamp = __classPrivateFieldGet2(this, _Webhooks_instances, "m", _Webhooks_getRequiredHeader).call(this, headersObj, "webhook-timestamp");
+    const webhookId = __classPrivateFieldGet2(this, _Webhooks_instances, "m", _Webhooks_getRequiredHeader).call(this, headersObj, "webhook-id");
+    const timestampSeconds = parseInt(timestamp, 10);
+    if (isNaN(timestampSeconds)) {
+      throw new InvalidWebhookSignatureError("Invalid webhook timestamp format");
+    }
+    const nowSeconds = Math.floor(Date.now() / 1e3);
+    if (nowSeconds - timestampSeconds > tolerance) {
+      throw new InvalidWebhookSignatureError("Webhook timestamp is too old");
+    }
+    if (timestampSeconds > nowSeconds + tolerance) {
+      throw new InvalidWebhookSignatureError("Webhook timestamp is too new");
+    }
+    const signatures = signatureHeader.split(" ").map((part) => part.startsWith("v1,") ? part.substring(3) : part);
+    const decodedSecret = secret.startsWith("whsec_") ? Buffer.from(secret.replace("whsec_", ""), "base64") : Buffer.from(secret, "utf-8");
+    const signedPayload = webhookId ? `${webhookId}.${timestamp}.${payload}` : `${timestamp}.${payload}`;
+    const key = await crypto.subtle.importKey("raw", decodedSecret, { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    for (const signature of signatures) {
+      try {
+        const signatureBytes = Buffer.from(signature, "base64");
+        const isValid = await crypto.subtle.verify("HMAC", key, signatureBytes, new TextEncoder().encode(signedPayload));
+        if (isValid) {
+          return;
+        }
+      } catch {
+        continue;
+      }
+    }
+    throw new InvalidWebhookSignatureError("The given webhook signature does not match the expected signature");
+  }
+};
+_Webhooks_instances = /* @__PURE__ */ new WeakSet(), _Webhooks_validateSecret = function _Webhooks_validateSecret2(secret) {
+  if (typeof secret !== "string" || secret.length === 0) {
+    throw new Error(`The webhook secret must either be set using the env var, OPENAI_WEBHOOK_SECRET, on the client class, OpenAI({ webhookSecret: '123' }), or passed to this function`);
+  }
+}, _Webhooks_getRequiredHeader = function _Webhooks_getRequiredHeader2(headers, name) {
+  if (!headers) {
+    throw new Error(`Headers are required`);
+  }
+  const value = headers.get(name);
+  if (value === null || value === void 0) {
+    throw new Error(`Missing required header: ${name}`);
+  }
+  return value;
+};
+
+// ../../node_modules/.pnpm/openai@6.35.0_ws@8.20.0_zod@4.3.6/node_modules/openai/client.mjs
+var _OpenAI_instances;
+var _a2;
+var _OpenAI_encoder;
+var _OpenAI_baseURLOverridden;
+var WORKLOAD_IDENTITY_API_KEY_PLACEHOLDER = "workload-identity-auth";
+var OpenAI = class {
+  /**
+   * API Client for interfacing with the OpenAI API.
+   *
+   * @param {string | undefined} [opts.apiKey=process.env['OPENAI_API_KEY'] ?? undefined]
+   * @param {string | null | undefined} [opts.organization=process.env['OPENAI_ORG_ID'] ?? null]
+   * @param {string | null | undefined} [opts.project=process.env['OPENAI_PROJECT_ID'] ?? null]
+   * @param {string | null | undefined} [opts.webhookSecret=process.env['OPENAI_WEBHOOK_SECRET'] ?? null]
+   * @param {string} [opts.baseURL=process.env['OPENAI_BASE_URL'] ?? https://api.openai.com/v1] - Override the default base URL for the API.
+   * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
+   * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
+   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
+   * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
+   * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
+   */
+  constructor({ baseURL = readEnv("OPENAI_BASE_URL"), apiKey = readEnv("OPENAI_API_KEY"), organization = readEnv("OPENAI_ORG_ID") ?? null, project = readEnv("OPENAI_PROJECT_ID") ?? null, webhookSecret = readEnv("OPENAI_WEBHOOK_SECRET") ?? null, workloadIdentity, ...opts } = {}) {
+    _OpenAI_instances.add(this);
+    _OpenAI_encoder.set(this, void 0);
+    this.completions = new Completions2(this);
+    this.chat = new Chat(this);
+    this.embeddings = new Embeddings(this);
+    this.files = new Files2(this);
+    this.images = new Images(this);
+    this.audio = new Audio(this);
+    this.moderations = new Moderations(this);
+    this.models = new Models(this);
+    this.fineTuning = new FineTuning(this);
+    this.graders = new Graders2(this);
+    this.vectorStores = new VectorStores(this);
+    this.webhooks = new Webhooks(this);
+    this.beta = new Beta(this);
+    this.batches = new Batches(this);
+    this.uploads = new Uploads(this);
+    this.responses = new Responses(this);
+    this.realtime = new Realtime2(this);
+    this.conversations = new Conversations(this);
+    this.evals = new Evals(this);
+    this.containers = new Containers(this);
+    this.skills = new Skills(this);
+    this.videos = new Videos(this);
+    if (workloadIdentity) {
+      if (apiKey && apiKey !== WORKLOAD_IDENTITY_API_KEY_PLACEHOLDER) {
+        throw new OpenAIError("The `apiKey` and `workloadIdentity` arguments are mutually exclusive; only one can be passed at a time.");
+      }
+      apiKey = WORKLOAD_IDENTITY_API_KEY_PLACEHOLDER;
+    } else if (apiKey === void 0) {
+      throw new OpenAIError("Missing credentials. Please pass an `apiKey`, `workloadIdentity`, or set the `OPENAI_API_KEY` environment variable.");
+    }
+    const options = {
+      apiKey,
+      organization,
+      project,
+      webhookSecret,
+      workloadIdentity,
+      ...opts,
+      baseURL: baseURL || `https://api.openai.com/v1`
+    };
+    if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
+      throw new OpenAIError("It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n");
+    }
+    this.baseURL = options.baseURL;
+    this.timeout = options.timeout ?? _a2.DEFAULT_TIMEOUT;
+    this.logger = options.logger ?? console;
+    const defaultLogLevel = "warn";
+    this.logLevel = defaultLogLevel;
+    this.logLevel = parseLogLevel(options.logLevel, "ClientOptions.logLevel", this) ?? parseLogLevel(readEnv("OPENAI_LOG"), "process.env['OPENAI_LOG']", this) ?? defaultLogLevel;
+    this.fetchOptions = options.fetchOptions;
+    this.maxRetries = options.maxRetries ?? 2;
+    this.fetch = options.fetch ?? getDefaultFetch();
+    __classPrivateFieldSet2(this, _OpenAI_encoder, FallbackEncoder, "f");
+    this._options = options;
+    if (workloadIdentity) {
+      this._workloadIdentityAuth = new WorkloadIdentityAuth(workloadIdentity, this.fetch);
+    }
+    this.apiKey = typeof apiKey === "string" ? apiKey : "Missing Key";
+    this.organization = organization;
+    this.project = project;
+    this.webhookSecret = webhookSecret;
+  }
+  /**
+   * Create a new client instance re-using the same options given to the current client with optional overriding.
+   */
+  withOptions(options) {
+    const client = new this.constructor({
+      ...this._options,
+      baseURL: this.baseURL,
+      maxRetries: this.maxRetries,
+      timeout: this.timeout,
+      logger: this.logger,
+      logLevel: this.logLevel,
+      fetch: this.fetch,
+      fetchOptions: this.fetchOptions,
+      apiKey: this.apiKey,
+      workloadIdentity: this._options.workloadIdentity,
+      organization: this.organization,
+      project: this.project,
+      webhookSecret: this.webhookSecret,
+      ...options
+    });
+    return client;
+  }
+  defaultQuery() {
+    return this._options.defaultQuery;
+  }
+  validateHeaders({ values, nulls }) {
+    return;
+  }
+  async authHeaders(opts) {
+    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
+  }
+  stringifyQuery(query) {
+    return stringifyQuery(query);
+  }
+  getUserAgent() {
+    return `${this.constructor.name}/JS ${VERSION}`;
+  }
+  defaultIdempotencyKey() {
+    return `stainless-node-retry-${uuid4()}`;
+  }
+  makeStatusError(status, error, message, headers) {
+    return APIError.generate(status, error, message, headers);
+  }
+  async _callApiKey() {
+    const apiKey = this._options.apiKey;
+    if (typeof apiKey !== "function")
+      return false;
+    let token2;
+    try {
+      token2 = await apiKey();
+    } catch (err) {
+      if (err instanceof OpenAIError)
+        throw err;
+      throw new OpenAIError(
+        `Failed to get token from 'apiKey' function: ${err.message}`,
+        // @ts-ignore
+        { cause: err }
+      );
+    }
+    if (typeof token2 !== "string" || !token2) {
+      throw new OpenAIError(`Expected 'apiKey' function argument to return a string but it returned ${token2}`);
+    }
+    this.apiKey = token2;
+    return true;
+  }
+  buildURL(path3, query, defaultBaseURL) {
+    const baseURL = !__classPrivateFieldGet2(this, _OpenAI_instances, "m", _OpenAI_baseURLOverridden).call(this) && defaultBaseURL || this.baseURL;
+    const url = isAbsoluteURL(path3) ? new URL(path3) : new URL(baseURL + (baseURL.endsWith("/") && path3.startsWith("/") ? path3.slice(1) : path3));
+    const defaultQuery = this.defaultQuery();
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
+    }
+    if (typeof query === "object" && query && !Array.isArray(query)) {
+      url.search = this.stringifyQuery(query);
+    }
+    return url.toString();
+  }
+  /**
+   * Used as a callback for mutating the given `FinalRequestOptions` object.
+   */
+  async prepareOptions(options) {
+    await this._callApiKey();
+  }
+  /**
+   * Used as a callback for mutating the given `RequestInit` object.
+   *
+   * This is useful for cases where you want to add certain headers based off of
+   * the request properties, e.g. `method` or `url`.
+   */
+  async prepareRequest(request, { url, options }) {
+  }
+  get(path3, opts) {
+    return this.methodRequest("get", path3, opts);
+  }
+  post(path3, opts) {
+    return this.methodRequest("post", path3, opts);
+  }
+  patch(path3, opts) {
+    return this.methodRequest("patch", path3, opts);
+  }
+  put(path3, opts) {
+    return this.methodRequest("put", path3, opts);
+  }
+  delete(path3, opts) {
+    return this.methodRequest("delete", path3, opts);
+  }
+  methodRequest(method, path3, opts) {
+    return this.request(Promise.resolve(opts).then((opts2) => {
+      return { method, path: path3, ...opts2 };
+    }));
+  }
+  request(options, remainingRetries = null) {
+    return new APIPromise(this, this.makeRequest(options, remainingRetries, void 0));
+  }
+  async makeRequest(optionsInput, retriesRemaining, retryOfRequestLogID) {
+    const options = await optionsInput;
+    const maxRetries = options.maxRetries ?? this.maxRetries;
+    if (retriesRemaining == null) {
+      retriesRemaining = maxRetries;
+    }
+    await this.prepareOptions(options);
+    const { req, url, timeout } = await this.buildRequest(options, {
+      retryCount: maxRetries - retriesRemaining
+    });
+    await this.prepareRequest(req, { url, options });
+    const requestLogID = "log_" + (Math.random() * (1 << 24) | 0).toString(16).padStart(6, "0");
+    const retryLogStr = retryOfRequestLogID === void 0 ? "" : `, retryOf: ${retryOfRequestLogID}`;
+    const startTime = Date.now();
+    loggerFor(this).debug(`[${requestLogID}] sending request`, formatRequestDetails({
+      retryOfRequestLogID,
+      method: options.method,
+      url,
+      options,
+      headers: req.headers
+    }));
+    if (options.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    const controller = new AbortController();
+    const response = await this.fetchWithAuth(url, req, timeout, controller).catch(castToError);
+    const headersTime = Date.now();
+    if (response instanceof globalThis.Error) {
+      const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
+      if (options.signal?.aborted) {
+        throw new APIUserAbortError();
+      }
+      const isTimeout = isAbortError(response) || /timed? ?out/i.test(String(response) + ("cause" in response ? String(response.cause) : ""));
+      if (retriesRemaining) {
+        loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? "timed out" : "failed"} - ${retryMessage}`);
+        loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? "timed out" : "failed"} (${retryMessage})`, formatRequestDetails({
+          retryOfRequestLogID,
+          url,
+          durationMs: headersTime - startTime,
+          message: response.message
+        }));
+        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+      }
+      loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? "timed out" : "failed"} - error; no more retries left`);
+      loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? "timed out" : "failed"} (error; no more retries left)`, formatRequestDetails({
+        retryOfRequestLogID,
+        url,
+        durationMs: headersTime - startTime,
+        message: response.message
+      }));
+      if (response instanceof OAuthError || response instanceof SubjectTokenProviderError) {
+        throw response;
+      }
+      if (isTimeout) {
+        throw new APIConnectionTimeoutError();
+      }
+      throw new APIConnectionError({ cause: response });
+    }
+    const specialHeaders = [...response.headers.entries()].filter(([name]) => name === "x-request-id").map(([name, value]) => ", " + name + ": " + JSON.stringify(value)).join("");
+    const responseInfo = `[${requestLogID}${retryLogStr}${specialHeaders}] ${req.method} ${url} ${response.ok ? "succeeded" : "failed"} with status ${response.status} in ${headersTime - startTime}ms`;
+    if (!response.ok) {
+      if (response.status === 401 && this._workloadIdentityAuth && !options.__metadata?.["hasStreamingBody"] && !options.__metadata?.["workloadIdentityTokenRefreshed"]) {
+        await CancelReadableStream(response.body);
+        this._workloadIdentityAuth.invalidateToken();
+        return this.makeRequest({
+          ...options,
+          __metadata: {
+            ...options.__metadata,
+            workloadIdentityTokenRefreshed: true
+          }
+        }, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+      }
+      const shouldRetry = await this.shouldRetry(response);
+      if (retriesRemaining && shouldRetry) {
+        const retryMessage2 = `retrying, ${retriesRemaining} attempts remaining`;
+        await CancelReadableStream(response.body);
+        loggerFor(this).info(`${responseInfo} - ${retryMessage2}`);
+        loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage2})`, formatRequestDetails({
+          retryOfRequestLogID,
+          url: response.url,
+          status: response.status,
+          headers: response.headers,
+          durationMs: headersTime - startTime
+        }));
+        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID, response.headers);
+      }
+      const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
+      loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+      const errText = await response.text().catch((err2) => castToError(err2).message);
+      const errJSON = safeJSON(errText);
+      const errMessage = errJSON ? void 0 : errText;
+      loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({
+        retryOfRequestLogID,
+        url: response.url,
+        status: response.status,
+        headers: response.headers,
+        message: errMessage,
+        durationMs: Date.now() - startTime
+      }));
+      const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
+      throw err;
+    }
+    loggerFor(this).info(responseInfo);
+    loggerFor(this).debug(`[${requestLogID}] response start`, formatRequestDetails({
+      retryOfRequestLogID,
+      url: response.url,
+      status: response.status,
+      headers: response.headers,
+      durationMs: headersTime - startTime
+    }));
+    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+  }
+  getAPIList(path3, Page2, opts) {
+    return this.requestAPIList(Page2, opts && "then" in opts ? opts.then((opts2) => ({ method: "get", path: path3, ...opts2 })) : { method: "get", path: path3, ...opts });
+  }
+  requestAPIList(Page2, options) {
+    const request = this.makeRequest(options, null, void 0);
+    return new PagePromise(this, request, Page2);
+  }
+  async fetchWithAuth(url, init, timeout, controller) {
+    if (this._workloadIdentityAuth) {
+      const headers = init.headers;
+      const authHeader = headers.get("Authorization");
+      if (!authHeader || authHeader === `Bearer ${WORKLOAD_IDENTITY_API_KEY_PLACEHOLDER}`) {
+        const token2 = await this._workloadIdentityAuth.getToken();
+        headers.set("Authorization", `Bearer ${token2}`);
+      }
+    }
+    const response = await this.fetchWithTimeout(url, init, timeout, controller);
+    return response;
+  }
+  async fetchWithTimeout(url, init, ms, controller) {
+    const { signal, method, ...options } = init || {};
+    const abort = this._makeAbort(controller);
+    if (signal)
+      signal.addEventListener("abort", abort, { once: true });
+    const timeout = setTimeout(abort, ms);
+    const isReadableBody = globalThis.ReadableStream && options.body instanceof globalThis.ReadableStream || typeof options.body === "object" && options.body !== null && Symbol.asyncIterator in options.body;
+    const fetchOptions = {
+      signal: controller.signal,
+      ...isReadableBody ? { duplex: "half" } : {},
+      method: "GET",
+      ...options
+    };
+    if (method) {
+      fetchOptions.method = method.toUpperCase();
+    }
+    try {
+      return await this.fetch.call(void 0, url, fetchOptions);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+  async shouldRetry(response) {
+    const shouldRetryHeader = response.headers.get("x-should-retry");
+    if (shouldRetryHeader === "true")
+      return true;
+    if (shouldRetryHeader === "false")
+      return false;
+    if (response.status === 408)
+      return true;
+    if (response.status === 409)
+      return true;
+    if (response.status === 429)
+      return true;
+    if (response.status >= 500)
+      return true;
+    return false;
+  }
+  async retryRequest(options, retriesRemaining, requestLogID, responseHeaders) {
+    let timeoutMillis;
+    const retryAfterMillisHeader = responseHeaders?.get("retry-after-ms");
+    if (retryAfterMillisHeader) {
+      const timeoutMs = parseFloat(retryAfterMillisHeader);
+      if (!Number.isNaN(timeoutMs)) {
+        timeoutMillis = timeoutMs;
+      }
+    }
+    const retryAfterHeader = responseHeaders?.get("retry-after");
+    if (retryAfterHeader && !timeoutMillis) {
+      const timeoutSeconds = parseFloat(retryAfterHeader);
+      if (!Number.isNaN(timeoutSeconds)) {
+        timeoutMillis = timeoutSeconds * 1e3;
+      } else {
+        timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
+      }
+    }
+    if (timeoutMillis === void 0) {
+      const maxRetries = options.maxRetries ?? this.maxRetries;
+      timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
+    }
+    await sleep2(timeoutMillis);
+    return this.makeRequest(options, retriesRemaining - 1, requestLogID);
+  }
+  calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
+    const initialRetryDelay = 0.5;
+    const maxRetryDelay = 8;
+    const numRetries = maxRetries - retriesRemaining;
+    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
+    const jitter = 1 - Math.random() * 0.25;
+    return sleepSeconds * jitter * 1e3;
+  }
+  async buildRequest(inputOptions, { retryCount = 0 } = {}) {
+    const options = { ...inputOptions };
+    const { method, path: path3, query, defaultBaseURL } = options;
+    const url = this.buildURL(path3, query, defaultBaseURL);
+    if ("timeout" in options)
+      validatePositiveInteger("timeout", options.timeout);
+    options.timeout = options.timeout ?? this.timeout;
+    const { bodyHeaders, body, isStreamingBody } = this.buildBody({ options });
+    if (isStreamingBody) {
+      inputOptions.__metadata = {
+        ...inputOptions.__metadata,
+        hasStreamingBody: true
+      };
+    }
+    const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
+    const req = {
+      method,
+      headers: reqHeaders,
+      ...options.signal && { signal: options.signal },
+      ...globalThis.ReadableStream && body instanceof globalThis.ReadableStream && { duplex: "half" },
+      ...body && { body },
+      ...this.fetchOptions ?? {},
+      ...options.fetchOptions ?? {}
+    };
+    return { req, url, timeout: options.timeout };
+  }
+  async buildHeaders({ options, method, bodyHeaders, retryCount }) {
+    let idempotencyHeaders = {};
+    if (this.idempotencyHeader && method !== "get") {
+      if (!options.idempotencyKey)
+        options.idempotencyKey = this.defaultIdempotencyKey();
+      idempotencyHeaders[this.idempotencyHeader] = options.idempotencyKey;
+    }
+    const headers = buildHeaders([
+      idempotencyHeaders,
+      {
+        Accept: "application/json",
+        "User-Agent": this.getUserAgent(),
+        "X-Stainless-Retry-Count": String(retryCount),
+        ...options.timeout ? { "X-Stainless-Timeout": String(Math.trunc(options.timeout / 1e3)) } : {},
+        ...getPlatformHeaders(),
+        "OpenAI-Organization": this.organization,
+        "OpenAI-Project": this.project
+      },
+      await this.authHeaders(options),
+      this._options.defaultHeaders,
+      bodyHeaders,
+      options.headers
+    ]);
+    this.validateHeaders(headers);
+    return headers.values;
+  }
+  _makeAbort(controller) {
+    return () => controller.abort();
+  }
+  buildBody({ options: { body, headers: rawHeaders } }) {
+    if (!body) {
+      return { bodyHeaders: void 0, body: void 0, isStreamingBody: false };
+    }
+    const headers = buildHeaders([rawHeaders]);
+    const isReadableStream = typeof globalThis.ReadableStream !== "undefined" && body instanceof globalThis.ReadableStream;
+    const isRetryableBody = !isReadableStream && (typeof body === "string" || body instanceof ArrayBuffer || ArrayBuffer.isView(body) || typeof globalThis.Blob !== "undefined" && body instanceof globalThis.Blob || body instanceof URLSearchParams || body instanceof FormData);
+    if (
+      // Pass raw type verbatim
+      ArrayBuffer.isView(body) || body instanceof ArrayBuffer || body instanceof DataView || typeof body === "string" && // Preserve legacy string encoding behavior for now
+      headers.values.has("content-type") || // `Blob` is superset of `File`
+      globalThis.Blob && body instanceof globalThis.Blob || // `FormData` -> `multipart/form-data`
+      body instanceof FormData || // `URLSearchParams` -> `application/x-www-form-urlencoded`
+      body instanceof URLSearchParams || // Send chunked stream (each chunk has own `length`)
+      isReadableStream
+    ) {
+      return { bodyHeaders: void 0, body, isStreamingBody: !isRetryableBody };
+    } else if (typeof body === "object" && (Symbol.asyncIterator in body || Symbol.iterator in body && "next" in body && typeof body.next === "function")) {
+      return {
+        bodyHeaders: void 0,
+        body: ReadableStreamFrom(body),
+        isStreamingBody: true
+      };
+    } else if (typeof body === "object" && headers.values.get("content-type") === "application/x-www-form-urlencoded") {
+      return {
+        bodyHeaders: { "content-type": "application/x-www-form-urlencoded" },
+        body: this.stringifyQuery(body),
+        isStreamingBody: false
+      };
+    } else {
+      return { ...__classPrivateFieldGet2(this, _OpenAI_encoder, "f").call(this, { body, headers }), isStreamingBody: false };
+    }
+  }
+};
+_a2 = OpenAI, _OpenAI_encoder = /* @__PURE__ */ new WeakMap(), _OpenAI_instances = /* @__PURE__ */ new WeakSet(), _OpenAI_baseURLOverridden = function _OpenAI_baseURLOverridden2() {
+  return this.baseURL !== "https://api.openai.com/v1";
+};
+OpenAI.OpenAI = _a2;
+OpenAI.DEFAULT_TIMEOUT = 6e5;
+OpenAI.OpenAIError = OpenAIError;
+OpenAI.APIError = APIError;
+OpenAI.APIConnectionError = APIConnectionError;
+OpenAI.APIConnectionTimeoutError = APIConnectionTimeoutError;
+OpenAI.APIUserAbortError = APIUserAbortError;
+OpenAI.NotFoundError = NotFoundError;
+OpenAI.ConflictError = ConflictError;
+OpenAI.RateLimitError = RateLimitError;
+OpenAI.BadRequestError = BadRequestError;
+OpenAI.AuthenticationError = AuthenticationError;
+OpenAI.InternalServerError = InternalServerError;
+OpenAI.PermissionDeniedError = PermissionDeniedError;
+OpenAI.UnprocessableEntityError = UnprocessableEntityError;
+OpenAI.InvalidWebhookSignatureError = InvalidWebhookSignatureError;
+OpenAI.toFile = toFile;
+OpenAI.Completions = Completions2;
+OpenAI.Chat = Chat;
+OpenAI.Embeddings = Embeddings;
+OpenAI.Files = Files2;
+OpenAI.Images = Images;
+OpenAI.Audio = Audio;
+OpenAI.Moderations = Moderations;
+OpenAI.Models = Models;
+OpenAI.FineTuning = FineTuning;
+OpenAI.Graders = Graders2;
+OpenAI.VectorStores = VectorStores;
+OpenAI.Webhooks = Webhooks;
+OpenAI.Beta = Beta;
+OpenAI.Batches = Batches;
+OpenAI.Uploads = Uploads;
+OpenAI.Responses = Responses;
+OpenAI.Realtime = Realtime2;
+OpenAI.Conversations = Conversations;
+OpenAI.Evals = Evals;
+OpenAI.Containers = Containers;
+OpenAI.Skills = Skills;
+OpenAI.Videos = Videos;
+
+// src/bot/guess/ai.ts
+var _client = null;
+function getClient() {
+  if (_client) return _client;
+  const baseURL = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL;
+  const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY ?? process.env.OPENAI_API_KEY ?? "no-key";
+  if (!baseURL && !process.env.OPENAI_API_KEY) return null;
+  _client = new OpenAI({
+    apiKey,
+    ...baseURL ? { baseURL } : {}
+  });
+  return _client;
+}
+async function aiAnswerQuestion(question, word) {
+  const client = getClient();
+  if (!client) return null;
+  try {
+    const response = await client.chat.completions.create({
+      model: "gpt-5-mini",
+      max_completion_tokens: 5,
+      messages: [
+        {
+          role: "system",
+          content: [
+            `\u0623\u0646\u062A \u0645\u0633\u0627\u0639\u062F \u0641\u064A \u0644\u0639\u0628\u0629 "\u062E\u0645\u0646 \u0627\u0644\u0643\u0644\u0645\u0629".`,
+            `\u0627\u0644\u0643\u0644\u0645\u0629 \u0627\u0644\u0633\u0631\u064A\u0629 \u0647\u064A: "${word}"`,
+            `\u0645\u0647\u0645\u062A\u0643: \u0623\u062C\u0628 \u0639\u0644\u0649 \u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0644\u0627\u0639\u0628\u064A\u0646 \u0628\u0640 "\u0646\u0639\u0645" \u0623\u0648 "\u0644\u0627" \u0641\u0642\u0637.`,
+            `\u0644\u0627 \u062A\u0643\u062A\u0628 \u0623\u064A \u0634\u064A\u0621 \u0622\u062E\u0631 \u0633\u0648\u0649 \u0643\u0644\u0645\u0629 \u0648\u0627\u062D\u062F\u0629: \u0646\u0639\u0645 \u0623\u0648 \u0644\u0627.`,
+            `\u0641\u0643\u0631 \u0628\u062F\u0642\u0629 \u0641\u064A \u0645\u0639\u0646\u0649 \u0627\u0644\u0643\u0644\u0645\u0629 \u0648\u0627\u0644\u0633\u0624\u0627\u0644 \u0642\u0628\u0644 \u0627\u0644\u0625\u062C\u0627\u0628\u0629.`
+          ].join("\n")
+        },
+        {
+          role: "user",
+          content: question
+        }
+      ]
+    });
+    const text = response.choices[0]?.message?.content?.trim() ?? "";
+    if (/^نعم/.test(text)) return true;
+    if (/^لا/.test(text)) return false;
+    if (/yes/i.test(text)) return true;
+    if (/no/i.test(text)) return false;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // src/bot/guess/handlers.ts
 var LOBBY_SECONDS7 = 60;
 var GAME_TIMEOUT_MS = 15 * 60 * 1e3;
@@ -79931,9 +87130,14 @@ async function sendTurnPrompt(channel, game) {
   const player = getCurrentGuesser(game);
   await channel.send(
     `<@${player.userId}> \u062F\u0648\u0631\u0643! \u{1F50E}
-\u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u064A\u0628\u062F\u0623 \u0628\u0640 **\u0647\u0644** (\u0645\u062B\u0627\u0644: \u0647\u0644 \u0627\u0644\u0643\u0644\u0645\u0629 \u062D\u064A\u0648\u0627\u0646\u061F)
+\u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B (\u0645\u062B\u0627\u0644: **\u0647\u0644 \u0627\u0644\u0643\u0644\u0645\u0629 \u062D\u064A\u0648\u0627\u0646\u061F \u0647\u0644 \u0647\u064A \u0643\u0628\u064A\u0631\u0629\u061F \u0647\u0644 \u062A\u064F\u0624\u0643\u0644\u061F**)
 \u0623\u0648 \u0627\u0643\u062A\u0628 \u062A\u062E\u0645\u064A\u0646\u0643 \u0645\u0628\u0627\u0634\u0631\u0629\u064B \u0644\u0644\u0641\u0648\u0632! \u2014 **${game.questionCount}** \u0633\u0624\u0627\u0644 \u062D\u062A\u0649 \u0627\u0644\u0622\u0646`
   );
+}
+async function getAnswer(question, game) {
+  const aiResult = await aiAnswerQuestion(question, game.word.word);
+  if (aiResult !== null) return aiResult;
+  return answerQuestion(question, game.word);
 }
 async function handleGuessMessage(message) {
   if (message.author.bot) return;
@@ -79945,18 +87149,23 @@ async function handleGuessMessage(message) {
   const text = message.content.trim();
   if (!text) return;
   const channel = message.channel;
-  const isQuestion = /^هل\s+/.test(text);
+  const isQuestion = /^هل\s+/.test(text) || /؟\s*$/.test(text);
   if (isQuestion) {
     game.questionCount++;
-    const answer = answerQuestion(text, game.word);
+    await channel.sendTyping().catch(() => {
+    });
+    const answer = await getAnswer(text, game);
     if (answer === null) {
-      await channel.send(`<@${current.userId}> \u2753 \u0645\u0627 \u0623\u0642\u062F\u0631 \u0623\u062C\u0627\u0648\u0628 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u0633\u0624\u0627\u0644 \u2014 \u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u0622\u062E\u0631 \u0623\u0648 \u062E\u0645\u0651\u0646 \u0645\u0628\u0627\u0634\u0631\u0629\u064B.`);
+      game.questionCount--;
+      await channel.send(
+        `<@${current.userId}> \u2753 \u0645\u0627 \u0623\u0642\u062F\u0631 \u0623\u062C\u0627\u0648\u0628 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u0633\u0624\u0627\u0644 \u2014 \u0627\u0633\u0623\u0644 \u0628\u0637\u0631\u064A\u0642\u0629 \u0645\u062E\u062A\u0644\u0641\u0629.`
+      );
       return;
     }
     await channel.send(
       answer ? `\u2705 **\u0646\u0639\u0645!** _(\u0633\u0624\u0627\u0644 #${game.questionCount})_` : `\u274C **\u0644\u0627.** _(\u0633\u0624\u0627\u0644 #${game.questionCount})_`
     );
-    const next = nextGuesser(game);
+    nextGuesser(game);
     await sendTurnPrompt(channel, game);
     return;
   }
@@ -79970,7 +87179,7 @@ async function handleGuessMessage(message) {
     await channel.send({ embeds: [guessWinEmbed(winner, secret, questionCount)] });
     return;
   }
-  await channel.send(`<@${current.userId}> \u274C \u062E\u0637\u0623! \u0627\u0633\u062A\u0645\u0631 \u0641\u064A \u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u062E\u0645\u0651\u0646 \u0645\u0631\u0629 \u0623\u062E\u0631\u0649 \u0641\u064A \u062F\u0648\u0631\u0643 \u0627\u0644\u0642\u0627\u062F\u0645.`);
+  await channel.send(`<@${current.userId}> \u274C \u062E\u0637\u0623! \u0627\u0633\u062A\u0645\u0631 \u0641\u064A \u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0623\u0648 \u062C\u0631\u0651\u0628 \u0645\u0631\u0629 \u062B\u0627\u0646\u064A\u0629 \u0641\u064A \u062F\u0648\u0631\u0643 \u0627\u0644\u0642\u0627\u062F\u0645.`);
   nextGuesser(game);
   await sendTurnPrompt(channel, game);
 }

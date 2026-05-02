@@ -10,7 +10,8 @@
   "dependencies": {
     "discord.js": "^14.26.3",
     "pg": "^8.13.3",
-    "openai": "^6.35.0"
+    "openai": "^6.35.0",
+    "sharp": "^0.34.5"
   },
   "engines": {
     "node": ">=18"

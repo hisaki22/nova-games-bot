@@ -74994,9 +74994,9 @@ var import_discord9 = __toESM(require_src(), 1);
 
 // console-logger:console-logger
 var logger = {
-  info: (obj, msg) => console.log("[INFO]", msg ?? obj),
-  warn: (obj, msg) => console.warn("[WARN]", msg ?? obj),
-  error: (obj, msg) => console.error("[ERROR]", msg ?? obj),
+  info: (obj, msg) => console.log("[INFO]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
+  warn: (obj, msg) => console.warn("[WARN]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
+  error: (obj, msg) => console.error("[ERROR]", msg ?? (typeof obj === "string" ? obj : JSON.stringify(obj))),
   child: function() {
     return this;
   }
@@ -75858,6 +75858,9 @@ function getUserRank(guildId, userId) {
   const sorted = Object.values(guild).filter((r) => r.points > 0).sort((a, b) => b.points - a.points);
   const idx = sorted.findIndex((r) => r.userId === userId);
   return idx === -1 ? 0 : idx + 1;
+}
+function getStoreSnapshot() {
+  return JSON.parse(JSON.stringify(store));
 }
 function getGuildStats(guildId) {
   const guild = store[guildId];
@@ -79595,6 +79598,41 @@ async function startBot(token2) {
   return client;
 }
 
+// src/bot/backup.ts
+var BACKUP_INTERVAL_MS = 24 * 60 * 60 * 1e3;
+function startDailyBackup(getStoreSnapshot2) {
+  const webhookUrl = process.env.GOOGLE_DRIVE_WEBHOOK;
+  if (!webhookUrl) {
+    logger.warn("GOOGLE_DRIVE_WEBHOOK not set \u2014 daily backup disabled");
+    return;
+  }
+  async function runBackup() {
+    try {
+      const snapshot = getStoreSnapshot2();
+      const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+      const payload = { date, scores: snapshot };
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        logger.info(`Daily backup sent to Google Drive \u2705 (${date})`);
+      } else {
+        const text = await res.text();
+        logger.error({ status: res.status, text }, "Backup failed");
+      }
+    } catch (err) {
+      logger.error({ err }, "Backup request error");
+    }
+  }
+  setTimeout(() => {
+    runBackup();
+    setInterval(runBackup, BACKUP_INTERVAL_MS);
+  }, 1e4);
+  logger.info("Daily Google Drive backup scheduled \u2705");
+}
+
 // bot-entry:bot-entry
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
@@ -79602,7 +79640,10 @@ if (!token) {
   process.exit(1);
 }
 console.log("[INFO] Nova Games Bot starting...");
-loadScores().then(() => console.log("[INFO] Scores loaded")).catch((e) => console.warn("[WARN] Scores:", e));
+loadScores().then(() => {
+  console.log("[INFO] Scores loaded");
+  startDailyBackup(getStoreSnapshot);
+}).catch((e) => console.warn("[WARN] Scores:", e));
 startBot(token).then(() => console.log("[INFO] Bot online \u2705")).catch((err) => {
   console.error("[ERROR] Bot failed:", err);
   process.exit(1);

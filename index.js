@@ -74994,9 +74994,9 @@ var import_discord9 = __toESM(require_src(), 1);
 
 // console-logger:console-logger
 var logger = {
-  info: (obj, msg) => console.log("[INFO]", msg ?? obj, typeof obj === "object" ? JSON.stringify(obj) : ""),
-  warn: (obj, msg) => console.warn("[WARN]", msg ?? obj, typeof obj === "object" ? JSON.stringify(obj) : ""),
-  error: (obj, msg) => console.error("[ERROR]", msg ?? obj, typeof obj === "object" ? JSON.stringify(obj) : ""),
+  info: (obj, msg) => console.log("[INFO]", msg ?? obj),
+  warn: (obj, msg) => console.warn("[WARN]", msg ?? obj),
+  error: (obj, msg) => console.error("[ERROR]", msg ?? obj),
   child: function() {
     return this;
   }
@@ -75688,9 +75688,90 @@ var import_path = __toESM(require("path"), 1);
 var DATA_DIR = import_path.default.join(process.cwd(), "data");
 var SCORES_FILE = import_path.default.join(DATA_DIR, "scores.json");
 var store = {};
-var dirty = false;
-var saveTimer = null;
+var pgClient = null;
+async function connectPg() {
+  const url = process.env.DATABASE_URL;
+  if (!url) return null;
+  try {
+    const { Client: Client3 } = await import("pg");
+    const client = new Client3({ connectionString: url, ssl: { rejectUnauthorized: false } });
+    await client.connect();
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS scores (
+        guild_id        TEXT NOT NULL,
+        user_id         TEXT NOT NULL,
+        username        TEXT NOT NULL DEFAULT '',
+        points          INTEGER NOT NULL DEFAULT 0,
+        scramble_wins   INTEGER NOT NULL DEFAULT 0,
+        scramble_correct INTEGER NOT NULL DEFAULT 0,
+        imposter_points INTEGER NOT NULL DEFAULT 0,
+        search_wins     INTEGER NOT NULL DEFAULT 0,
+        roulette_wins   INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (guild_id, user_id)
+      )
+    `);
+    logger.info("PostgreSQL connected \u2014 scores will be persisted");
+    return client;
+  } catch (err) {
+    logger.error({ err }, "PostgreSQL connection failed \u2014 falling back to file storage");
+    return null;
+  }
+}
+async function pgUpsert(guildId, rec) {
+  if (!pgClient) return;
+  try {
+    await pgClient.query(
+      `INSERT INTO scores
+         (guild_id, user_id, username, points, scramble_wins, scramble_correct, imposter_points, search_wins, roulette_wins)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+       ON CONFLICT (guild_id, user_id) DO UPDATE SET
+         username         = EXCLUDED.username,
+         points           = EXCLUDED.points,
+         scramble_wins    = EXCLUDED.scramble_wins,
+         scramble_correct = EXCLUDED.scramble_correct,
+         imposter_points  = EXCLUDED.imposter_points,
+         search_wins      = EXCLUDED.search_wins,
+         roulette_wins    = EXCLUDED.roulette_wins`,
+      [
+        guildId,
+        rec.userId,
+        rec.username,
+        rec.points,
+        rec.scrambleWins,
+        rec.scrambleCorrect,
+        rec.imposterPoints,
+        rec.searchWins,
+        rec.rouletteWins
+      ]
+    );
+  } catch (err) {
+    logger.error({ err }, "pgUpsert failed");
+  }
+}
 async function loadScores() {
+  pgClient = await connectPg();
+  if (pgClient) {
+    try {
+      const result = await pgClient.query("SELECT * FROM scores");
+      for (const row of result.rows) {
+        if (!store[row.guild_id]) store[row.guild_id] = {};
+        store[row.guild_id][row.user_id] = {
+          userId: row.user_id,
+          username: row.username,
+          points: Number(row.points),
+          scrambleWins: Number(row.scramble_wins),
+          scrambleCorrect: Number(row.scramble_correct),
+          imposterPoints: Number(row.imposter_points),
+          searchWins: Number(row.search_wins),
+          rouletteWins: Number(row.roulette_wins)
+        };
+      }
+      logger.info({ rows: result.rowCount }, "scores loaded from PostgreSQL");
+      return;
+    } catch (err) {
+      logger.error({ err }, "failed to load scores from PostgreSQL");
+    }
+  }
   try {
     await (0, import_promises.mkdir)(DATA_DIR, { recursive: true });
     const raw = await (0, import_promises.readFile)(SCORES_FILE, "utf-8");
@@ -75699,7 +75780,14 @@ async function loadScores() {
     store = {};
   }
 }
-function scheduleSave() {
+var dirty = false;
+var saveTimer = null;
+function scheduleSave(guildId, rec) {
+  if (pgClient) {
+    pgUpsert(guildId, rec).catch(() => {
+    });
+    return;
+  }
   dirty = true;
   if (saveTimer) return;
   saveTimer = setTimeout(async () => {
@@ -75709,7 +75797,7 @@ function scheduleSave() {
     try {
       await (0, import_promises.writeFile)(SCORES_FILE, JSON.stringify(store, null, 2), "utf-8");
     } catch (err) {
-      logger.error({ err }, "failed to save scores");
+      logger.error({ err }, "failed to save scores to file");
     }
   }, 2e3);
 }
@@ -75735,26 +75823,26 @@ function addScrambleWin(guildId, userId, username, pts) {
   const rec = getOrCreate(guildId, userId, username);
   rec.points += pts;
   rec.scrambleWins += 1;
-  scheduleSave();
+  scheduleSave(guildId, rec);
 }
 function addImposterPoints(guildId, userId, username, pts) {
   if (pts <= 0) return;
   const rec = getOrCreate(guildId, userId, username);
   rec.points += pts * 10;
   rec.imposterPoints += pts * 10;
-  scheduleSave();
+  scheduleSave(guildId, rec);
 }
 function addSearchWin(guildId, userId, username, pts) {
   const rec = getOrCreate(guildId, userId, username);
   rec.points += pts;
   rec.searchWins = (rec.searchWins ?? 0) + 1;
-  scheduleSave();
+  scheduleSave(guildId, rec);
 }
 function addRouletteWin(guildId, userId, username, pts) {
   const rec = getOrCreate(guildId, userId, username);
   rec.points += pts;
   rec.rouletteWins = (rec.rouletteWins ?? 0) + 1;
-  scheduleSave();
+  scheduleSave(guildId, rec);
 }
 function getLeaderboard(guildId) {
   const guild = store[guildId];

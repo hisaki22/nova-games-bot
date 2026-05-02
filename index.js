@@ -79334,7 +79334,8 @@ function createClosestGame(channelId, guildId, hostId, hostUsername) {
     currentPlayerIndex: 0,
     roundCount: 0,
     lobbyMessageId: null,
-    timers: []
+    timers: [],
+    turnTimer: null
   };
   games5.set(channelId, game);
   lockChannel(channelId, "\u0627\u0644\u0623\u0642\u0631\u0628");
@@ -79348,6 +79349,10 @@ function deleteClosestGame(channelId) {
   if (game) {
     for (const t of game.timers) clearTimeout(t);
     game.timers = [];
+    if (game.turnTimer) {
+      clearTimeout(game.turnTimer);
+      game.turnTimer = null;
+    }
   }
   games5.delete(channelId);
   unlockChannel(channelId);
@@ -79388,6 +79393,15 @@ function nextPlayer(game) {
   game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
   return game.players[game.currentPlayerIndex];
 }
+function eliminateCurrentPlayer(game) {
+  if (game.players.length === 0) return null;
+  const eliminated = game.players[game.currentPlayerIndex];
+  game.players.splice(game.currentPlayerIndex, 1);
+  if (game.players.length > 0 && game.currentPlayerIndex >= game.players.length) {
+    game.currentPlayerIndex = 0;
+  }
+  return eliminated;
+}
 
 // src/bot/closest/embeds.ts
 var COLOR = 10181046;
@@ -79419,6 +79433,7 @@ function closestWinEmbed(winner, secretNumber, rounds, points) {
 
 // src/bot/closest/handlers.ts
 var LOBBY_SECONDS6 = 60;
+var TURN_SECONDS = 10;
 function lobbyButtons4() {
   return new import_discord9.ActionRowBuilder().addComponents(
     new import_discord9.ButtonBuilder().setCustomId("clst:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord9.ButtonStyle.Success),
@@ -79499,7 +79514,38 @@ async function initClosestGame(channel, guildId, userId, username) {
 }
 async function sendTurnMessage(channel, game) {
   const player = getCurrentPlayer(game);
-  await channel.send(`<@${player.userId}> \u062F\u0648\u0631\u0643! \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0646 **0** \u0625\u0644\u0649 **300**`);
+  if (game.turnTimer) {
+    clearTimeout(game.turnTimer);
+    game.turnTimer = null;
+  }
+  await channel.send(
+    `<@${player.userId}> \u062F\u0648\u0631\u0643! \u{1F522}
+\u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0646 **0** \u0625\u0644\u0649 **300** \u2014 \u0644\u062F\u064A\u0643 **${TURN_SECONDS} \u062B\u0648\u0627\u0646\u064A** \u23F1\uFE0F`
+  );
+  const turnTimer = setTimeout(async () => {
+    const g = getClosestGame(channel.id);
+    if (!g || g.phase !== "playing") return;
+    if (getCurrentPlayer(g).userId !== player.userId) return;
+    g.turnTimer = null;
+    const eliminated = eliminateCurrentPlayer(g);
+    if (!eliminated) return;
+    await channel.send(`\u23F0 <@${eliminated.userId}> \u062A\u0623\u062E\u0631 \u0639\u0646 \u0627\u0644\u0631\u062F \u0648\u0627\u0646\u0637\u0631\u062F \u0645\u0646 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F6AB}`);
+    if (g.players.length === 0) {
+      deleteClosestGame(channel.id);
+      await channel.send({ embeds: [{ color: 15548997, title: "\u274C \u0627\u0646\u062A\u0647\u062A \u0627\u0644\u0644\u0639\u0628\u0629", description: "\u0645\u0627 \u0641\u064A \u0644\u0627\u0639\u0628\u064A\u0646 \u0645\u062A\u0628\u0642\u064A\u0646." }] });
+      return;
+    }
+    if (g.players.length === 1) {
+      const winner = g.players[0];
+      const points = 10 + g.roundCount;
+      addClosestWin(g.guildId, winner.userId, winner.username, points);
+      deleteClosestGame(channel.id);
+      await channel.send({ embeds: [closestWinEmbed(winner, g.secretNumber, g.roundCount, points)] });
+      return;
+    }
+    await sendTurnMessage(channel, g);
+  }, TURN_SECONDS * 1e3);
+  game.turnTimer = turnTimer;
 }
 async function handleClosestMessage(message) {
   if (message.author.bot) return;
@@ -79510,6 +79556,10 @@ async function handleClosestMessage(message) {
   if (message.author.id !== current.userId) return;
   const num = parseInt(message.content.trim(), 10);
   if (isNaN(num) || num < 0 || num > 300) return;
+  if (game.turnTimer) {
+    clearTimeout(game.turnTimer);
+    game.turnTimer = null;
+  }
   const result = handleGuess2(game, num);
   const channel = message.channel;
   if (result === "correct") {
@@ -79528,7 +79578,8 @@ async function handleClosestMessage(message) {
     await channel.send(`<@${current.userId}> \u0627\u0644\u0631\u0642\u0645 **\u0623\u0643\u0628\u0631** \u0645\u0646 ${num} \u{1F4C8}`);
   }
   const next = nextPlayer(game);
-  await channel.send(`<@${next.userId}> \u062F\u0648\u0631\u0643! \u0627\u0643\u062A\u0628 \u0631\u0642\u0645\u0627\u064B \u0645\u0646 **0** \u0625\u0644\u0649 **300**`);
+  await sendTurnMessage(channel, game);
+  void next;
 }
 async function handleClosestButton(interaction) {
   const game = getClosestGame(interaction.channelId);
@@ -79739,7 +79790,8 @@ function createGuessGame(channelId, guildId, hostId, hostUsername) {
     currentPlayerIndex: 0,
     questionCount: 0,
     lobbyMessageId: null,
-    timers: []
+    timers: [],
+    turnTimer: null
   };
   games6.set(channelId, game);
   lockChannel(channelId, "\u062E\u0645\u0651\u0646");
@@ -79753,6 +79805,10 @@ function deleteGuessGame(channelId) {
   if (game) {
     for (const t of game.timers) clearTimeout(t);
     game.timers = [];
+    if (game.turnTimer) {
+      clearTimeout(game.turnTimer);
+      game.turnTimer = null;
+    }
   }
   games6.delete(channelId);
   unlockChannel(channelId);
@@ -79786,6 +79842,15 @@ function getCurrentGuesser(game) {
 function nextGuesser(game) {
   game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
   return game.players[game.currentPlayerIndex];
+}
+function eliminateCurrentGuesser(game) {
+  if (game.players.length === 0) return null;
+  const eliminated = game.players[game.currentPlayerIndex];
+  game.players.splice(game.currentPlayerIndex, 1);
+  if (game.players.length > 0 && game.currentPlayerIndex >= game.players.length) {
+    game.currentPlayerIndex = 0;
+  }
+  return eliminated;
 }
 
 // src/bot/guess/embeds.ts
@@ -87061,6 +87126,7 @@ async function aiAnswerQuestion(question, word) {
 // src/bot/guess/handlers.ts
 var LOBBY_SECONDS7 = 60;
 var GAME_TIMEOUT_MS = 15 * 60 * 1e3;
+var TURN_SECONDS2 = 20;
 function lobbyButtons5() {
   return new import_discord10.ActionRowBuilder().addComponents(
     new import_discord10.ButtonBuilder().setCustomId("gss:join").setLabel("\u0627\u0646\u0636\u0645\u0627\u0645 \u{1F3AE}").setStyle(import_discord10.ButtonStyle.Success),
@@ -87145,11 +87211,39 @@ async function initGuessGame(channel, guildId, userId, username) {
 }
 async function sendTurnPrompt(channel, game) {
   const player = getCurrentGuesser(game);
+  if (game.turnTimer) {
+    clearTimeout(game.turnTimer);
+    game.turnTimer = null;
+  }
   await channel.send(
     `<@${player.userId}> \u062F\u0648\u0631\u0643! \u{1F50E}
-\u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B (\u0645\u062B\u0627\u0644: **\u0647\u0644 \u0627\u0644\u0643\u0644\u0645\u0629 \u062D\u064A\u0648\u0627\u0646\u061F \u0647\u0644 \u0647\u064A \u0643\u0628\u064A\u0631\u0629\u061F \u0647\u0644 \u062A\u064F\u0624\u0643\u0644\u061F**)
-\u0623\u0648 \u0627\u0643\u062A\u0628 \u062A\u062E\u0645\u064A\u0646\u0643 \u0645\u0628\u0627\u0634\u0631\u0629\u064B \u0644\u0644\u0641\u0648\u0632! \u2014 **${game.questionCount}** \u0633\u0624\u0627\u0644 \u062D\u062A\u0649 \u0627\u0644\u0622\u0646`
+\u0627\u0633\u0623\u0644 \u0633\u0624\u0627\u0644\u0627\u064B \u064A\u0628\u062F\u0623 \u0628\u0640 **\u0647\u0644** \u0623\u0648 \u0627\u0643\u062A\u0628 \u062A\u062E\u0645\u064A\u0646\u0643 \u0644\u0644\u0641\u0648\u0632 \u2014 **${TURN_SECONDS2} \u062B\u0627\u0646\u064A\u0629** \u23F1\uFE0F
+_(${game.questionCount} \u0633\u0624\u0627\u0644 \u062D\u062A\u0649 \u0627\u0644\u0622\u0646)_`
   );
+  const turnTimer = setTimeout(async () => {
+    const g = getGuessGame(channel.id);
+    if (!g || g.phase !== "playing") return;
+    if (getCurrentGuesser(g).userId !== player.userId) return;
+    g.turnTimer = null;
+    const eliminated = eliminateCurrentGuesser(g);
+    if (!eliminated) return;
+    await channel.send(`\u23F0 <@${eliminated.userId}> \u062A\u0623\u062E\u0631 \u0639\u0646 \u0627\u0644\u0631\u062F \u0648\u0627\u0646\u0637\u0631\u062F \u0645\u0646 \u0627\u0644\u0644\u0639\u0628\u0629! \u{1F6AB}`);
+    if (g.players.length === 0) {
+      const word = g.word.word;
+      deleteGuessGame(channel.id);
+      await channel.send({ embeds: [guessTimeoutEmbed(word)] });
+      return;
+    }
+    if (g.players.length === 1) {
+      const winner = g.players[0];
+      addGuessWin(g.guildId, winner.userId, winner.username, 40);
+      deleteGuessGame(channel.id);
+      await channel.send({ embeds: [guessWinEmbed(winner, g.word.word, g.questionCount)] });
+      return;
+    }
+    await sendTurnPrompt(channel, g);
+  }, TURN_SECONDS2 * 1e3);
+  game.turnTimer = turnTimer;
 }
 async function getAnswer(question, game) {
   const aiResult = await aiAnswerQuestion(question, game.word.word);
@@ -87165,6 +87259,10 @@ async function handleGuessMessage(message) {
   if (message.author.id !== current.userId) return;
   const text = message.content.trim();
   if (!text) return;
+  if (game.turnTimer) {
+    clearTimeout(game.turnTimer);
+    game.turnTimer = null;
+  }
   const channel = message.channel;
   const isQuestion = /^هل\s+/.test(text) || /؟\s*$/.test(text);
   if (isQuestion) {
@@ -87177,6 +87275,7 @@ async function handleGuessMessage(message) {
       await channel.send(
         `<@${current.userId}> \u2753 \u0645\u0627 \u0623\u0642\u062F\u0631 \u0623\u062C\u0627\u0648\u0628 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u0633\u0624\u0627\u0644 \u2014 \u0627\u0633\u0623\u0644 \u0628\u0637\u0631\u064A\u0642\u0629 \u0645\u062E\u062A\u0644\u0641\u0629.`
       );
+      await sendTurnPrompt(channel, game);
       return;
     }
     await channel.send(

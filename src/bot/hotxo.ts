@@ -315,6 +315,15 @@ export async function initHotXOGame(
   });
   game.messageId = msg.id;
 
+  // بعد 0.1 ثانية نعدّل الرسالة ونضيف @here فوق الإمبد للإشعار
+  setTimeout(() => {
+    msg.edit({
+      content:    '@here',
+      embeds:     [hotxoLobbyEmbed(game)],
+      components: [lobbyRow(game)],
+    }).catch(() => {});
+  }, 100);
+
   const timer = setTimeout(async () => {
     const g = getHotXOGame(channel.id);
     if (g && g.phase === 'lobby') {

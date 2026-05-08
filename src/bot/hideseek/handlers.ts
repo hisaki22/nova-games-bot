@@ -97,17 +97,15 @@ export async function handleHideseekButton(interaction: ButtonInteraction): Prom
     if (game.players.size < 2) { await interaction.reply({ content: "يلزم شخصين مختبئين على الأقل.", flags: MessageFlags.Ephemeral }); return; }
     game.phase = "hiding";
     await interaction.update({ embeds: [hideseekHidingEmbed(game)], components: [] });
-    // Send ephemeral hide buttons to each player
     const ch = interaction.channel as TextChannel;
     await ch.send({
       content: `🙈 **المختبئون:** اختاروا غرفتكم قبل 30 ثانية!\n${[...game.players.values()].map((p) => `<@${p.userId}>`).join(" ")}`,
       components: hideButtons(),
     });
-    // After 30s, start seeking phase
     const t = setTimeout(async () => {
       if (!getHideseekGame(interaction.channelId)) return;
       game.phase = "seeking";
-      const seekMsg = await ch.send({ embeds: [hideseekSeekEmbed(game)], components: seekButtons(game) });
+      await ch.send({ embeds: [hideseekSeekEmbed(game)], components: seekButtons(game) });
       await ch.send({ content: `🔍 <@${game.seekerId}> دورك تفتش الغرف!` });
     }, 30000);
     game.timers.push(t);
@@ -117,6 +115,21 @@ export async function handleHideseekButton(interaction: ButtonInteraction): Prom
   if (action === "hide") {
     const roomIdx = parseInt(parts[2], 10);
     if (game.phase !== "hiding") { await interaction.reply({ content: "وقت الاختباء انتهى!", flags: MessageFlags.Ephemeral }); return; }
+
+    // ── الثغرة: الباحث يضغط زر الاختباء ──
+    if (interaction.user.id === game.seekerId) {
+      const seekerName = game.seekerUsername;
+      const survivors = [...game.players.values()];
+      // المختبئون يفوزون والباحث يُطرد
+      for (const s of survivors) addHideseekWin(game.guildId, s.userId, s.username);
+      deleteHideseekGame(interaction.channelId);
+      await interaction.reply({
+        content: `💀 **${seekerName}** كان الباحث وحاول الاختباء بدل البحث! **طُرد من اللعبة** 🤣\n` +
+          `🎉 المختبئون فازوا جميعاً: ${survivors.map((p) => `<@${p.userId}>`).join(", ")}`,
+      });
+      return;
+    }
+
     if (!game.players.has(interaction.user.id)) { await interaction.reply({ content: "أنت لست من المختبئين.", flags: MessageFlags.Ephemeral }); return; }
     hidePlayer(game, interaction.user.id, roomIdx);
     await interaction.reply({ content: `🙈 اختبأت في **${ROOMS[roomIdx]}**! لا تتحرك!`, flags: MessageFlags.Ephemeral });

@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.mjs --packages=external",
     "start": "node index.js"
   },
   "dependencies": {
@@ -13,7 +14,10 @@
     "openai": "^6.35.0",
     "sharp": "^0.34.5"
   },
-  "engines": {
-    "node": ">=18"
-  }
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": { "node": ">=18" }
 }

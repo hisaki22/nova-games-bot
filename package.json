@@ -1,0 +1,19 @@
+{
+  "name": "nova-games-bot",
+  "version": "1.0.0",
+  "description": "Nova Games Arabic Discord Bot",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.3",
+    "pg": "^8.13.3",
+    "openai": "^6.35.0",
+    "sharp": "^0.34.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

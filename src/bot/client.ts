@@ -12,36 +12,25 @@ import { handleHotXOCommand, handleHotXOButton } from "./hotxo.js";
 import { handleWordleCommand, handleWordleButton, handleWordleModal } from "./wordle/handlers.js";
 import { handleCloserCommand, handleCloserMessage } from "./closer/handlers.js";
 import { handleChairsCommand, handleChairsButton } from "./chairs/handlers.js";
-import { handleHideseekCommand, handleHideseekButton } from "./hideseek/handlers.js";
+import { handleHideseekCommand, handleHideseekButton, handleHideseekModal } from "./hideseek/handlers.js";
 import { handleGuessCommand, handleGuessButton, handleGuessModal } from "./guess/handlers.js";
 
 const commands = [
-  // — Imposter —
   new SlashCommandBuilder().setName("امبوستر").setDescription("ابدأ لعبة إمبوستر جديدة في هذه القناة").toJSON(),
   new SlashCommandBuilder().setName("مساعدة").setDescription("اعرض شرح لعبة الإمبوستر والأوامر").toJSON(),
   new SlashCommandBuilder().setName("الغاء").setDescription("ألغِ لعبة الإمبوستر الحالية (للمضيف)").toJSON(),
-  // — Scramble —
   new SlashCommandBuilder().setName("حروف").setDescription("ابدأ لعبة الحروف المخربطة").toJSON(),
   new SlashCommandBuilder().setName("الغاء_حروف").setDescription("ألغِ لعبة الحروف الحالية (للمضيف)").toJSON(),
-  // — Scores —
   new SlashCommandBuilder().setName("نقاط").setDescription("اعرض نقاطك ومرتبتك في هذا السيرفر").toJSON(),
   new SlashCommandBuilder().setName("توب").setDescription("اعرض أفضل ١٠ لاعبين في السيرفر").toJSON(),
-  // — Search —
   new SlashCommandBuilder().setName("بحث").setDescription("ابدأ لعبة البحث — أيهما يُبحث عنه أكثر؟").toJSON(),
-  // — Roulette —
   new SlashCommandBuilder().setName("روليت").setDescription("ابدأ لعبة الروليت").toJSON(),
   new SlashCommandBuilder().setName("الغاء_روليت").setDescription("ألغِ لعبة الروليت الحالية (للمضيف)").toJSON(),
-  // — HotXO —
   new SlashCommandBuilder().setName("xo").setDescription("ابدأ لعبة XO الملتهبة 🔥").toJSON(),
-  // — Wordle (أوردو) —
   new SlashCommandBuilder().setName("اوردو").setDescription("ابدأ لعبة أوردو — خمّن الكلمة الخماسية!").toJSON(),
-  // — Closer (أقرب) —
   new SlashCommandBuilder().setName("اقرب").setDescription("ابدأ لعبة أقرب — خمّن الرقم السري!").toJSON(),
-  // — Musical Chairs (كراسي) —
   new SlashCommandBuilder().setName("كراسي").setDescription("ابدأ الكراسي الموسيقية!").toJSON(),
-  // — Hide & Seek (غميضة) —
-  new SlashCommandBuilder().setName("غميضة").setDescription("ابدأ لعبة غميضة — اختبئ من الباحث!").toJSON(),
-  // — 20 Questions (خمن) —
+  new SlashCommandBuilder().setName("غميضة").setDescription("ابدأ لعبة غميضة — اختبئ في خانة سرية!").toJSON(),
   new SlashCommandBuilder().setName("خمن").setDescription("ابدأ لعبة خمن — 20 سؤال بنعم أو لا!").toJSON(),
 ];
 
@@ -98,6 +87,7 @@ export async function startBot(token: string): Promise<Client> {
       } else if (interaction.isModalSubmit()) {
         const id = interaction.customId;
         if (id.startsWith("wrdl:")) await handleWordleModal(interaction);
+        else if (id.startsWith("hsk:")) await handleHideseekModal(interaction);
         else if (id.startsWith("gss:")) await handleGuessModal(interaction);
         else await handleModal(interaction);
       }

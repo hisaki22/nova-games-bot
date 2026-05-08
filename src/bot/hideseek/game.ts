@@ -1,81 +1,141 @@
-export const ROOMS = ["🌲 الغابة", "🏚️ المخزن", "⛵ المركب", "🏔️ الكهف", "🌾 الحقل", "🏰 القلعة"];
-export const ROOM_IDS = ["r0","r1","r2","r3","r4","r5"];
+export const GRID_SIZE = 25;
 
 export interface HideseekPlayer {
   userId: string;
   username: string;
-  roomIndex?: number; // where they hid
-  found: boolean;
+  hiddenCell?: number;   // 1-25, chosen secretly
+  eliminated: boolean;
+  joinOrder: number;
 }
 
-export type HideseekPhase = "lobby" | "hiding" | "seeking" | "ended";
+export type HideseekPhase = "lobby" | "hiding" | "playing" | "ended";
 
 export interface HideseekGame {
   channelId: string;
   guildId: string;
-  seekerId: string;
-  seekerUsername: string;
-  players: Map<string, HideseekPlayer>; // hiders only (not seeker)
+  hostId: string;
+  players: Map<string, HideseekPlayer>;
   phase: HideseekPhase;
-  searchedRooms: number[];
-  roundsLeft: number;
+  revealedCells: number[];      // cells already revealed
+  currentRevealerIndex: number; // index into turn order
+  turnOrder: string[];          // userIds in rotation
+  roundNumber: number;
   timers: NodeJS.Timeout[];
-  lobbyMessageId?: string;
 }
 
 const games = new Map<string, HideseekGame>();
 
-export function getHideseekGame(ch: string): HideseekGame | undefined { return games.get(ch); }
-export function deleteHideseekGame(ch: string): void { const g = games.get(ch); if (g) for (const t of g.timers) clearTimeout(t); games.delete(ch); }
+export function getHideseekGame(ch: string): HideseekGame | undefined {
+  return games.get(ch);
+}
+
+export function deleteHideseekGame(ch: string): void {
+  const g = games.get(ch);
+  if (g) for (const t of g.timers) clearTimeout(t);
+  games.delete(ch);
+}
 
 export function createHideseekGame(
-  channelId: string, guildId: string,
-  seekerId: string, seekerUsername: string,
+  channelId: string, guildId: string, hostId: string, hostUsername: string,
 ): HideseekGame {
   const g: HideseekGame = {
-    channelId, guildId, seekerId, seekerUsername,
-    players: new Map(),
+    channelId, guildId, hostId,
+    players: new Map([[hostId, { userId: hostId, username: hostUsername, eliminated: false, joinOrder: 0 }]]),
     phase: "lobby",
-    searchedRooms: [],
-    roundsLeft: ROOMS.length,
+    revealedCells: [],
+    currentRevealerIndex: 0,
+    turnOrder: [],
+    roundNumber: 0,
     timers: [],
   };
   games.set(channelId, g);
   return g;
 }
 
-export function joinHideseek(game: HideseekGame, userId: string, username: string): "joined" | "already" | "seeker" | "full" {
-  if (userId === game.seekerId) return "seeker";
+export function joinHideseek(game: HideseekGame, userId: string, username: string): "joined" | "already" | "full" {
   if (game.players.has(userId)) return "already";
-  if (game.players.size >= 10) return "full";
-  game.players.set(userId, { userId, username, found: false });
+  if (game.players.size >= 15) return "full";
+  game.players.set(userId, { userId, username, eliminated: false, joinOrder: game.players.size });
   return "joined";
 }
 
-export function hidePlayer(game: HideseekGame, userId: string, roomIndex: number): boolean {
+export function setHiddenCell(game: HideseekGame, userId: string, cell: number): "ok" | "invalid" | "not_in" {
   const p = game.players.get(userId);
-  if (!p || game.phase !== "hiding") return false;
-  p.roomIndex = roomIndex;
-  return true;
+  if (!p) return "not_in";
+  if (cell < 1 || cell > GRID_SIZE) return "invalid";
+  p.hiddenCell = cell;
+  return "ok";
 }
 
-export function searchRoom(game: HideseekGame, roomIndex: number): HideseekPlayer[] {
-  if (game.searchedRooms.includes(roomIndex)) return [];
-  game.searchedRooms.push(roomIndex);
-  const found: HideseekPlayer[] = [];
+export function allPlayersHid(game: HideseekGame): boolean {
+  return [...game.players.values()].every((p) => p.hiddenCell !== undefined);
+}
+
+export function startGame(game: HideseekGame): void {
+  game.phase = "playing";
+  game.turnOrder = [...game.players.keys()];
+  game.currentRevealerIndex = 0;
+  game.roundNumber = 1;
+}
+
+export function getCurrentRevealer(game: HideseekGame): HideseekPlayer | null {
+  // Advance to next non-eliminated player
+  const alive = game.turnOrder.filter((id) => {
+    const p = game.players.get(id);
+    return p && !p.eliminated;
+  });
+  if (alive.length === 0) return null;
+  const idx = game.currentRevealerIndex % alive.length;
+  const uid = alive[idx];
+  return game.players.get(uid) ?? null;
+}
+
+export interface RevealResult {
+  cell: number;
+  foundPlayers: HideseekPlayer[];    // hiding in that cell
+  revealerCaught: boolean;           // revealer was in their own cell
+  alivePlayers: HideseekPlayer[];
+  winner: HideseekPlayer | null;
+}
+
+export function revealCell(
+  game: HideseekGame,
+  revealerId: string,
+  cell: number,
+): RevealResult | { error: string } {
+  if (game.phase !== "playing") return { error: "اللعبة مو نشطة." };
+  if (game.revealedCells.includes(cell)) return { error: "هذه الخانة مكشوفة بالفعل!" };
+
+  const revealer = game.players.get(revealerId);
+  if (!revealer || revealer.eliminated) return { error: "أنت مو من اللاعبين النشطين." };
+
+  game.revealedCells.push(cell);
+  game.roundNumber++;
+
+  // Find all players hiding in this cell (including possibly the revealer)
+  const foundPlayers: HideseekPlayer[] = [];
   for (const p of game.players.values()) {
-    if (p.roomIndex === roomIndex && !p.found) {
-      p.found = true;
-      found.push(p);
+    if (!p.eliminated && p.hiddenCell === cell) {
+      p.eliminated = true;
+      foundPlayers.push(p);
     }
   }
-  return found;
+
+  // Check if revealer was caught in their own cell
+  const revealerCaught = foundPlayers.some((p) => p.userId === revealerId);
+
+  // Advance turn (skip to next alive player)
+  const aliveAfter = [...game.players.values()].filter((p) => !p.eliminated);
+
+  // Next revealer: move index forward
+  game.currentRevealerIndex++;
+
+  const winner = aliveAfter.length === 1 ? aliveAfter[0] : null;
+  if (aliveAfter.length <= 1) game.phase = "ended";
+
+  return { cell, foundPlayers, revealerCaught, alivePlayers: aliveAfter, winner: winner ?? null };
 }
 
-export function getHidersLeft(game: HideseekGame): HideseekPlayer[] {
-  return [...game.players.values()].filter((p) => !p.found);
-}
-
-export function allHid(game: HideseekGame): boolean {
-  return [...game.players.values()].every((p) => p.roomIndex !== undefined);
+export function getAlivePlayers(game: HideseekGame): HideseekPlayer[] {
+  return [...game.players.values()].filter((p) => !p.eliminated);
 }
